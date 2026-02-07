@@ -88,7 +88,7 @@ export async function GET(request: NextRequest) {
     console.log("[Score API] Calling calculerScoreFiscal...");
     const score = await calculerScoreFiscal(profil, undefined, {
       userId: user.id,
-      useJournalData: true, // Use hybrid calculation with journal data
+      useJournalData: false, // TEMPORARILY DISABLED - Use pure estimation for now
     });
     console.log("[Score API] Score calculated successfully:", {
       totalPaye: score.totalPaye,

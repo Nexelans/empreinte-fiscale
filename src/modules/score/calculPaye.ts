@@ -189,18 +189,23 @@ export async function calculTVAAvecJournal(
   millesime: string
 ): Promise<number> {
   try {
+    console.log("[calculTVAAvecJournal] Starting with userId:", userId);
+
     // Récupérer les entrées du journal pour l'année en cours
     const currentYear = new Date().getFullYear();
     const startDate = new Date(currentYear, 0, 1);
     const endDate = new Date(currentYear, 11, 31);
 
+    console.log("[calculTVAAvecJournal] Fetching journal entries...");
     const journalEntries = await getJournalEntries(userId, {
       startDate,
       endDate,
     });
+    console.log("[calculTVAAvecJournal] Found", journalEntries.length, "entries");
 
     if (journalEntries.length === 0) {
       // Pas de données journal, utiliser estimation pure
+      console.log("[calculTVAAvecJournal] No journal data, using pure estimation");
       return calculTVA(depensesAnnuellesEstimees, millesime);
     }
 
@@ -306,7 +311,9 @@ export async function calculTotalPaye(
   // Use journal data for TVA if available and requested
   let tva: number;
   if (options?.useJournalData && options?.userId) {
+    console.log("[calculTotalPaye] Using journal data for TVA calculation");
     tva = await calculTVAAvecJournal(options.userId, depensesAnnuelles, millesime);
+    console.log("[calculTotalPaye] TVA calculated:", tva);
   } else {
     tva = await calculTVA(depensesAnnuelles, millesime);
   }
