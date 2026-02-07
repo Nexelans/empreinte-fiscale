@@ -13,9 +13,14 @@ import { ProfilFiscalComplete } from "@/modules/profil/types";
  * Calcule et retourne le score fiscal de l'utilisateur connecté
  */
 export async function GET(request: NextRequest) {
+  const startTime = Date.now();
   try {
-    console.log("[Score API] Starting score calculation...");
+    console.log("[Score API] ==> Starting score calculation...");
+
+    console.log("[Score API] Step 1: Getting session...");
+    const sessionStart = Date.now();
     const session = await getServerSession(authOptions);
+    console.log(`[Score API] Session check took ${Date.now() - sessionStart}ms`);
 
     if (!session?.user?.email) {
       console.log("[Score API] No session found");
@@ -24,12 +29,15 @@ export async function GET(request: NextRequest) {
 
     console.log("[Score API] Session found for:", session.user.email);
 
+    console.log("[Score API] Step 2: Fetching user from database...");
+    const userStart = Date.now();
     const user = await prisma.user.findUnique({
       where: { email: session.user.email },
       include: {
         profilFiscal: true,
       },
     });
+    console.log(`[Score API] User fetch took ${Date.now() - userStart}ms`);
 
     if (!user) {
       console.log("[Score API] User not found");
@@ -44,7 +52,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    console.log("[Score API] Profil found, transforming data...");
+    console.log("[Score API] Step 3: Transforming profil data...");
 
     // Transform Prisma profil to ProfilFiscalComplete format
     const profil: Partial<ProfilFiscalComplete> = {
@@ -84,17 +92,22 @@ export async function GET(request: NextRequest) {
       statusData: user.profilFiscal.statusData as any,
     };
 
-    // Calculate score with journal data integration
-    console.log("[Score API] Calling calculerScoreFiscal...");
+    console.log("[Score API] Step 4: Calling calculerScoreFiscal...");
+    const calcStart = Date.now();
     const score = await calculerScoreFiscal(profil, undefined, {
       userId: user.id,
       useJournalData: false, // TEMPORARILY DISABLED - Use pure estimation for now
     });
+    console.log(`[Score API] Calculation took ${Date.now() - calcStart}ms`);
+
     console.log("[Score API] Score calculated successfully:", {
       totalPaye: score.totalPaye,
       totalRecu: score.totalRecu,
       soldeNet: score.soldeNet,
     });
+
+    const totalTime = Date.now() - startTime;
+    console.log(`[Score API] <== Total request time: ${totalTime}ms`);
 
     return NextResponse.json(score);
   } catch (error) {

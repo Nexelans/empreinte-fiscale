@@ -57,40 +57,77 @@ export default function DashboardPage() {
 
         // If profil is complete, calculate score
         if (profilData.isComplete) {
-          console.log("[Dashboard] Fetching score...");
+          console.log("[Dashboard] Profil is complete, fetching score...");
 
           // Add timeout for score fetching (30 seconds)
           const controller = new AbortController();
           const timeoutId = setTimeout(() => {
-            console.error("[Dashboard] Score fetch timeout!");
+            console.error("[Dashboard] Score fetch timeout after 30 seconds!");
             controller.abort();
           }, 30000);
 
           try {
+            console.log("[Dashboard] Starting fetch to /api/score...");
+            const scoreStartTime = Date.now();
+
             const [scoreRes, confianceRes] = await Promise.all([
-              fetch("/api/score", { signal: controller.signal }),
-              fetch("/api/score/confiance", { signal: controller.signal }),
+              fetch("/api/score", {
+                signal: controller.signal,
+                headers: {
+                  'Content-Type': 'application/json',
+                }
+              }),
+              fetch("/api/score/confiance", {
+                signal: controller.signal,
+                headers: {
+                  'Content-Type': 'application/json',
+                }
+              }),
             ]);
 
             clearTimeout(timeoutId);
+            const scoreElapsed = Date.now() - scoreStartTime;
+            console.log(`[Dashboard] Fetch completed in ${scoreElapsed}ms`);
 
             if (scoreRes.ok) {
               const scoreData = await scoreRes.json();
-              console.log("[Dashboard] Score loaded:", scoreData);
+              console.log("[Dashboard] Score loaded successfully:", {
+                totalPaye: scoreData.totalPaye,
+                totalRecu: scoreData.totalRecu,
+                soldeNet: scoreData.soldeNet
+              });
               setScore(scoreData);
             } else {
-              console.error("[Dashboard] Score fetch failed:", scoreRes.status, await scoreRes.text());
+              const errorText = await scoreRes.text();
+              console.error("[Dashboard] Score fetch failed:", {
+                status: scoreRes.status,
+                statusText: scoreRes.statusText,
+                error: errorText
+              });
+              alert(`Erreur lors du calcul du score: ${errorText}`);
             }
 
             if (confianceRes.ok) {
               const confianceData = await confianceRes.json();
               setConfiance(confianceData);
+            } else {
+              console.warn("[Dashboard] Confiance fetch failed:", confianceRes.status);
             }
           } catch (fetchError) {
             clearTimeout(timeoutId);
-            console.error("[Dashboard] Error fetching score:", fetchError);
+            console.error("[Dashboard] Exception while fetching score:", fetchError);
+
+            if (fetchError instanceof Error) {
+              if (fetchError.name === 'AbortError') {
+                alert("Le calcul du score a pris trop de temps. Veuillez réessayer.");
+              } else {
+                alert(`Erreur: ${fetchError.message}`);
+              }
+            }
             // Continue loading the page even if score fails
           }
+        } else {
+          console.log("[Dashboard] Profil not complete, skipping score calculation");
         }
       }
     } catch (error) {
