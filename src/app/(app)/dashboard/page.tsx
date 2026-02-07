@@ -35,9 +35,10 @@ export default function DashboardPage() {
         const journalRes = await fetch("/api/journal");
         if (journalRes.ok) {
           const journalData = await journalRes.json();
+          const entries = journalData.entries || [];
 
           // Get last 5 entries
-          const recent = journalData.slice(0, 5);
+          const recent = entries.slice(0, 5);
           setRecentEntries(recent);
 
           // Calculate monthly total
@@ -45,7 +46,7 @@ export default function DashboardPage() {
           const currentMonth = now.getMonth();
           const currentYear = now.getFullYear();
 
-          const monthlyEntries = journalData.filter((entry: JournalEntryData) => {
+          const monthlyEntries = entries.filter((entry: JournalEntryData) => {
             const entryDate = new Date(entry.date);
             return entryDate.getMonth() === currentMonth && entryDate.getFullYear() === currentYear;
           });
