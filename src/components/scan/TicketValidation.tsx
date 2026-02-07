@@ -55,35 +55,19 @@ export function TicketValidation({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Header with confidence score */}
-      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900">Données extraites</h3>
-            <p className="text-sm text-gray-600 mt-1">
-              Vérifiez et corrigez si nécessaire les valeurs détectées
-            </p>
-          </div>
-          <div className="text-right">
-            <div className="text-sm font-medium text-gray-500">Confiance</div>
-            <div
-              className={`text-2xl font-bold ${
-                confidence >= 70
-                  ? "text-green-600"
-                  : confidence >= 40
-                  ? "text-amber-600"
-                  : "text-red-600"
-              }`}
-            >
-              {confidence}%
-            </div>
-          </div>
+      {/* Header */}
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900">Saisissez les informations du ticket</h3>
+          <p className="text-sm text-gray-600 mt-1">
+            Référez-vous à votre ticket pour remplir les informations ci-dessous
+          </p>
         </div>
 
         {scanResult.warnings && scanResult.warnings.length > 0 && (
           <div className="mt-3 text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded p-2">
             {scanResult.warnings.map((warning, i) => (
-              <p key={i}>⚠️ {warning}</p>
+              <p key={i}>💡 {warning}</p>
             ))}
           </div>
         )}
@@ -93,34 +77,21 @@ export function TicketValidation({
       <div className="space-y-4">
         {/* Enseigne */}
         <div>
-          <Label htmlFor="enseigne" className="flex items-center gap-2">
-            Enseigne
-            {formData.enseigne ? (
-              <span className="text-xs text-green-600">✓ Détecté</span>
-            ) : (
-              <span className="text-xs text-gray-400">Non détecté</span>
-            )}
+          <Label htmlFor="enseigne">
+            Enseigne <span className="text-xs text-gray-500">(optionnel)</span>
           </Label>
           <Input
             id="enseigne"
             type="text"
             value={formData.enseigne || ""}
             onChange={(e) => handleChange("enseigne", e.target.value)}
-            placeholder="Nom du commerce"
-            className={formData.enseigne ? "bg-white" : "bg-gray-50"}
+            placeholder="Ex: Carrefour, Auchan, Total..."
           />
         </div>
 
         {/* Date */}
         <div>
-          <Label htmlFor="date" className="flex items-center gap-2">
-            Date
-            {formData.date ? (
-              <span className="text-xs text-green-600">✓ Détecté</span>
-            ) : (
-              <span className="text-xs text-gray-400">Non détecté</span>
-            )}
-          </Label>
+          <Label htmlFor="date">Date</Label>
           <Input
             id="date"
             type="date"
@@ -130,19 +101,13 @@ export function TicketValidation({
                 : new Date().toISOString().split("T")[0]
             }
             onChange={(e) => handleChange("date", new Date(e.target.value))}
-            className={formData.date ? "bg-white" : "bg-gray-50"}
           />
         </div>
 
         {/* Montant TTC (required) */}
         <div>
-          <Label htmlFor="montantTTC" className="flex items-center gap-2">
+          <Label htmlFor="montantTTC">
             Montant TTC <span className="text-red-500">*</span>
-            {formData.montantTTC > 0 ? (
-              <span className="text-xs text-green-600">✓ Détecté</span>
-            ) : (
-              <span className="text-xs text-red-400">Requis</span>
-            )}
           </Label>
           <div className="flex items-center gap-2">
             <Input
@@ -154,7 +119,6 @@ export function TicketValidation({
               onChange={(e) => handleChange("montantTTC", parseFloat(e.target.value))}
               placeholder="0.00"
               required
-              className={formData.montantTTC > 0 ? "bg-white" : "bg-gray-50"}
             />
             <span className="text-sm text-gray-500">€</span>
           </div>
@@ -162,13 +126,8 @@ export function TicketValidation({
 
         {/* Montant TVA */}
         <div>
-          <Label htmlFor="montantTVA" className="flex items-center gap-2">
-            Montant TVA
-            {formData.montantTVA ? (
-              <span className="text-xs text-green-600">✓ Détecté</span>
-            ) : (
-              <span className="text-xs text-gray-400">Optionnel</span>
-            )}
+          <Label htmlFor="montantTVA">
+            Montant TVA <span className="text-xs text-gray-500">(optionnel)</span>
           </Label>
           <div className="flex items-center gap-2">
             <Input
@@ -183,8 +142,7 @@ export function TicketValidation({
                   e.target.value ? parseFloat(e.target.value) : undefined
                 )
               }
-              placeholder="Montant de TVA"
-              className={formData.montantTVA ? "bg-white" : "bg-gray-50"}
+              placeholder="Si indiqué sur le ticket"
             />
             <span className="text-sm text-gray-500">€</span>
           </div>
