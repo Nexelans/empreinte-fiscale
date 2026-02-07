@@ -1,0 +1,426 @@
+import { ProfilFiscalComplete } from "@/modules/profil/types";
+
+/**
+ * Profils types pour le mode découverte
+ * Basés sur des données INSEE et statistiques publiques
+ */
+
+export interface ProfilType {
+  id: string;
+  nom: string;
+  description: string;
+  emoji: string;
+  categorie: "revenus_modestes" | "classe_moyenne" | "cadres" | "independants" | "retraites" | "etudiants";
+  profil: Partial<ProfilFiscalComplete>;
+}
+
+export const PROFILS_TYPES: ProfilType[] = [
+  {
+    id: "smicard",
+    nom: "Salarié au SMIC",
+    description: "Célibataire, SMIC temps plein, locataire",
+    emoji: "👷",
+    categorie: "revenus_modestes",
+    profil: {
+      situation: {
+        statut: "celibataire",
+        nombreParts: 1,
+        commune: "Lyon",
+        age: 28,
+      },
+      revenus: {
+        salaireBrut: 21203, // SMIC 2026
+        salaireNet: 16600,
+        typeContrat: "CDI",
+        revenusFonciers: 0,
+        revenusCapitaux: 0,
+        autresRevenus: 0,
+      },
+      patrimoine: {
+        proprietaire: false,
+        valeurLocative: 0,
+        taxeFonciere: 0,
+        vehicules: null,
+        patrimoineIFI: 0,
+      },
+      consommation: {
+        mode: "sobre",
+        budgetMensuel: {
+          courses: 200,
+          restaurants: 50,
+          carburant: 0,
+          loisirs: 80,
+        },
+        detailCategories: null,
+        alcoolTabac: null,
+      },
+      familleServices: {
+        nombreEnfants: 0,
+        enfants: [],
+        frequenceServices: { transports: "quotidien", sante: "occasionnel" },
+        aides: { rsa: false, apl: true, primeActivite: true },
+      },
+      statusData: {},
+    },
+  },
+  {
+    id: "enseignant",
+    nom: "Enseignant",
+    description: "Professeur certifié, marié, 2 enfants",
+    emoji: "👨‍🏫",
+    categorie: "classe_moyenne",
+    profil: {
+      situation: {
+        statut: "marie",
+        nombreParts: 3,
+        commune: "Toulouse",
+        age: 38,
+      },
+      revenus: {
+        salaireBrut: 32000,
+        salaireNet: 25000,
+        typeContrat: "Fonctionnaire",
+        revenusFonciers: 0,
+        revenusCapitaux: 0,
+        autresRevenus: 0,
+      },
+      patrimoine: {
+        proprietaire: true,
+        valeurLocative: 12000,
+        taxeFonciere: 1200,
+        vehicules: [{ type: "thermique", kmAnnuels: 12000 }],
+        patrimoineIFI: 0,
+      },
+      consommation: {
+        mode: "moyen",
+        budgetMensuel: {
+          courses: 600,
+          restaurants: 150,
+          carburant: 150,
+          loisirs: 200,
+        },
+        detailCategories: null,
+        alcoolTabac: null,
+      },
+      familleServices: {
+        nombreEnfants: 2,
+        enfants: [
+          { age: 8, niveauScolaire: "primaire" },
+          { age: 12, niveauScolaire: "college" },
+        ],
+        frequenceServices: { transports: "quotidien", sante: "regulier" },
+        aides: { allocations: true },
+      },
+      statusData: {},
+    },
+  },
+  {
+    id: "cadre",
+    nom: "Cadre en entreprise",
+    description: "Cadre supérieur, célibataire, Paris",
+    emoji: "👔",
+    categorie: "cadres",
+    profil: {
+      situation: {
+        statut: "celibataire",
+        nombreParts: 1,
+        commune: "Paris",
+        age: 35,
+      },
+      revenus: {
+        salaireBrut: 65000,
+        salaireNet: 50000,
+        typeContrat: "CDI",
+        revenusFonciers: 0,
+        revenusCapitaux: 2000,
+        autresRevenus: 0,
+      },
+      patrimoine: {
+        proprietaire: false,
+        valeurLocative: 0,
+        taxeFonciere: 0,
+        vehicules: null,
+        patrimoineIFI: 0,
+      },
+      consommation: {
+        mode: "eleve",
+        budgetMensuel: {
+          courses: 400,
+          restaurants: 400,
+          carburant: 0,
+          loisirs: 500,
+        },
+        detailCategories: null,
+        alcoolTabac: null,
+      },
+      familleServices: {
+        nombreEnfants: 0,
+        enfants: [],
+        frequenceServices: { transports: "quotidien", sante: "regulier" },
+        aides: null,
+      },
+      statusData: {},
+    },
+  },
+  {
+    id: "medecin",
+    nom: "Médecin libéral",
+    description: "Médecin généraliste, marié, 1 enfant",
+    emoji: "⚕️",
+    categorie: "independants",
+    profil: {
+      situation: {
+        statut: "marie",
+        nombreParts: 2.5,
+        commune: "Bordeaux",
+        age: 45,
+      },
+      revenus: {
+        salaireBrut: 95000,
+        salaireNet: 75000,
+        typeContrat: "Independant",
+        revenusFonciers: 5000,
+        revenusCapitaux: 3000,
+        autresRevenus: 0,
+      },
+      patrimoine: {
+        proprietaire: true,
+        valeurLocative: 18000,
+        taxeFonciere: 2200,
+        vehicules: [{ type: "thermique", kmAnnuels: 15000 }],
+        patrimoineIFI: 0,
+      },
+      consommation: {
+        mode: "eleve",
+        budgetMensuel: {
+          courses: 800,
+          restaurants: 300,
+          carburant: 200,
+          loisirs: 400,
+        },
+        detailCategories: null,
+        alcoolTabac: null,
+      },
+      familleServices: {
+        nombreEnfants: 1,
+        enfants: [{ age: 15, niveauScolaire: "lycee" }],
+        frequenceServices: { transports: "occasionnel", sante: "regulier" },
+        aides: null,
+      },
+      statusData: {},
+    },
+  },
+  {
+    id: "artisan",
+    nom: "Artisan",
+    description: "Plombier indépendant, marié, 3 enfants",
+    emoji: "🔧",
+    categorie: "independants",
+    profil: {
+      situation: {
+        statut: "marie",
+        nombreParts: 4,
+        commune: "Nantes",
+        age: 42,
+      },
+      revenus: {
+        salaireBrut: 45000,
+        salaireNet: 35000,
+        typeContrat: "Independant",
+        revenusFonciers: 0,
+        revenusCapitaux: 0,
+        autresRevenus: 0,
+      },
+      patrimoine: {
+        proprietaire: true,
+        valeurLocative: 10000,
+        taxeFonciere: 900,
+        vehicules: [
+          { type: "thermique", kmAnnuels: 25000 },
+          { type: "thermique", kmAnnuels: 10000 },
+        ],
+        patrimoineIFI: 0,
+      },
+      consommation: {
+        mode: "moyen",
+        budgetMensuel: {
+          courses: 700,
+          restaurants: 100,
+          carburant: 300,
+          loisirs: 150,
+        },
+        detailCategories: null,
+        alcoolTabac: null,
+      },
+      familleServices: {
+        nombreEnfants: 3,
+        enfants: [
+          { age: 6, niveauScolaire: "primaire" },
+          { age: 10, niveauScolaire: "primaire" },
+          { age: 14, niveauScolaire: "college" },
+        ],
+        frequenceServices: { transports: "occasionnel", sante: "regulier" },
+        aides: { allocations: true },
+      },
+      statusData: {},
+    },
+  },
+  {
+    id: "retraite",
+    nom: "Retraité",
+    description: "Retraité, couple, propriétaire",
+    emoji: "👴",
+    categorie: "retraites",
+    profil: {
+      situation: {
+        statut: "marie",
+        nombreParts: 2,
+        commune: "Nice",
+        age: 68,
+      },
+      revenus: {
+        salaireBrut: 0,
+        salaireNet: 0,
+        typeContrat: "CDI",
+        revenusFonciers: 3000,
+        revenusCapitaux: 2000,
+        autresRevenus: 28000, // pension
+      },
+      patrimoine: {
+        proprietaire: true,
+        valeurLocative: 15000,
+        taxeFonciere: 1500,
+        vehicules: [{ type: "thermique", kmAnnuels: 8000 }],
+        patrimoineIFI: 0,
+      },
+      consommation: {
+        mode: "moyen",
+        budgetMensuel: {
+          courses: 400,
+          restaurants: 150,
+          carburant: 100,
+          loisirs: 200,
+        },
+        detailCategories: null,
+        alcoolTabac: null,
+      },
+      familleServices: {
+        nombreEnfants: 0,
+        enfants: [],
+        frequenceServices: { transports: "occasionnel", sante: "frequent" },
+        aides: null,
+      },
+      statusData: {},
+    },
+  },
+  {
+    id: "etudiant",
+    nom: "Étudiant",
+    description: "Étudiant en master, job à mi-temps",
+    emoji: "🎓",
+    categorie: "etudiants",
+    profil: {
+      situation: {
+        statut: "celibataire",
+        nombreParts: 1,
+        commune: "Paris",
+        age: 23,
+      },
+      revenus: {
+        salaireBrut: 8000,
+        salaireNet: 6500,
+        typeContrat: "CDD",
+        revenusFonciers: 0,
+        revenusCapitaux: 0,
+        autresRevenus: 0,
+      },
+      patrimoine: {
+        proprietaire: false,
+        valeurLocative: 0,
+        taxeFonciere: 0,
+        vehicules: null,
+        patrimoineIFI: 0,
+      },
+      consommation: {
+        mode: "sobre",
+        budgetMensuel: {
+          courses: 150,
+          restaurants: 80,
+          carburant: 0,
+          loisirs: 100,
+        },
+        detailCategories: null,
+        alcoolTabac: null,
+      },
+      familleServices: {
+        nombreEnfants: 0,
+        enfants: [],
+        frequenceServices: { transports: "quotidien", sante: "occasionnel" },
+        aides: { bourses: true, apl: true },
+      },
+      statusData: {},
+    },
+  },
+  {
+    id: "haut_revenu",
+    nom: "Haut revenu",
+    description: "Dirigeant, marié, 2 enfants, patrimoine important",
+    emoji: "💼",
+    categorie: "cadres",
+    profil: {
+      situation: {
+        statut: "marie",
+        nombreParts: 3,
+        commune: "Paris",
+        age: 50,
+      },
+      revenus: {
+        salaireBrut: 180000,
+        salaireNet: 140000,
+        typeContrat: "CDI",
+        revenusFonciers: 25000,
+        revenusCapitaux: 15000,
+        autresRevenus: 0,
+      },
+      patrimoine: {
+        proprietaire: true,
+        valeurLocative: 35000,
+        taxeFonciere: 4500,
+        vehicules: [
+          { type: "hybride", kmAnnuels: 15000 },
+          { type: "electrique", kmAnnuels: 10000 },
+        ],
+        patrimoineIFI: 1800000,
+      },
+      consommation: {
+        mode: "eleve",
+        budgetMensuel: {
+          courses: 1200,
+          restaurants: 800,
+          carburant: 150,
+          loisirs: 1000,
+        },
+        detailCategories: null,
+        alcoolTabac: null,
+      },
+      familleServices: {
+        nombreEnfants: 2,
+        enfants: [
+          { age: 16, niveauScolaire: "lycee" },
+          { age: 19, niveauScolaire: "superieur_public" },
+        ],
+        frequenceServices: { transports: "occasionnel", sante: "regulier" },
+        aides: null,
+      },
+      statusData: {},
+    },
+  },
+];
+
+export function getProfilById(id: string): ProfilType | undefined {
+  return PROFILS_TYPES.find((p) => p.id === id);
+}
+
+export function getProfilsByCategorie(categorie: string): ProfilType[] {
+  return PROFILS_TYPES.filter((p) => p.categorie === categorie);
+}

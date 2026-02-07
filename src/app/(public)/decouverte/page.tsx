@@ -1,5 +1,252 @@
-import { ProfilTypeSelector } from "@/components/decouverte/ProfilTypeSelector";
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { PROFILS_TYPES, ProfilType } from "@/modules/decouverte/profiles";
+import { ScoreCard } from "@/components/dashboard/ScoreCard";
+import { BreakdownChart } from "@/components/dashboard/BreakdownChart";
 
 export default function DecouvertePage() {
-  return <ProfilTypeSelector />;
+  const [selectedProfil, setSelectedProfil] = useState<ProfilType | null>(null);
+  const [score, setScore] = useState<any>(null);
+  const [isCalculating, setIsCalculating] = useState(false);
+
+  const categories = [
+    { id: "revenus_modestes", nom: "Revenus modestes", color: "bg-blue-100" },
+    { id: "classe_moyenne", nom: "Classe moyenne", color: "bg-green-100" },
+    { id: "cadres", nom: "Cadres", color: "bg-purple-100" },
+    { id: "independants", nom: "Indépendants", color: "bg-orange-100" },
+    { id: "retraites", nom: "Retraités", color: "bg-gray-100" },
+    { id: "etudiants", nom: "Étudiants", color: "bg-pink-100" },
+  ];
+
+  const handleSelectProfil = async (profil: ProfilType) => {
+    setSelectedProfil(profil);
+    setIsCalculating(true);
+    setScore(null);
+
+    try {
+      const response = await fetch("/api/decouverte/calcul", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ profil: profil.profil }),
+      });
+
+      if (response.ok) {
+        const scoreData = await response.json();
+        setScore(scoreData);
+      } else {
+        console.error("Erreur calcul:", await response.text());
+      }
+    } catch (error) {
+      console.error("Erreur:", error);
+    } finally {
+      setIsCalculating(false);
+    }
+  };
+
+  const payeItems = score
+    ? Object.entries(score.detailPaye)
+        .filter(([, value]) => (value as number) > 0)
+        .map(([key, value]) => ({
+          label: key.replace(/_/g, " ").replace(/\b\w/g, (l: string) => l.toUpperCase()),
+          value: value as number,
+          color: "#ef4444",
+        }))
+    : [];
+
+  const recuItems = score
+    ? [
+        ...Object.entries(score.detailRecu.transfertsDirects)
+          .filter(([, value]) => (value as number) > 0)
+          .map(([key, value]) => ({
+            label: key.replace(/\b\w/g, (l: string) => l.toUpperCase()),
+            value: value as number,
+            color: "#10b981",
+          })),
+        ...Object.entries(score.detailRecu.servicesMutualises)
+          .filter(([, value]) => (value as number) > 0)
+          .map(([key, value]) => ({
+            label: key.replace(/\b\w/g, (l: string) => l.toUpperCase()),
+            value: value as number,
+            color: "#3b82f6",
+          })),
+      ]
+    : [];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+      {/* Hero */}
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">
+              🔍 Mode Découverte
+            </h1>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+              Explorez différents profils fiscaux pour comprendre comment fonctionne
+              votre relation financière avec l'État selon votre situation.
+            </p>
+            <div className="flex gap-4 justify-center">
+              <Link href="/quiz">
+                <Button variant="outline" size="lg">
+                  🎯 Quiz fiscal
+                </Button>
+              </Link>
+              <Link href="/auth/register">
+                <Button size="lg">
+                  ✨ Créer mon compte pour MON score
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+        {/* Sélection du profil */}
+        {!selectedProfil && (
+          <div className="space-y-8">
+            <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">
+              Et si j'étais…
+            </h2>
+
+            {categories.map((categorie) => {
+              const profils = PROFILS_TYPES.filter(
+                (p) => p.categorie === categorie.id
+              );
+              if (profils.length === 0) return null;
+
+              return (
+                <div key={categorie.id}>
+                  <h3 className="text-lg font-semibold text-gray-700 mb-4">
+                    {categorie.nom}
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {profils.map((profil) => (
+                      <button
+                        key={profil.id}
+                        onClick={() => handleSelectProfil(profil)}
+                        className={`${categorie.color} p-6 rounded-lg border-2 border-transparent hover:border-blue-500 transition-all hover:shadow-lg`}
+                      >
+                        <div className="text-4xl mb-2">{profil.emoji}</div>
+                        <h4 className="font-semibold text-gray-900">
+                          {profil.nom}
+                        </h4>
+                        <p className="text-sm text-gray-600 mt-2">
+                          {profil.description}
+                        </p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Résultat */}
+        {selectedProfil && (
+          <div>
+            {/* Header */}
+            <div className="bg-white rounded-lg shadow p-6 mb-8">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="text-5xl">{selectedProfil.emoji}</div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-900">
+                      {selectedProfil.nom}
+                    </h2>
+                    <p className="text-gray-600">{selectedProfil.description}</p>
+                  </div>
+                </div>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setSelectedProfil(null);
+                    setScore(null);
+                  }}
+                >
+                  ← Changer de profil
+                </Button>
+              </div>
+            </div>
+
+            {/* Calcul en cours */}
+            {isCalculating && (
+              <div className="text-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                <p className="text-gray-600">Calcul du score en cours...</p>
+              </div>
+            )}
+
+            {/* Score */}
+            {!isCalculating && score && (
+              <div className="space-y-8">
+                {/* Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <ScoreCard
+                    title="Ce que je paie"
+                    value={score.totalPaye}
+                    subtitle="Impôts + cotisations + taxes"
+                    color="red"
+                    icon="💸"
+                  />
+                  <ScoreCard
+                    title="Ce que je reçois"
+                    value={score.totalRecu}
+                    subtitle="Transferts + services publics"
+                    color="green"
+                    icon="🎁"
+                  />
+                  <ScoreCard
+                    title="Solde net"
+                    value={score.soldeNet}
+                    subtitle={
+                      score.soldeNet > 0
+                        ? "Contributeur net"
+                        : "Bénéficiaire net"
+                    }
+                    color="blue"
+                    icon={score.soldeNet > 0 ? "📈" : "📉"}
+                  />
+                </div>
+
+                {/* Détails */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <BreakdownChart
+                    title="Détail : Ce que je paie"
+                    items={payeItems}
+                    total={score.totalPaye}
+                  />
+                  <BreakdownChart
+                    title="Détail : Ce que je reçois"
+                    items={recuItems}
+                    total={score.totalRecu}
+                  />
+                </div>
+
+                {/* CTA */}
+                <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-8 text-center text-white">
+                  <h3 className="text-2xl font-bold mb-4">
+                    Ce profil vous ressemble ?
+                  </h3>
+                  <p className="text-lg mb-6 opacity-90">
+                    Créez votre compte pour calculer VOTRE score personnalisé avec
+                    vos vraies données !
+                  </p>
+                  <Link href="/auth/register">
+                    <Button size="lg" variant="secondary">
+                      ✨ Créer mon compte gratuitement
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
