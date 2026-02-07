@@ -97,10 +97,15 @@ export function TicketValidation({
             type="date"
             value={
               formData.date
-                ? new Date(formData.date).toISOString().split("T")[0]
+                ? (() => {
+                    const date = new Date(formData.date);
+                    return isNaN(date.getTime())
+                      ? new Date().toISOString().split("T")[0]
+                      : date.toISOString().split("T")[0];
+                  })()
                 : new Date().toISOString().split("T")[0]
             }
-            onChange={(e) => handleChange("date", new Date(e.target.value))}
+            onChange={(e) => handleChange("date", e.target.value ? new Date(e.target.value) : new Date())}
           />
         </div>
 

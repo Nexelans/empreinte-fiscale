@@ -89,10 +89,13 @@ export function EditEntryModal({
               type="date"
               value={
                 formData.date
-                  ? new Date(formData.date).toISOString().split("T")[0]
+                  ? (() => {
+                      const date = new Date(formData.date);
+                      return isNaN(date.getTime()) ? "" : date.toISOString().split("T")[0];
+                    })()
                   : ""
               }
-              onChange={(e) => handleChange("date", new Date(e.target.value))}
+              onChange={(e) => handleChange("date", e.target.value ? new Date(e.target.value) : new Date())}
               required
             />
           </div>
