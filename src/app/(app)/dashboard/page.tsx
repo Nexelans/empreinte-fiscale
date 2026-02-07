@@ -9,6 +9,22 @@ import { BreakdownChart } from "@/components/dashboard/BreakdownChart";
 import { ConfianceScore } from "@/components/dashboard/ConfianceScore";
 import { JournalEntryData } from "@/modules/journal/types";
 import { getEntryTotalTax } from "@/modules/journal/service";
+import { FiscalTooltip } from "@/components/pedagogie/FiscalTooltip";
+import { DetailPanel } from "@/components/pedagogie/DetailPanel";
+import {
+  getImpotRevenuDetail,
+  getCsgCrdsDetail,
+  getCotisationsSalarialesDetail,
+  getCotisationsPatronalesDetail,
+  getTVADetail,
+  getTaxeFonciereDetail,
+  getIFIDetail,
+  getAllocationsDetail,
+  getEducationDetail,
+  getSanteDetail,
+  getSecuriteDetail,
+  getInfrastructureDetail,
+} from "@/modules/pedagogie/detailPanelData";
 
 export default function DashboardPage() {
   const { data: session } = useSession();
@@ -238,10 +254,15 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Score cards */}
+        {/* Score cards with tooltips */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <ScoreCard
-            title="Ce que je paie"
+            title={
+              <span>
+                Ce que je paie{" "}
+                <span className="text-sm font-normal text-gray-500">(cliquez sur chaque ligne pour les détails)</span>
+              </span>
+            }
             value={score.totalPaye}
             subtitle="Impôts + cotisations + taxes"
             color="red"
@@ -255,7 +276,11 @@ export default function DashboardPage() {
             icon="🎁"
           />
           <ScoreCard
-            title="Solde net"
+            title={
+              <FiscalTooltip terme={score.soldeNet > 0 ? "contributeur_net" : "beneficiaire_net"}>
+                Solde net
+              </FiscalTooltip>
+            }
             value={score.soldeNet}
             subtitle={score.soldeNet > 0 ? "Contributeur net" : "Bénéficiaire net"}
             color="blue"
@@ -263,30 +288,172 @@ export default function DashboardPage() {
           />
         </div>
 
-        {/* Breakdown and Confidence */}
+        {/* Detailed breakdown with pedagogical panels */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           <div className="lg:col-span-2 space-y-6">
-            <BreakdownChart
-              title="Détail : Ce que je paie"
-              items={payeItems}
-              total={score.totalPaye}
-            />
-            <BreakdownChart
-              title="Détail : Ce que je reçois (Transferts)"
-              items={recuTransfertsItems}
-              total={Object.values(score.detailRecu.transfertsDirects).reduce(
-                (sum: number, val) => sum + (val as number),
-                0
-              )}
-            />
-            <BreakdownChart
-              title="Détail : Services mutualisés"
-              items={recuServicesItems}
-              total={Object.values(score.detailRecu.servicesMutualises).reduce(
-                (sum: number, val) => sum + (val as number),
-                0
-              )}
-            />
+            {/* Ce que je paie */}
+            <div className="bg-white border border-gray-200 rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                💸 <FiscalTooltip terme="impot_revenu">Ce que je paie</FiscalTooltip>
+              </h2>
+              <div className="space-y-3">
+                {score.detailPaye.impotRevenu > 0 && (
+                  <DetailPanel
+                    {...getImpotRevenuDetail(
+                      score.detailPaye.impotRevenu,
+                      profil?.revenus?.salaireNet || 0,
+                      profil?.situation?.nombreParts || 1
+                    )}
+                  />
+                )}
+                {score.detailPaye.csg_crds > 0 && (
+                  <DetailPanel
+                    {...getCsgCrdsDetail(
+                      score.detailPaye.csg_crds,
+                      profil?.revenus?.salaireBrut || 0
+                    )}
+                  />
+                )}
+                {score.detailPaye.cotisationsSalariales > 0 && (
+                  <DetailPanel
+                    {...getCotisationsSalarialesDetail(
+                      score.detailPaye.cotisationsSalariales,
+                      profil?.revenus?.salaireBrut || 0
+                    )}
+                  />
+                )}
+                {score.detailPaye.cotisationsPatronales > 0 && (
+                  <DetailPanel
+                    {...getCotisationsPatronalesDetail(
+                      score.detailPaye.cotisationsPatronales,
+                      profil?.revenus?.salaireBrut || 0
+                    )}
+                  />
+                )}
+                {score.detailPaye.tva > 0 && (
+                  <DetailPanel
+                    {...getTVADetail(
+                      score.detailPaye.tva,
+                      20000 // TODO: get actual depensesAnnuelles
+                    )}
+                  />
+                )}
+                {score.detailPaye.taxeFonciere > 0 && (
+                  <DetailPanel {...getTaxeFonciereDetail(score.detailPaye.taxeFonciere)} />
+                )}
+                {score.detailPaye.ifi > 0 && (
+                  <DetailPanel
+                    {...getIFIDetail(
+                      score.detailPaye.ifi,
+                      profil?.patrimoine?.patrimoineIFI || 0
+                    )}
+                  />
+                )}
+              </div>
+            </div>
+
+            {/* Ce que je reçois - Transferts */}
+            <div className="bg-white border border-gray-200 rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                🎁 Transferts directs
+              </h2>
+              <div className="space-y-3">
+                {score.detailRecu.transfertsDirects.allocations > 0 && (
+                  <DetailPanel
+                    {...getAllocationsDetail(
+                      score.detailRecu.transfertsDirects.allocations,
+                      profil?.familleServices?.nombreEnfants || 0
+                    )}
+                  />
+                )}
+                {score.detailRecu.transfertsDirects.apl > 0 && (
+                  <DetailPanel
+                    titre="APL (Aide Personnalisée au Logement)"
+                    montant={score.detailRecu.transfertsDirects.apl}
+                    description="Aide au logement versée par la CAF selon vos revenus et votre loyer."
+                    sources={[
+                      {
+                        nom: "Caisse d'Allocations Familiales",
+                        url: "https://www.caf.fr/",
+                      },
+                    ]}
+                    statut="estime"
+                    icon="🏠"
+                  />
+                )}
+                {score.detailRecu.transfertsDirects.remboursementsSante > 0 && (
+                  <DetailPanel
+                    titre="Remboursements santé"
+                    montant={score.detailRecu.transfertsDirects.remboursementsSante}
+                    description="Remboursements de la Sécurité sociale pour vos soins médicaux."
+                    sources={[
+                      {
+                        nom: "Assurance Maladie",
+                        url: "https://www.ameli.fr/",
+                      },
+                    ]}
+                    statut="estime"
+                    icon="💊"
+                  />
+                )}
+              </div>
+            </div>
+
+            {/* Services mutualisés */}
+            <div className="bg-white border border-gray-200 rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                🏛️ <FiscalTooltip terme="services_mutualises">Services mutualisés</FiscalTooltip>
+              </h2>
+              <div className="space-y-3">
+                {score.detailRecu.servicesMutualises.education > 0 && (
+                  <DetailPanel
+                    {...getEducationDetail(
+                      score.detailRecu.servicesMutualises.education,
+                      profil?.familleServices?.enfants || []
+                    )}
+                  />
+                )}
+                {score.detailRecu.servicesMutualises.sante > 0 && (
+                  <DetailPanel {...getSanteDetail(score.detailRecu.servicesMutualises.sante)} />
+                )}
+                {score.detailRecu.servicesMutualises.securite > 0 && (
+                  <DetailPanel
+                    {...getSecuriteDetail(score.detailRecu.servicesMutualises.securite)}
+                  />
+                )}
+                {score.detailRecu.servicesMutualises.infrastructure > 0 && (
+                  <DetailPanel
+                    {...getInfrastructureDetail(
+                      score.detailRecu.servicesMutualises.infrastructure
+                    )}
+                  />
+                )}
+                {score.detailRecu.servicesMutualises.culture > 0 && (
+                  <DetailPanel
+                    titre="Culture"
+                    montant={score.detailRecu.servicesMutualises.culture}
+                    description="Budget culture (musées, théâtres, patrimoine, médiathèques) réparti par habitant."
+                    sources={[
+                      {
+                        nom: "Ministère de la Culture",
+                        url: "https://www.culture.gouv.fr/",
+                      },
+                    ]}
+                    statut="estime"
+                    icon="🎨"
+                  />
+                )}
+                {score.detailRecu.servicesMutualises.administration > 0 && (
+                  <DetailPanel
+                    titre="Administration"
+                    montant={score.detailRecu.servicesMutualises.administration}
+                    description="Coût de l'administration publique (fonction publique, services de l'État) réparti par habitant."
+                    statut="estime"
+                    icon="🏢"
+                  />
+                )}
+              </div>
+            </div>
           </div>
 
           <div>

@@ -1,5 +1,7 @@
+import { ReactNode } from "react";
+
 interface ScoreCardProps {
-  title: string;
+  title: string | ReactNode;
   value: number;
   subtitle: string;
   color: "red" | "green" | "blue";
