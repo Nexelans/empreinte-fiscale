@@ -7,12 +7,16 @@ import Link from "next/link";
 import { ScoreCard } from "@/components/dashboard/ScoreCard";
 import { BreakdownChart } from "@/components/dashboard/BreakdownChart";
 import { ConfianceScore } from "@/components/dashboard/ConfianceScore";
+import { JournalEntryData } from "@/modules/journal/types";
+import { getEntryTotalTax } from "@/modules/journal/service";
 
 export default function DashboardPage() {
   const { data: session } = useSession();
   const [profil, setProfil] = useState<any>(null);
   const [score, setScore] = useState<any>(null);
   const [confiance, setConfiance] = useState<any>(null);
+  const [recentEntries, setRecentEntries] = useState<JournalEntryData[]>([]);
+  const [monthlyTotal, setMonthlyTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -26,6 +30,29 @@ export default function DashboardPage() {
       if (profilRes.ok) {
         const profilData = await profilRes.json();
         setProfil(profilData);
+
+        // Load journal entries (last 5 and monthly total)
+        const journalRes = await fetch("/api/journal");
+        if (journalRes.ok) {
+          const journalData = await journalRes.json();
+
+          // Get last 5 entries
+          const recent = journalData.slice(0, 5);
+          setRecentEntries(recent);
+
+          // Calculate monthly total
+          const now = new Date();
+          const currentMonth = now.getMonth();
+          const currentYear = now.getFullYear();
+
+          const monthlyEntries = journalData.filter((entry: JournalEntryData) => {
+            const entryDate = new Date(entry.date);
+            return entryDate.getMonth() === currentMonth && entryDate.getFullYear() === currentYear;
+          });
+
+          const total = monthlyEntries.reduce((sum: number, entry: JournalEntryData) => sum + entry.montantTTC, 0);
+          setMonthlyTotal(total);
+        }
 
         // If profil is complete, calculate score
         if (profilData.isComplete) {
@@ -208,6 +235,66 @@ export default function DashboardPage() {
             {confiance && <ConfianceScore scoreConfiance={confiance} />}
           </div>
         </div>
+
+        {/* Dépenses récentes */}
+        {recentEntries.length > 0 && (
+          <div className="mt-8 bg-white border border-gray-200 rounded-lg p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-semibold text-gray-900">Dépenses récentes</h2>
+              <Link href="/journal">
+                <Button variant="link" className="text-blue-600">
+                  Voir tout le journal →
+                </Button>
+              </Link>
+            </div>
+
+            {/* Monthly total */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-blue-900 font-medium">Total du mois en cours</span>
+                <span className="text-2xl font-bold text-blue-900">{monthlyTotal.toFixed(2)} €</span>
+              </div>
+            </div>
+
+            {/* Recent entries list */}
+            <div className="space-y-3">
+              {recentEntries.map((entry) => {
+                const totalTax = getEntryTotalTax(entry);
+                const entryDate = new Date(entry.date);
+
+                return (
+                  <div
+                    key={entry.id}
+                    className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                  >
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium text-gray-900">
+                          {entry.enseigne || "Dépense"}
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          {entryDate.toLocaleDateString("fr-FR", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          })}
+                        </span>
+                      </div>
+                      <div className="text-sm text-gray-600 mt-1">
+                        Dont {totalTax.toFixed(2)} € de taxes
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-lg font-semibold text-gray-900">
+                        {entry.montantTTC.toFixed(2)} €
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* CTA */}
         <div className="mt-8 flex gap-4 justify-center">
