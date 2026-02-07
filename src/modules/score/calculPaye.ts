@@ -9,6 +9,8 @@ import {
   getDepensesAnnuellesDefaut,
 } from "@/modules/referentiel";
 import { DetailPaye } from "./types";
+import { getJournalEntries } from "../journal/service";
+import { getCurrentYearAggregation } from "../journal/aggregations";
 
 /**
  * Calcule l'impôt sur le revenu avec quotient familial
@@ -150,7 +152,7 @@ export async function calculCotisationsPatronales(
 }
 
 /**
- * Calcule la TVA estimée
+ * Calcule la TVA estimée (méthode par défaut sans journal)
  */
 export async function calculTVA(
   depensesAnnuelles: number,
@@ -174,6 +176,63 @@ export async function calculTVA(
       repartition.super_reduit * (tauxTVA.super_reduit / (1 + tauxTVA.super_reduit)));
 
   return Math.round(tvaTotal);
+}
+
+/**
+ * Calcule la TVA avec données du journal (hybride : réel + estimé)
+ * Utilise les données réelles du journal quand disponibles,
+ * complète avec des estimations pour les jours manquants
+ */
+export async function calculTVAAvecJournal(
+  userId: string,
+  depensesAnnuellesEstimees: number,
+  millesime: string
+): Promise<number> {
+  try {
+    // Récupérer les entrées du journal pour l'année en cours
+    const currentYear = new Date().getFullYear();
+    const startDate = new Date(currentYear, 0, 1);
+    const endDate = new Date(currentYear, 11, 31);
+
+    const journalEntries = await getJournalEntries(userId, {
+      startDate,
+      endDate,
+    });
+
+    if (journalEntries.length === 0) {
+      // Pas de données journal, utiliser estimation pure
+      return calculTVA(depensesAnnuellesEstimees, millesime);
+    }
+
+    // Agréger les taxes du journal
+    const yearlyAgg = getCurrentYearAggregation(journalEntries);
+    if (!yearlyAgg) {
+      return calculTVA(depensesAnnuellesEstimees, millesime);
+    }
+
+    // Total des taxes TVA réelles du journal
+    const tvaReelle = yearlyAgg.totalTaxes;
+
+    // Nombre de jours avec données
+    const daysWithData = journalEntries.length; // Simplifié: 1 entry = 1 jour
+    const totalDaysInYear = 365;
+    const daysWithoutData = Math.max(0, totalDaysInYear - daysWithData);
+
+    // Estimation pour les jours manquants
+    // Dépenses quotidiennes estimées = dépenses annuelles / 365
+    const depensesQuotidiennesEstimees = depensesAnnuellesEstimees / totalDaysInYear;
+    const tvaQuotidienneEstimee = (await calculTVA(depensesAnnuellesEstimees, millesime)) / totalDaysInYear;
+    const tvaEstimeePourJoursManquants = tvaQuotidienneEstimee * daysWithoutData;
+
+    // TVA hybride = TVA réelle + TVA estimée pour jours manquants
+    const tvaHybride = tvaReelle + tvaEstimeePourJoursManquants;
+
+    return Math.round(tvaHybride);
+  } catch (error) {
+    console.error("[calculTVAAvecJournal] Error:", error);
+    // Fallback sur estimation pure en cas d'erreur
+    return calculTVA(depensesAnnuellesEstimees, millesime);
+  }
 }
 
 /**
@@ -207,7 +266,11 @@ export async function calculIFI(patrimoineNet: number, millesime: string): Promi
  */
 export async function calculTotalPaye(
   profil: Partial<ProfilFiscalComplete>,
-  millesime: string
+  millesime: string,
+  options?: {
+    userId?: string;
+    useJournalData?: boolean;
+  }
 ): Promise<DetailPaye> {
   const salaireBrut = profil.revenus?.salaireBrut || 0;
   const salaireNet = profil.revenus?.salaireNet || 0;
@@ -239,7 +302,14 @@ export async function calculTotalPaye(
   );
   const cotisationsSalariales = await calculCotisationsSalariales(salaireBrut, millesime);
   const cotisationsPatronales = await calculCotisationsPatronales(salaireBrut, millesime);
-  const tva = await calculTVA(depensesAnnuelles, millesime);
+
+  // Use journal data for TVA if available and requested
+  let tva: number;
+  if (options?.useJournalData && options?.userId) {
+    tva = await calculTVAAvecJournal(options.userId, depensesAnnuelles, millesime);
+  } else {
+    tva = await calculTVA(depensesAnnuelles, millesime);
+  }
 
   // IFI - Calcul depuis le Référentiel
   const ifi = await calculIFI(patrimoineIFI, millesime);

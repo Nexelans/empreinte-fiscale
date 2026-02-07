@@ -205,7 +205,7 @@ export default function ProfilWizardPage() {
         ...profilData,
         isComplete: true,
         lastCompletedAt: new Date(),
-        wizardStep: 5,
+        wizardStep: 5 as WizardStep,
       };
 
       // Save directly with completed flag

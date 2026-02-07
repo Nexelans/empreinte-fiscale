@@ -11,7 +11,11 @@ import { calculerScoreConfiance } from "./scoreConfiance";
  */
 export async function calculerScoreFiscal(
   profil: Partial<ProfilFiscalComplete>,
-  millesime?: string
+  millesime?: string,
+  options?: {
+    userId?: string;
+    useJournalData?: boolean;
+  }
 ): Promise<ScoreFiscal> {
   // Validation du profil
   const validation = validateProfilForScore(profil);
@@ -22,7 +26,7 @@ export async function calculerScoreFiscal(
   const annee = parseInt(millesimeActif);
 
   // Calcul "Ce que je paie"
-  const detailPaye = await calculTotalPaye(profil, millesimeActif);
+  const detailPaye = await calculTotalPaye(profil, millesimeActif, options);
   const totalPaye = Object.values(detailPaye).reduce((sum, val) => sum + val, 0);
 
   // Calcul du coût éducation
