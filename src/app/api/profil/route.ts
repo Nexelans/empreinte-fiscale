@@ -33,7 +33,49 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Profil not found" }, { status: 404 });
     }
 
-    return NextResponse.json(user.profilFiscal);
+    // Transform Prisma model to ProfilFiscalComplete format
+    const profil = user.profilFiscal;
+    const transformed = {
+      wizardStep: profil.wizardStep,
+      isComplete: profil.isComplete,
+      lastCompletedAt: profil.lastCompletedAt,
+      situation: {
+        statut: profil.statut,
+        nombreParts: profil.nombreParts,
+        commune: profil.commune,
+        age: profil.age,
+      },
+      revenus: {
+        salaireBrut: profil.salaireBrut,
+        salaireNet: profil.salaireNet,
+        typeContrat: profil.typeContrat,
+        revenusFonciers: profil.revenusFonciers,
+        revenusCapitaux: profil.revenusCapitaux,
+        autresRevenus: profil.autresRevenus,
+      },
+      patrimoine: {
+        proprietaire: profil.proprietaire,
+        valeurLocative: profil.valeurLocative,
+        taxeFonciere: profil.taxeFonciere,
+        vehicules: profil.vehicules,
+        patrimoineIFI: profil.patrimoineIFI,
+      },
+      consommation: {
+        mode: profil.modeConsommation,
+        budgetMensuel: profil.budgetMensuel,
+        detailCategories: profil.detailCategories,
+        alcoolTabac: profil.alcoolTabac,
+      },
+      familleServices: {
+        nombreEnfants: profil.nombreEnfants,
+        enfants: profil.enfantsDetails,
+        frequenceServices: profil.frequenceServices,
+        aides: profil.aides,
+      },
+      statusData: profil.statusData,
+    };
+
+    return NextResponse.json(transformed);
   } catch (error) {
     console.error("Error fetching profil:", error);
     return NextResponse.json(

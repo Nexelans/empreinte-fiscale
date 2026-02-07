@@ -78,13 +78,15 @@ export function validateProfilForScore(
 
 /**
  * Gestion des cas limites dans les calculs
+ * Note: Le solde net PEUT être négatif (bénéficiaire net)
  */
 export function handleEdgeCases(value: number): number {
   // Arrondi à 2 décimales
   const rounded = Math.round(value * 100) / 100;
 
-  // Pas de valeurs négatives pour les montants
-  return Math.max(0, rounded);
+  // Retourne la valeur arrondie sans forcer à positif
+  // (le solde net peut être négatif si bénéficiaire net)
+  return rounded;
 }
 
 /**

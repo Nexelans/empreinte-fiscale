@@ -29,6 +29,44 @@ export default function ProfilWizardPage() {
     }
   }, [status, router]);
 
+  // Auto-calculate nombre de parts when statut or children change
+  useEffect(() => {
+    if (!profilData || isLoading) return;
+
+    const statut = profilData.situation?.statut;
+    const nombreEnfants = profilData.familleServices?.nombreEnfants || 0;
+
+    if (statut) {
+      let calculatedParts = statut === "marie_pacse" ? 2 : 1;
+
+      // Add parts for children (French tax rules)
+      if (nombreEnfants === 1) {
+        calculatedParts += 0.5;
+      } else if (nombreEnfants === 2) {
+        calculatedParts += 1.0; // 0.5 + 0.5
+      } else if (nombreEnfants >= 3) {
+        calculatedParts += 1.0 + (nombreEnfants - 2) * 1.0;
+      }
+
+      // Only update if different from current value (to avoid override if manually changed)
+      if (profilData.situation?.nombreParts !== calculatedParts) {
+        setProfilData((prev) => {
+          if (!prev) return prev;
+          return {
+            ...prev,
+            situation: {
+              ...prev.situation,
+              statut: prev.situation?.statut || null,
+              commune: prev.situation?.commune || null,
+              age: prev.situation?.age || null,
+              nombreParts: calculatedParts,
+            },
+          };
+        });
+      }
+    }
+  }, [profilData?.situation?.statut, profilData?.familleServices?.nombreEnfants, isLoading]);
+
   // Auto-save on data change (debounced)
   useEffect(() => {
     if (!profilData || isLoading) return;
@@ -160,14 +198,40 @@ export default function ProfilWizardPage() {
   const completeProfil = async () => {
     if (!profilData) return;
 
-    setProfilData({
-      ...profilData,
-      isComplete: true,
-      lastCompletedAt: new Date(),
-    });
+    setIsSaving(true);
+    try {
+      // Prepare the completed profil data
+      const completedProfilData = {
+        ...profilData,
+        isComplete: true,
+        lastCompletedAt: new Date(),
+        wizardStep: 5,
+      };
 
-    await saveProfil(true);
-    router.push("/dashboard");
+      // Save directly with completed flag
+      const response = await fetch("/api/profil", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(completedProfilData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to complete profil");
+      }
+
+      console.log("✅ Profil completed successfully!");
+
+      // Update local state
+      setProfilData(completedProfilData);
+
+      // Redirect to dashboard
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Error completing profil:", error);
+      alert("Erreur lors de la finalisation du profil. Veuillez réessayer.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   if (isLoading || !profilData) {
@@ -202,31 +266,61 @@ export default function ProfilWizardPage() {
         <div className="bg-white rounded-lg shadow-sm p-6 mt-8">
           {currentStep === 1 && (
             <Step1Situation
-              data={profilData.situation!}
+              data={profilData.situation || { statut: null, nombreParts: null, commune: null, age: null }}
               onChange={(data) => updateProfilData("situation", data)}
             />
           )}
           {currentStep === 2 && (
             <Step2Revenus
-              data={profilData.revenus!}
+              data={profilData.revenus || {
+                salaireBrut: null,
+                salaireNet: null,
+                typeContrat: null,
+                revenusFonciers: null,
+                revenusCapitaux: null,
+                autresRevenus: null,
+              }}
               onChange={(data) => updateProfilData("revenus", data)}
             />
           )}
           {currentStep === 3 && (
             <Step3Patrimoine
-              data={profilData.patrimoine!}
+              data={profilData.patrimoine || {
+                proprietaire: null,
+                valeurLocative: null,
+                taxeFonciere: null,
+                vehicules: [],
+                patrimoineIFI: null,
+              }}
               onChange={(data) => updateProfilData("patrimoine", data)}
             />
           )}
           {currentStep === 4 && (
             <Step4Consommation
-              data={profilData.consommation!}
+              data={profilData.consommation || { mode: null }}
               onChange={(data) => updateProfilData("consommation", data)}
             />
           )}
           {currentStep === 5 && (
             <Step5FamilleServices
-              data={profilData.familleServices!}
+              data={profilData.familleServices || {
+                nombreEnfants: 0,
+                enfants: [],
+                frequenceServices: {
+                  transportsCommun: "jamais",
+                  hopitalMedecin: "jamais",
+                  bibliotheque: "jamais",
+                  equipementsSportifs: "jamais",
+                },
+                aides: {
+                  caf: false,
+                  apl: false,
+                  rsa: false,
+                  bourses: false,
+                  chomage: false,
+                  cmuc: false,
+                },
+              }}
               onChange={(data) => updateProfilData("familleServices", data)}
             />
           )}
@@ -243,10 +337,10 @@ export default function ProfilWizardPage() {
           </Button>
 
           {currentStep < 5 ? (
-            <Button onClick={nextStep}>Suivant →</Button>
+            <Button onClick={nextStep} disabled={isSaving}>Suivant →</Button>
           ) : (
-            <Button onClick={completeProfil}>
-              Terminer et voir mon score
+            <Button onClick={completeProfil} disabled={isSaving}>
+              {isSaving ? "Finalisation..." : "Terminer et voir mon score"}
             </Button>
           )}
         </div>

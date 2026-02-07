@@ -219,10 +219,17 @@ export async function calculTotalPaye(
 
   // Estimation des dépenses annuelles depuis le Référentiel si non renseigné
   const depensesAnnuellesDefaut = await getDepensesAnnuellesDefaut(millesime);
-  const depensesAnnuelles =
-    profil.consommation?.budgetMensuel?.total
-      ? (profil.consommation.budgetMensuel.total as number) * 12
-      : depensesAnnuellesDefaut;
+  let depensesAnnuelles = depensesAnnuellesDefaut;
+
+  if (profil.consommation?.budgetMensuel) {
+    const budget = profil.consommation.budgetMensuel;
+    const totalMensuel =
+      (budget.courses || 0) +
+      (budget.restaurants || 0) +
+      (budget.carburant || 0) +
+      (budget.loisirs || 0);
+    depensesAnnuelles = totalMensuel * 12;
+  }
 
   const impotRevenu = await calculImpotRevenu(salaireNet, nombreParts, millesime);
   const csg_crds = await calculCSG_CRDS(

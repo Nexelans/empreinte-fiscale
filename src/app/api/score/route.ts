@@ -14,11 +14,15 @@ import { ProfilFiscalComplete } from "@/modules/profil/types";
  */
 export async function GET(request: NextRequest) {
   try {
+    console.log("[Score API] Starting score calculation...");
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.email) {
+      console.log("[Score API] No session found");
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+
+    console.log("[Score API] Session found for:", session.user.email);
 
     const user = await prisma.user.findUnique({
       where: { email: session.user.email },
@@ -28,15 +32,19 @@ export async function GET(request: NextRequest) {
     });
 
     if (!user) {
+      console.log("[Score API] User not found");
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
     if (!user.profilFiscal) {
+      console.log("[Score API] Profil not found");
       return NextResponse.json(
         { error: "Profil not found. Please complete your profile first." },
         { status: 404 }
       );
     }
+
+    console.log("[Score API] Profil found, transforming data...");
 
     // Transform Prisma profil to ProfilFiscalComplete format
     const profil: Partial<ProfilFiscalComplete> = {
@@ -77,13 +85,23 @@ export async function GET(request: NextRequest) {
     };
 
     // Calculate score
+    console.log("[Score API] Calling calculerScoreFiscal...");
     const score = await calculerScoreFiscal(profil);
+    console.log("[Score API] Score calculated successfully:", {
+      totalPaye: score.totalPaye,
+      totalRecu: score.totalRecu,
+      soldeNet: score.soldeNet,
+    });
 
     return NextResponse.json(score);
   } catch (error) {
-    console.error("Error calculating score:", error);
+    console.error("[Score API] Error calculating score:", error);
+    console.error("[Score API] Error stack:", error instanceof Error ? error.stack : "No stack");
     return NextResponse.json(
-      { error: "Internal server error" },
+      {
+        error: "Internal server error",
+        message: error instanceof Error ? error.message : "Unknown error"
+      },
       { status: 500 }
     );
   }

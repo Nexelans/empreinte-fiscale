@@ -9,7 +9,7 @@ import { isLocked, recordFailedAttempt, resetAttempts } from "@/modules/auth/rat
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   session: {
-    strategy: "database",
+    strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   pages: {
@@ -66,6 +66,7 @@ export const authOptions: NextAuthOptions = {
           email: user.email,
           name: user.name,
           image: user.image,
+          emailVerified: user.emailVerified,
         };
       },
     }),
@@ -82,20 +83,53 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async session({ session, user }) {
-      if (session.user) {
-        (session.user as any).id = (user as any).id;
+    async jwt({ token, user, account, trigger }) {
+      // Initial sign in - store user data in token
+      if (user) {
+        token.id = user.id;
+        token.email = user.email;
+        token.name = user.name;
+        token.picture = user.image;
+        token.emailVerified = user.emailVerified ? true : false;
       }
-      return session;
-    },
-    async signIn({ user, account }) {
-      // OAuth providers automatically verify email
-      if (account?.provider === "google" && user.email) {
+
+      // OAuth sign in - verify email and update token
+      if (account?.provider === "google" && user?.email) {
         await prisma.user.update({
           where: { email: user.email },
           data: { emailVerified: new Date() },
         });
+        token.emailVerified = true;
       }
+
+      // On update trigger, refresh user data from database
+      if (trigger === "update" && token.email) {
+        const dbUser = await prisma.user.findUnique({
+          where: { email: token.email as string },
+          select: { emailVerified: true, name: true, image: true },
+        });
+        if (dbUser) {
+          token.emailVerified = dbUser.emailVerified ? true : false;
+          token.name = dbUser.name;
+          token.picture = dbUser.image;
+        }
+      }
+
+      return token;
+    },
+    async session({ session, token }) {
+      // Add user data from token to session
+      if (token && session.user) {
+        (session.user as any).id = token.id as string;
+        (session.user as any).emailVerified = token.emailVerified as boolean;
+        session.user.email = token.email as string;
+        session.user.name = token.name as string;
+        session.user.image = token.picture as string;
+      }
+      return session;
+    },
+    async signIn({ user }) {
+      // Allow sign in
       return true;
     },
   },

@@ -78,8 +78,9 @@ export function Step1Situation({ data, onChange }: Step1SituationProps) {
             placeholder="Ex: 1, 1.5, 2"
           />
           <p className="text-sm text-gray-500 mt-1">
-            Calculé automatiquement selon votre statut. Ajustez si vous avez des enfants (0.5 part
-            par enfant pour les 2 premiers, 1 part à partir du 3ème).
+            <strong>Calculé automatiquement</strong> selon votre statut et vos enfants à l'étape 5.
+            <br />
+            Vous pouvez modifier manuellement si nécessaire.
           </p>
         </div>
 
