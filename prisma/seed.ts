@@ -129,13 +129,13 @@ async function seedTauxTVA() {
     millesime: "2026",
     categorie: "TAUX_TVA",
     cle: "normal",
-    valeur: 0.20,
+    valeur: 20,
     unite: "pourcentage",
     source: "Code général des impôts, article 278",
     urlSource: "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006279261",
     datePublication: new Date("2014-01-01"),
     statut: "OFFICIEL",
-    notes: "Taux normal applicable à la plupart des biens et services",
+    notes: "Taux normal applicable à la plupart des biens et services (20%)",
   });
 
   // Taux intermédiaire
@@ -143,14 +143,14 @@ async function seedTauxTVA() {
     millesime: "2026",
     categorie: "TAUX_TVA",
     cle: "intermediaire",
-    valeur: 0.10,
+    valeur: 10,
     unite: "pourcentage",
     source: "Code général des impôts, article 278-0 bis",
     urlSource: "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006279243",
     datePublication: new Date("2014-01-01"),
     statut: "OFFICIEL",
     notes:
-      "Applicable notamment aux produits agricoles, restauration, travaux dans logements anciens",
+      "Applicable notamment aux produits agricoles, restauration, travaux dans logements anciens (10%)",
   });
 
   // Taux réduit
@@ -158,13 +158,13 @@ async function seedTauxTVA() {
     millesime: "2026",
     categorie: "TAUX_TVA",
     cle: "reduit",
-    valeur: 0.055,
+    valeur: 5.5,
     unite: "pourcentage",
     source: "Code général des impôts, article 278-0 bis A",
     urlSource: "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006279244",
     datePublication: new Date("2014-01-01"),
     statut: "OFFICIEL",
-    notes: "Applicable notamment aux produits alimentaires de première nécessité, livres",
+    notes: "Applicable notamment aux produits alimentaires de première nécessité, livres (5,5%)",
   });
 
   // Taux super-réduit
@@ -172,13 +172,13 @@ async function seedTauxTVA() {
     millesime: "2026",
     categorie: "TAUX_TVA",
     cle: "super_reduit",
-    valeur: 0.021,
+    valeur: 2.1,
     unite: "pourcentage",
     source: "Code général des impôts, article 281 quater",
     urlSource: "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006279278",
     datePublication: new Date("2014-01-01"),
     statut: "OFFICIEL",
-    notes: "Applicable aux médicaments remboursables, presse",
+    notes: "Applicable aux médicaments remboursables, presse (2,1%)",
   });
 
   console.log("✓ Taux TVA seeded");
