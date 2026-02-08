@@ -32,19 +32,19 @@ export default function HomePage() {
 
         <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
           <div className="p-6 bg-white rounded-lg shadow-sm">
-            <h3 className="text-lg font-semibold mb-2">🔍 Transparent</h3>
+            <h2 className="text-lg font-semibold mb-2">🔍 Transparent</h2>
             <p className="text-gray-600">
               Chaque chiffre est sourcé et traçable jusqu'aux données officielles
             </p>
           </div>
           <div className="p-6 bg-white rounded-lg shadow-sm">
-            <h3 className="text-lg font-semibold mb-2">⚖️ Non-partisan</h3>
+            <h2 className="text-lg font-semibold mb-2">⚖️ Non-partisan</h2>
             <p className="text-gray-600">
               Aucun jugement de valeur, juste les faits et vos chiffres personnalisés
             </p>
           </div>
           <div className="p-6 bg-white rounded-lg shadow-sm">
-            <h3 className="text-lg font-semibold mb-2">🎯 Précis</h3>
+            <h2 className="text-lg font-semibold mb-2">🎯 Précis</h2>
             <p className="text-gray-600">
               Score de confiance pour comprendre la fiabilité de vos résultats
             </p>
