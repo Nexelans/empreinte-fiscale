@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { SessionProvider } from "@/components/providers/SessionProvider";
+import { Footer } from "@/components/shared/Footer";
 
 export const metadata: Metadata = {
   title: "Empreinte Fiscale",
@@ -14,7 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr">
-      <body>
+      <body className="flex flex-col min-h-screen">
         {/* Skip to main content link - WCAG 2.4.1 */}
         <a
           href="#main-content"
@@ -24,9 +25,10 @@ export default function RootLayout({
         </a>
 
         <SessionProvider>
-          <main id="main-content" tabIndex={-1}>
+          <main id="main-content" tabIndex={-1} className="flex-grow">
             {children}
           </main>
+          <Footer />
         </SessionProvider>
       </body>
     </html>
