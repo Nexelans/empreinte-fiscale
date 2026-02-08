@@ -319,20 +319,63 @@ export function getEducationDetail(montant: number, enfants: any[]): DetailPanel
   };
 }
 
-export function getSanteDetail(montant: number): DetailPanelProps {
+export function getRemboursementsSanteDetail(montant: number): DetailPanelProps {
   return {
-    titre: "Santé",
+    titre: "Remboursements santé (transferts directs)",
     montant,
     description:
-      "Part publique des dépenses de santé dont vous bénéficiez : consultations, hôpital, médicaments remboursés. Calculé selon la moyenne nationale par habitant.",
-    formule: "Santé = budget santé / population",
+      "Montants que la Sécurité sociale vous rembourse directement pour vos consultations médicales, médicaments, hospitalisations. C'est de l'argent qui arrive sur votre compte bancaire ou celui de votre médecin/pharmacien. Distinct du coût global du système de santé (voir 'Santé' dans les services mutualisés).",
+    formule: "Remboursements = consultations remboursées + médicaments remboursés + hospitalisations",
+    sources: [
+      {
+        nom: "Assurance Maladie",
+        url: "https://www.ameli.fr/",
+      },
+    ],
+    hypotheses: [
+      "Estimation selon votre fréquence de consultation déclarée",
+      "Taux de remboursement moyens de la Sécurité sociale",
+      "Ne comprend pas les remboursements de votre mutuelle complémentaire",
+    ],
+    statut: "estime",
+    icon: "💊",
+  };
+}
+
+export function getSanteDetail(montant: number): DetailPanelProps {
+  return {
+    titre: "Santé (système public mutualisé)",
+    montant,
+    description:
+      "Coût global du système de santé public dont vous bénéficiez : hôpitaux publics (bâtiments, équipements, personnel soignant), recherche médicale, prévention, veille sanitaire. Ce n'est PAS de l'argent que vous recevez directement, mais la valeur des infrastructures et services financés par l'impôt dont vous profitez. Réparti selon la moyenne nationale par habitant.",
+    formule: "Santé = (budget hôpitaux + personnel soignant + équipements + prévention) / population",
+    etapes: [
+      {
+        label: "Budget santé publique national",
+        formula: "Projet de Loi de Finances 2026",
+        result: montant,
+      },
+      {
+        label: "Répartition par habitant",
+        formula: "Budget total / 67 millions d'habitants",
+        result: montant,
+      },
+    ],
     sources: [
       {
         nom: "Ministère de la Santé - Comptes de la santé",
         url: "https://sante.gouv.fr/",
       },
+      {
+        nom: "Projet de Loi de Finances 2026",
+        url: "https://www.budget.gouv.fr/",
+      },
     ],
-    hypotheses: ["Répartition moyenne nationale des dépenses de santé"],
+    hypotheses: [
+      "Répartition moyenne nationale par habitant",
+      "Comprend : hôpitaux publics, personnel médical, équipements, recherche",
+      "Ne comprend PAS vos remboursements directs (voir 'Remboursements santé')",
+    ],
     statut: "estime",
     icon: "🏥",
   };

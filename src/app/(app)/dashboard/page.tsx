@@ -22,6 +22,7 @@ import {
   getAllocationsDetail,
   getEducationDetail,
   getSanteDetail,
+  getRemboursementsSanteDetail,
   getSecuriteDetail,
   getInfrastructureDetail,
 } from "@/modules/pedagogie/detailPanelData";
@@ -355,8 +356,11 @@ export default function DashboardPage() {
             {/* Ce que je reçois - Transferts */}
             <div className="bg-white border border-gray-200 rounded-lg p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                🎁 Transferts directs
+                🎁 <FiscalTooltip terme="transferts_directs">Transferts directs</FiscalTooltip>
               </h2>
+              <p className="text-sm text-gray-600 mb-4 bg-green-50 border border-green-200 rounded p-3">
+                💰 <strong>Argent que vous recevez</strong> : allocations, aides, remboursements versés directement sur votre compte bancaire ou à votre médecin/pharmacien.
+              </p>
               <div className="space-y-3">
                 {score.detailRecu.transfertsDirects.allocations > 0 && (
                   <DetailPanel
@@ -383,17 +387,9 @@ export default function DashboardPage() {
                 )}
                 {score.detailRecu.transfertsDirects.remboursementsSante > 0 && (
                   <DetailPanel
-                    titre="Remboursements santé"
-                    montant={score.detailRecu.transfertsDirects.remboursementsSante}
-                    description="Remboursements de la Sécurité sociale pour vos soins médicaux."
-                    sources={[
-                      {
-                        nom: "Assurance Maladie",
-                        url: "https://www.ameli.fr/",
-                      },
-                    ]}
-                    statut="estime"
-                    icon="💊"
+                    {...getRemboursementsSanteDetail(
+                      score.detailRecu.transfertsDirects.remboursementsSante
+                    )}
                   />
                 )}
               </div>
@@ -404,6 +400,9 @@ export default function DashboardPage() {
               <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
                 🏛️ <FiscalTooltip terme="services_mutualises">Services mutualisés</FiscalTooltip>
               </h2>
+              <p className="text-sm text-gray-600 mb-4 bg-blue-50 border border-blue-200 rounded p-3">
+                🏗️ <strong>Services dont vous bénéficiez</strong> : infrastructures publiques (écoles, hôpitaux, routes) et services financés par l'impôt. Ce n'est pas de l'argent versé directement, mais la valeur estimée de ce que l'État met à votre disposition.
+              </p>
               <div className="space-y-3">
                 {score.detailRecu.servicesMutualises.education > 0 && (
                   <DetailPanel

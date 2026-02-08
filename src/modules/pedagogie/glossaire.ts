@@ -100,12 +100,22 @@ export const GLOSSAIRE: Record<string, TermeGlossaire> = {
     urlSource: "https://www.legifrance.gouv.fr/",
   },
 
+  transferts_directs: {
+    terme: "Transferts directs",
+    definition:
+      "Sommes d'argent versées directement par l'État ou la Sécurité sociale sur votre compte bancaire ou à votre bénéfice : allocations familiales, APL, prime d'activité, remboursements santé, bourses, etc. C'est de l'argent que vous recevez réellement, contrairement aux services publics mutualisés.",
+    exemple:
+      "Famille avec 2 enfants : allocations familiales 1 680€/an + APL 3 000€/an = 4 680€ de transferts directs.",
+    source: "Caisse d'Allocations Familiales, Assurance Maladie",
+    urlSource: "https://www.caf.fr/",
+  },
+
   services_mutualises: {
     terme: "Services publics mutualisés",
     definition:
-      "Services financés collectivement par l'impôt et accessibles à tous : éducation, santé, sécurité, infrastructure, culture. Leur coût est réparti selon la population.",
+      "Services financés collectivement par l'impôt et accessibles à tous : éducation, santé, sécurité, infrastructure, culture. Leur coût est réparti selon la population. Ce n'est PAS de l'argent versé directement, mais la valeur estimée des services dont vous bénéficiez.",
     exemple:
-      "Éducation d'un enfant au collège : environ 8 780€/an financés par l'État.",
+      "Éducation d'un enfant au collège : environ 8 780€/an financés par l'État. Vous ne recevez pas cet argent, mais votre enfant bénéficie d'une scolarité gratuite.",
     source: "Ministère de l'Éducation nationale (DEPP)",
     urlSource: "https://www.education.gouv.fr/",
   },
