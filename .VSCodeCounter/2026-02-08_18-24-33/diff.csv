@@ -1,0 +1,174 @@
+"filename", "language", "Markdown", "Python", "TypeScript", "JSON", "HTML", "TypeScript JSX", "YAML", "comment", "blank", "total"
+"c:\Dev\Empreinte Fiscale\.claude\settings.local.json", "JSON", 0, 0, 0, 29, 0, 0, 0, 0, 0, 29
+"c:\Dev\Empreinte Fiscale\ARCHITECTURE.md", "Markdown", 338, 0, 0, 0, 0, 0, 0, 0, 69, 407
+"c:\Dev\Empreinte Fiscale\docs\ADMIN_REFERENTIEL_GUIDE.md", "Markdown", 258, 0, 0, 0, 0, 0, 0, 0, 98, 356
+"c:\Dev\Empreinte Fiscale\docs\DEPLOYMENT_GUIDE.md", "Markdown", 432, 0, 0, 0, 0, 0, 0, 0, 135, 567
+"c:\Dev\Empreinte Fiscale\docs\PHASE4_ARCHITECTURE.md", "Markdown", 459, 0, 0, 0, 0, 0, 0, 0, 122, 581
+"c:\Dev\Empreinte Fiscale\docs\USER_AI_GUIDE.md", "Markdown", 353, 0, 0, 0, 0, 0, 0, 0, 112, 465
+"c:\Dev\Empreinte Fiscale\docs\lighthouse-accessibility-final.json", "JSON", 0, 0, 0, 2422, 0, 0, 0, 0, 0, 2422
+"c:\Dev\Empreinte Fiscale\docs\lighthouse-accessibility-report.html", "HTML", 0, 0, 0, 0, 2537, 0, 0, 5, 317, 2859
+"c:\Dev\Empreinte Fiscale\docs\lighthouse-accessibility.json", "JSON", 0, 0, 0, 2464, 0, 0, 0, 0, 0, 2464
+"c:\Dev\Empreinte Fiscale\docs\lighthouse-final.html", "HTML", 0, 0, 0, 0, 2537, 0, 0, 5, 317, 2859
+"c:\Dev\Empreinte Fiscale\openspec\changes\archive\2026-02-08-setup-phase4\.openspec.yaml", "YAML", 0, 0, 0, 0, 0, 0, 2, 0, 1, 3
+"c:\Dev\Empreinte Fiscale\openspec\changes\archive\2026-02-08-setup-phase4\design.md", "Markdown", 333, 0, 0, 0, 0, 0, 0, 0, 113, 446
+"c:\Dev\Empreinte Fiscale\openspec\changes\archive\2026-02-08-setup-phase4\proposal.md", "Markdown", 62, 0, 0, 0, 0, 0, 0, 0, 19, 81
+"c:\Dev\Empreinte Fiscale\openspec\changes\archive\2026-02-08-setup-phase4\specs\admin-interface\spec.md", "Markdown", 141, 0, 0, 0, 0, 0, 0, 0, 65, 206
+"c:\Dev\Empreinte Fiscale\openspec\changes\archive\2026-02-08-setup-phase4\specs\ai-integration\spec.md", "Markdown", 114, 0, 0, 0, 0, 0, 0, 0, 52, 166
+"c:\Dev\Empreinte Fiscale\openspec\changes\archive\2026-02-08-setup-phase4\specs\annual-wrapped\spec.md", "Markdown", 102, 0, 0, 0, 0, 0, 0, 0, 48, 150
+"c:\Dev\Empreinte Fiscale\openspec\changes\archive\2026-02-08-setup-phase4\specs\discovery-mode\spec.md", "Markdown", 52, 0, 0, 0, 0, 0, 0, 0, 26, 78
+"c:\Dev\Empreinte Fiscale\openspec\changes\archive\2026-02-08-setup-phase4\specs\document-upload\spec.md", "Markdown", 44, 0, 0, 0, 0, 0, 0, 0, 22, 66
+"c:\Dev\Empreinte Fiscale\openspec\changes\archive\2026-02-08-setup-phase4\specs\referentiel-automation\spec.md", "Markdown", 124, 0, 0, 0, 0, 0, 0, 0, 58, 182
+"c:\Dev\Empreinte Fiscale\openspec\changes\archive\2026-02-08-setup-phase4\specs\smart-notifications\spec.md", "Markdown", 55, 0, 0, 0, 0, 0, 0, 0, 27, 82
+"c:\Dev\Empreinte Fiscale\openspec\changes\archive\2026-02-08-setup-phase4\specs\social-friends\spec.md", "Markdown", 88, 0, 0, 0, 0, 0, 0, 0, 42, 130
+"c:\Dev\Empreinte Fiscale\openspec\changes\archive\2026-02-08-setup-phase4\specs\social-groups\spec.md", "Markdown", 80, 0, 0, 0, 0, 0, 0, 0, 38, 118
+"c:\Dev\Empreinte Fiscale\openspec\changes\archive\2026-02-08-setup-phase4\specs\social-leaderboard\spec.md", "Markdown", 74, 0, 0, 0, 0, 0, 0, 0, 36, 110
+"c:\Dev\Empreinte Fiscale\openspec\changes\archive\2026-02-08-setup-phase4\tasks.md", "Markdown", 257, 0, 0, 0, 0, 0, 0, 0, 66, 323
+"c:\Dev\Empreinte Fiscale\openspec\changes\setup-phase4\.openspec.yaml", "YAML", 0, 0, 0, 0, 0, 0, -2, 0, -1, -3
+"c:\Dev\Empreinte Fiscale\openspec\changes\setup-phase4\design.md", "Markdown", -333, 0, 0, 0, 0, 0, 0, 0, -113, -446
+"c:\Dev\Empreinte Fiscale\openspec\changes\setup-phase4\proposal.md", "Markdown", -62, 0, 0, 0, 0, 0, 0, 0, -19, -81
+"c:\Dev\Empreinte Fiscale\openspec\changes\setup-phase4\specs\admin-interface\spec.md", "Markdown", -141, 0, 0, 0, 0, 0, 0, 0, -65, -206
+"c:\Dev\Empreinte Fiscale\openspec\changes\setup-phase4\specs\ai-integration\spec.md", "Markdown", -114, 0, 0, 0, 0, 0, 0, 0, -52, -166
+"c:\Dev\Empreinte Fiscale\openspec\changes\setup-phase4\specs\annual-wrapped\spec.md", "Markdown", -102, 0, 0, 0, 0, 0, 0, 0, -48, -150
+"c:\Dev\Empreinte Fiscale\openspec\changes\setup-phase4\specs\discovery-mode\spec.md", "Markdown", -52, 0, 0, 0, 0, 0, 0, 0, -26, -78
+"c:\Dev\Empreinte Fiscale\openspec\changes\setup-phase4\specs\document-upload\spec.md", "Markdown", -44, 0, 0, 0, 0, 0, 0, 0, -22, -66
+"c:\Dev\Empreinte Fiscale\openspec\changes\setup-phase4\specs\referentiel-automation\spec.md", "Markdown", -124, 0, 0, 0, 0, 0, 0, 0, -58, -182
+"c:\Dev\Empreinte Fiscale\openspec\changes\setup-phase4\specs\smart-notifications\spec.md", "Markdown", -55, 0, 0, 0, 0, 0, 0, 0, -27, -82
+"c:\Dev\Empreinte Fiscale\openspec\changes\setup-phase4\specs\social-friends\spec.md", "Markdown", -88, 0, 0, 0, 0, 0, 0, 0, -42, -130
+"c:\Dev\Empreinte Fiscale\openspec\changes\setup-phase4\specs\social-groups\spec.md", "Markdown", -80, 0, 0, 0, 0, 0, 0, 0, -38, -118
+"c:\Dev\Empreinte Fiscale\openspec\changes\setup-phase4\specs\social-leaderboard\spec.md", "Markdown", -74, 0, 0, 0, 0, 0, 0, 0, -36, -110
+"c:\Dev\Empreinte Fiscale\openspec\changes\setup-phase4\tasks.md", "Markdown", -257, 0, 0, 0, 0, 0, 0, 0, -66, -323
+"c:\Dev\Empreinte Fiscale\openspec\specs\admin-interface\spec.md", "Markdown", 142, 0, 0, 0, 0, 0, 0, 0, 65, 207
+"c:\Dev\Empreinte Fiscale\openspec\specs\ai-integration\spec.md", "Markdown", 115, 0, 0, 0, 0, 0, 0, 0, 52, 167
+"c:\Dev\Empreinte Fiscale\openspec\specs\annual-wrapped\spec.md", "Markdown", 103, 0, 0, 0, 0, 0, 0, 0, 48, 151
+"c:\Dev\Empreinte Fiscale\openspec\specs\discovery-mode\spec.md", "Markdown", 51, 0, 0, 0, 0, 0, 0, 0, 25, 76
+"c:\Dev\Empreinte Fiscale\openspec\specs\document-upload\spec.md", "Markdown", 43, 0, 0, 0, 0, 0, 0, 0, 21, 64
+"c:\Dev\Empreinte Fiscale\openspec\specs\referentiel-automation\spec.md", "Markdown", 124, 0, 0, 0, 0, 0, 0, 0, 58, 182
+"c:\Dev\Empreinte Fiscale\openspec\specs\smart-notifications\spec.md", "Markdown", 52, 0, 0, 0, 0, 0, 0, 0, 24, 76
+"c:\Dev\Empreinte Fiscale\openspec\specs\social-friends\spec.md", "Markdown", 88, 0, 0, 0, 0, 0, 0, 0, 42, 130
+"c:\Dev\Empreinte Fiscale\openspec\specs\social-groups\spec.md", "Markdown", 80, 0, 0, 0, 0, 0, 0, 0, 38, 118
+"c:\Dev\Empreinte Fiscale\openspec\specs\social-leaderboard\spec.md", "Markdown", 74, 0, 0, 0, 0, 0, 0, 0, 36, 110
+"c:\Dev\Empreinte Fiscale\package-lock.json", "JSON", 0, 0, 0, 1519, 0, 0, 0, 0, 0, 1519
+"c:\Dev\Empreinte Fiscale\package.json", "JSON", 0, 0, 0, 10, 0, 0, 0, 0, 0, 10
+"c:\Dev\Empreinte Fiscale\read_t6.py", "Python", 0, 29, 0, 0, 0, 0, 0, 0, 8, 37
+"c:\Dev\Empreinte Fiscale\scripts\clean-test-users.ts", "TypeScript", 0, 0, 39, 0, 0, 0, 0, 8, 13, 60
+"c:\Dev\Empreinte Fiscale\scripts\create-test-user-complete.ts", "TypeScript", 0, 0, 110, 0, 0, 0, 0, 12, 21, 143
+"c:\Dev\Empreinte Fiscale\scripts\create-test-user.ts", "TypeScript", 0, 0, 51, 0, 0, 0, 0, 8, 15, 74
+"c:\Dev\Empreinte Fiscale\scripts\verify-test-user.ts", "TypeScript", 0, 0, 46, 0, 0, 0, 0, 9, 16, 71
+"c:\Dev\Empreinte Fiscale\src\app\(app)\admin\analytics\page.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 263, 0, 8, 21, 292
+"c:\Dev\Empreinte Fiscale\src\app\(app)\admin\layout.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 144, 0, 11, 19, 174
+"c:\Dev\Empreinte Fiscale\src\app\(app)\admin\page.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 181, 0, 8, 19, 208
+"c:\Dev\Empreinte Fiscale\src\app\(app)\admin\referentiel\page.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 261, 0, 7, 26, 294
+"c:\Dev\Empreinte Fiscale\src\app\(app)\admin\settings\page.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 158, 0, 4, 10, 172
+"c:\Dev\Empreinte Fiscale\src\app\(app)\admin\users\page.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 76, 0, 6, 12, 94
+"c:\Dev\Empreinte Fiscale\src\app\(app)\documents\page.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 51, 0, 2, 7, 60
+"c:\Dev\Empreinte Fiscale\src\app\(app)\settings\page.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 50, 0, 2, 3, 55
+"c:\Dev\Empreinte Fiscale\src\app\(app)\visualisations\page.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 198, 0, 8, 23, 229
+"c:\Dev\Empreinte Fiscale\src\app\(auth)\auth\login\page.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
+"c:\Dev\Empreinte Fiscale\src\app\(auth)\auth\register\page.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
+"c:\Dev\Empreinte Fiscale\src\app\(public)\aide\page.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 326, 0, 6, 16, 348
+"c:\Dev\Empreinte Fiscale\src\app\(public)\cgu\page.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 289, 0, 13, 25, 327
+"c:\Dev\Empreinte Fiscale\src\app\(public)\confidentialite\page.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 405, 0, 11, 31, 447
+"c:\Dev\Empreinte Fiscale\src\app\(public)\decouverte\page.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 27, 0, 3, 3, 33
+"c:\Dev\Empreinte Fiscale\src\app\(public)\mentions-legales\page.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 154, 0, 9, 12, 175
+"c:\Dev\Empreinte Fiscale\src\app\(public)\tutoriel\page.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 657, 0, 5, 38, 700
+"c:\Dev\Empreinte Fiscale\src\app\api\admin\analytics\export\route.ts", "TypeScript", 0, 0, 50, 0, 0, 0, 0, 6, 10, 66
+"c:\Dev\Empreinte Fiscale\src\app\api\admin\analytics\features\route.ts", "TypeScript", 0, 0, 25, 0, 0, 0, 0, 4, 6, 35
+"c:\Dev\Empreinte Fiscale\src\app\api\admin\analytics\growth\route.ts", "TypeScript", 0, 0, 27, 0, 0, 0, 0, 5, 8, 40
+"c:\Dev\Empreinte Fiscale\src\app\api\admin\monitoring\cache\route.ts", "TypeScript", 0, 0, 35, 0, 0, 0, 0, 10, 7, 52
+"c:\Dev\Empreinte Fiscale\src\app\api\admin\monitoring\errors\route.ts", "TypeScript", 0, 0, 23, 0, 0, 0, 0, 4, 7, 34
+"c:\Dev\Empreinte Fiscale\src\app\api\admin\monitoring\health\route.ts", "TypeScript", 0, 0, 19, 0, 0, 0, 0, 4, 5, 28
+"c:\Dev\Empreinte Fiscale\src\app\api\admin\monitoring\jobs\route.ts", "TypeScript", 0, 0, 19, 0, 0, 0, 0, 4, 5, 28
+"c:\Dev\Empreinte Fiscale\src\app\api\admin\referentiel\pipeline\run\route.ts", "TypeScript", 0, 0, 42, 0, 0, 0, 0, 7, 10, 59
+"c:\Dev\Empreinte Fiscale\src\app\api\admin\referentiel\rollback\route.ts", "TypeScript", 0, 0, 41, 0, 0, 0, 0, 5, 11, 57
+"c:\Dev\Empreinte Fiscale\src\app\api\admin\referentiel\updates\[id]\comparison\route.ts", "TypeScript", 0, 0, 34, 0, 0, 0, 0, 5, 9, 48
+"c:\Dev\Empreinte Fiscale\src\app\api\admin\referentiel\updates\route.ts", "TypeScript", 0, 0, 118, 0, 0, 0, 0, 21, 28, 167
+"c:\Dev\Empreinte Fiscale\src\app\api\admin\users\[id]\route.ts", "TypeScript", 0, 0, 100, 0, 0, 0, 0, 8, 21, 129
+"c:\Dev\Empreinte Fiscale\src\app\api\admin\users\[id]\suspend\route.ts", "TypeScript", 0, 0, 73, 0, 0, 0, 0, 7, 16, 96
+"c:\Dev\Empreinte Fiscale\src\app\api\admin\users\route.ts", "TypeScript", 0, 0, 35, 0, 0, 0, 0, 6, 9, 50
+"c:\Dev\Empreinte Fiscale\src\app\api\ai\ocr\route.ts", "TypeScript", 0, 0, 25, 0, 0, 0, 0, 5, 3, 33
+"c:\Dev\Empreinte Fiscale\src\app\api\ai\test\route.ts", "TypeScript", 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"c:\Dev\Empreinte Fiscale\src\app\api\auth\forgot-password\route.ts", "TypeScript", 0, 0, 1, 0, 0, 0, 0, 1, 1, 3
+"c:\Dev\Empreinte Fiscale\src\app\api\auth\register\route.ts", "TypeScript", 0, 0, 3, 0, 0, 0, 0, 0, 1, 4
+"c:\Dev\Empreinte Fiscale\src\app\api\documents\[id]\route.ts", "TypeScript", 0, 0, 57, 0, 0, 0, 0, 8, 13, 78
+"c:\Dev\Empreinte Fiscale\src\app\api\score\route.ts", "TypeScript", 0, 0, 3, 0, 0, 0, 0, 1, 1, 5
+"c:\Dev\Empreinte Fiscale\src\app\api\social\friends\[friendId]\data\route.ts", "TypeScript", 0, 0, 9, 0, 0, 0, 0, -1, 0, 8
+"c:\Dev\Empreinte Fiscale\src\app\api\wrapped\[year]\export\route.ts", "TypeScript", 0, 0, 149, 0, 0, 0, 0, 18, 22, 189
+"c:\Dev\Empreinte Fiscale\src\app\layout.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 12, 0, 1, 1, 14
+"c:\Dev\Empreinte Fiscale\src\app\page.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 337, 0, 12, 29, 378
+"c:\Dev\Empreinte Fiscale\src\components\admin\AnalyticsChart.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 133, 0, 10, 13, 156
+"c:\Dev\Empreinte Fiscale\src\components\admin\ReferentielReviewCard.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 256, 0, 10, 19, 285
+"c:\Dev\Empreinte Fiscale\src\components\admin\SystemHealthCard.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 124, 0, 9, 13, 146
+"c:\Dev\Empreinte Fiscale\src\components\admin\UserManagementTable.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 185, 0, 5, 17, 207
+"c:\Dev\Empreinte Fiscale\src\components\decouverte\InternationalComparison.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 198, 0, 14, 17, 229
+"c:\Dev\Empreinte Fiscale\src\components\decouverte\ShareResult.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 126, 0, 12, 14, 152
+"c:\Dev\Empreinte Fiscale\src\components\shared\Footer.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 140, 0, 5, 7, 152
+"c:\Dev\Empreinte Fiscale\src\components\social\GroupRadarChart.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 122, 0, 15, 19, 156
+"c:\Dev\Empreinte Fiscale\src\components\ui\alert.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 53, 0, 0, 7, 60
+"c:\Dev\Empreinte Fiscale\src\components\ui\avatar.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 44, 0, 0, 7, 51
+"c:\Dev\Empreinte Fiscale\src\components\ui\badge.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 31, 0, 0, 6, 37
+"c:\Dev\Empreinte Fiscale\src\components\ui\card.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 71, 0, 0, 9, 80
+"c:\Dev\Empreinte Fiscale\src\components\ui\dropdown-menu.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 182, 0, 0, 19, 201
+"c:\Dev\Empreinte Fiscale\src\components\ui\radio-group.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 39, 0, 0, 6, 45
+"c:\Dev\Empreinte Fiscale\src\components\ui\scroll-area.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 43, 0, 0, 6, 49
+"c:\Dev\Empreinte Fiscale\src\components\ui\sonner.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 40, 0, 0, 6, 46
+"c:\Dev\Empreinte Fiscale\src\components\ui\switch.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 25, 0, 0, 5, 30
+"c:\Dev\Empreinte Fiscale\src\components\ui\table.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 107, 0, 0, 11, 118
+"c:\Dev\Empreinte Fiscale\src\components\ui\tabs.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 48, 0, 0, 8, 56
+"c:\Dev\Empreinte Fiscale\src\components\ui\textarea.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 19, 0, 0, 4, 23
+"c:\Dev\Empreinte Fiscale\src\components\upload\DeleteConfirmDialog.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 75, 0, 0, 8, 83
+"c:\Dev\Empreinte Fiscale\src\components\upload\OCRComparisonView.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 197, 0, 14, 22, 233
+"c:\Dev\Empreinte Fiscale\src\components\upload\UploadZone.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 84, 0, 4, 6, 94
+"c:\Dev\Empreinte Fiscale\src\components\wrapped\WrappedAnimation.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 2, 0, 0, 0, 2
+"c:\Dev\Empreinte Fiscale\src\hooks\use-toast.ts", "TypeScript", 0, 0, 97, 0, 0, 0, 0, 10, 21, 128
+"c:\Dev\Empreinte Fiscale\src\lib\cache.ts", "TypeScript", 0, 0, 169, 0, 0, 0, 0, 62, 28, 259
+"c:\Dev\Empreinte Fiscale\src\lib\featureFlags.ts", "TypeScript", 0, 0, 4, 0, 0, 0, 0, 12, 4, 20
+"c:\Dev\Empreinte Fiscale\src\modules\admin\analytics.ts", "TypeScript", 0, 0, 249, 0, 0, 0, 0, 39, 33, 321
+"c:\Dev\Empreinte Fiscale\src\modules\admin\auth.ts", "TypeScript", 0, 0, 223, 0, 0, 0, 0, 128, 36, 387
+"c:\Dev\Empreinte Fiscale\src\modules\admin\logging.ts", "TypeScript", 0, 0, 260, 0, 0, 0, 0, 25, 30, 315
+"c:\Dev\Empreinte Fiscale\src\modules\admin\monitoring.ts", "TypeScript", 0, 0, 268, 0, 0, 0, 0, 50, 26, 344
+"c:\Dev\Empreinte Fiscale\src\modules\admin\types.ts", "TypeScript", 0, 0, 86, 0, 0, 0, 0, 25, 8, 119
+"c:\Dev\Empreinte Fiscale\src\modules\admin\users.ts", "TypeScript", 0, 0, 304, 0, 0, 0, 0, 57, 47, 408
+"c:\Dev\Empreinte Fiscale\src\modules\auth\email.ts", "TypeScript", 0, 0, 241, 0, 0, 0, 0, 19, 21, 281
+"c:\Dev\Empreinte Fiscale\src\modules\decouverte\profiles.ts", "TypeScript", 0, 0, 294, 0, 0, 0, 0, 0, 0, 294
+"c:\Dev\Empreinte Fiscale\src\modules\notifications\service.ts", "TypeScript", 0, 0, 4, 0, 0, 0, 0, 0, 0, 4
+"c:\Dev\Empreinte Fiscale\src\modules\notifications\templates.ts", "TypeScript", 0, 0, 33, 0, 0, 0, 0, 0, 4, 37
+"c:\Dev\Empreinte Fiscale\src\modules\notifications\types.ts", "TypeScript", 0, 0, 43, 0, 0, 0, 0, 0, 5, 48
+"c:\Dev\Empreinte Fiscale\src\modules\referentiel\automation\pipeline.ts", "TypeScript", 0, 0, 2, 0, 0, 0, 0, 0, 0, 2
+"c:\Dev\Empreinte Fiscale\src\modules\referentiel\automation\review.ts", "TypeScript", 0, 0, 311, 0, 0, 0, 0, 42, 42, 395
+"c:\Dev\Empreinte Fiscale\src\modules\social\friends\service.ts", "TypeScript", 0, 0, 0, 0, 0, 0, 0, 31, 1, 32
+"c:\Dev\Empreinte Fiscale\src\modules\social\leaderboard\service.ts", "TypeScript", 0, 0, 34, 0, 0, 0, 0, 12, 12, 58
+"c:\Dev\Empreinte Fiscale\src\modules\wrapped\export.ts", "TypeScript", 0, 0, 132, 0, 0, 0, 0, 50, 27, 209
+"c:\Dev\Empreinte Fiscale\test-results\.last-run.json", "JSON", 0, 0, 0, 4, 0, 0, 0, 0, 0, 4
+"c:\Dev\Empreinte Fiscale\tests\admin\permissions.test.ts", "TypeScript", 0, 0, 242, 0, 0, 0, 0, 7, 48, 297
+"c:\Dev\Empreinte Fiscale\tests\ai\encryption.test.ts", "TypeScript", 0, 0, 127, 0, 0, 0, 0, 9, 37, 173
+"c:\Dev\Empreinte Fiscale\tests\e2e\accessibility-test.spec.ts", "TypeScript", 0, 0, 931, 0, 0, 0, 0, 140, 15, 1086
+"c:\Dev\Empreinte Fiscale\tests\e2e\admin-test.spec.ts", "TypeScript", 0, 0, 417, 0, 0, 0, 0, 137, 17, 571
+"c:\Dev\Empreinte Fiscale\tests\e2e\ai-chat.spec.ts", "TypeScript", 0, 0, 102, 0, 0, 0, 0, 42, 49, 193
+"c:\Dev\Empreinte Fiscale\tests\e2e\ai-integration-test.spec.ts", "TypeScript", 0, 0, 393, 0, 0, 0, 0, 12, 14, 419
+"c:\Dev\Empreinte Fiscale\tests\e2e\ai-test.spec.ts", "TypeScript", 0, 0, 494, 0, 0, 0, 0, 2, 34, 530
+"c:\Dev\Empreinte Fiscale\tests\e2e\auth-visual-test.spec.ts", "TypeScript", 0, 0, 124, 0, 0, 0, 0, 30, 51, 205
+"c:\Dev\Empreinte Fiscale\tests\e2e\dashboard-test.spec.ts", "TypeScript", 0, 0, 101, 0, 0, 0, 0, 5, 18, 124
+"c:\Dev\Empreinte Fiscale\tests\e2e\decouverte-test.spec.ts", "TypeScript", 0, 0, 241, 0, 0, 0, 0, 2, 25, 268
+"c:\Dev\Empreinte Fiscale\tests\e2e\documents-test.spec.ts", "TypeScript", 0, 0, 167, 0, 0, 0, 0, 7, 19, 193
+"c:\Dev\Empreinte Fiscale\tests\e2e\friend-invitation.spec.ts", "TypeScript", 0, 0, 115, 0, 0, 0, 0, 48, 47, 210
+"c:\Dev\Empreinte Fiscale\tests\e2e\gamification-test.spec.ts", "TypeScript", 0, 0, 315, 0, 0, 0, 0, 2, 28, 345
+"c:\Dev\Empreinte Fiscale\tests\e2e\integration-e2e-test.spec.ts", "TypeScript", 0, 0, 730, 0, 0, 0, 0, 10, 14, 754
+"c:\Dev\Empreinte Fiscale\tests\e2e\journal-test.spec.ts", "TypeScript", 0, 0, 227, 0, 0, 0, 0, 1, 25, 253
+"c:\Dev\Empreinte Fiscale\tests\e2e\load-testing-test.spec.ts", "TypeScript", 0, 0, 33, 0, 0, 0, 0, 15, 14, 62
+"c:\Dev\Empreinte Fiscale\tests\e2e\mode-decouverte-test.spec.ts", "TypeScript", 0, 0, 893, 0, 0, 0, 0, 12, 14, 919
+"c:\Dev\Empreinte Fiscale\tests\e2e\notifications-test.spec.ts", "TypeScript", 0, 0, 33, 0, 0, 0, 0, 13, 14, 60
+"c:\Dev\Empreinte Fiscale\tests\e2e\performance-test.spec.ts", "TypeScript", 0, 0, 646, 0, 0, 0, 0, 133, 15, 794
+"c:\Dev\Empreinte Fiscale\tests\e2e\profil-wizard-full.spec.ts", "TypeScript", 0, 0, 142, 0, 0, 0, 0, 29, 67, 238
+"c:\Dev\Empreinte Fiscale\tests\e2e\profil-wizard-simple.spec.ts", "TypeScript", 0, 0, 46, 0, 0, 0, 0, 9, 24, 79
+"c:\Dev\Empreinte Fiscale\tests\e2e\profil-wizard-test.spec.ts", "TypeScript", 0, 0, 150, 0, 0, 0, 0, 46, 65, 261
+"c:\Dev\Empreinte Fiscale\tests\e2e\quiz-test.spec.ts", "TypeScript", 0, 0, 247, 0, 0, 0, 0, 2, 25, 274
+"c:\Dev\Empreinte Fiscale\tests\e2e\responsive-test.spec.ts", "TypeScript", 0, 0, 682, 0, 0, 0, 0, 132, 16, 830
+"c:\Dev\Empreinte Fiscale\tests\e2e\rgpd-test.spec.ts", "TypeScript", 0, 0, 674, 0, 0, 0, 0, 178, 18, 870
+"c:\Dev\Empreinte Fiscale\tests\e2e\security-test.spec.ts", "TypeScript", 0, 0, 639, 0, 0, 0, 0, 17, 14, 670
+"c:\Dev\Empreinte Fiscale\tests\e2e\simulations-test.spec.ts", "TypeScript", 0, 0, 318, 0, 0, 0, 0, 2, 30, 350
+"c:\Dev\Empreinte Fiscale\tests\e2e\social-test.spec.ts", "TypeScript", 0, 0, 524, 0, 0, 0, 0, 2, 40, 566
+"c:\Dev\Empreinte Fiscale\tests\e2e\visualizations-test.spec.ts", "TypeScript", 0, 0, 83, 0, 0, 0, 0, 3, 15, 101
+"c:\Dev\Empreinte Fiscale\tests\load\leaderboard.test.ts", "TypeScript", 0, 0, 99, 0, 0, 0, 0, 14, 29, 142
+"c:\Dev\Empreinte Fiscale\tests\referentiel\pipeline.test.ts", "TypeScript", 0, 0, 213, 0, 0, 0, 0, 8, 59, 280
+"c:\Dev\Empreinte Fiscale\tests\social\permissions.test.ts", "TypeScript", 0, 0, 98, 0, 0, 0, 0, 10, 24, 132
+"Total", "-", 2712, 29, 14134, 6448, 5074, 5935, 0, 2030, 3659, 40021

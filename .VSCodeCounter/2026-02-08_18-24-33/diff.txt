@@ -1,0 +1,339 @@
+Date : 2026-02-08 18:24:33
+Directory : c:\Dev\Empreinte Fiscale
+Total : 172 files,  34332 codes, 2030 comments, 3659 blanks, all 40021 lines
+
+Languages
++----------------+------------+------------+------------+------------+------------+
+| language       | files      | code       | comment    | blank      | total      |
++----------------+------------+------------+------------+------------+------------+
+| TypeScript     |         77 |     14,134 |      1,806 |      1,528 |     17,468 |
+| JSON           |          6 |      6,448 |          0 |          0 |      6,448 |
+| TypeScript JSX |         43 |      5,935 |        214 |        544 |      6,693 |
+| HTML           |          2 |      5,074 |         10 |        634 |      5,718 |
+| Markdown       |         41 |      2,712 |          0 |        945 |      3,657 |
+| Python         |          1 |         29 |          0 |          8 |         37 |
+| YAML           |          2 |          0 |          0 |          0 |          0 |
++----------------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                           | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                              |        172 |     34,332 |      2,030 |      3,659 |     40,021 |
+| . (Files)                                                                                                      |          4 |      1,896 |          0 |         77 |      1,973 |
+| .claude                                                                                                        |          1 |         29 |          0 |          0 |         29 |
+| docs                                                                                                           |          8 |     11,462 |         10 |      1,101 |     12,573 |
+| openspec                                                                                                       |         38 |        872 |          0 |        409 |      1,281 |
+| openspec\changes                                                                                               |         28 |          0 |          0 |          0 |          0 |
+| openspec\changes\archive                                                                                       |         14 |      1,528 |          0 |        613 |      2,141 |
+| openspec\changes\archive\2026-02-08-setup-phase4                                                               |         14 |      1,528 |          0 |        613 |      2,141 |
+| openspec\changes\archive\2026-02-08-setup-phase4 (Files)                                                       |          4 |        654 |          0 |        199 |        853 |
+| openspec\changes\archive\2026-02-08-setup-phase4\specs                                                         |         10 |        874 |          0 |        414 |      1,288 |
+| openspec\changes\archive\2026-02-08-setup-phase4\specs\admin-interface                                         |          1 |        141 |          0 |         65 |        206 |
+| openspec\changes\archive\2026-02-08-setup-phase4\specs\ai-integration                                          |          1 |        114 |          0 |         52 |        166 |
+| openspec\changes\archive\2026-02-08-setup-phase4\specs\annual-wrapped                                          |          1 |        102 |          0 |         48 |        150 |
+| openspec\changes\archive\2026-02-08-setup-phase4\specs\discovery-mode                                          |          1 |         52 |          0 |         26 |         78 |
+| openspec\changes\archive\2026-02-08-setup-phase4\specs\document-upload                                         |          1 |         44 |          0 |         22 |         66 |
+| openspec\changes\archive\2026-02-08-setup-phase4\specs\referentiel-automation                                  |          1 |        124 |          0 |         58 |        182 |
+| openspec\changes\archive\2026-02-08-setup-phase4\specs\smart-notifications                                     |          1 |         55 |          0 |         27 |         82 |
+| openspec\changes\archive\2026-02-08-setup-phase4\specs\social-friends                                          |          1 |         88 |          0 |         42 |        130 |
+| openspec\changes\archive\2026-02-08-setup-phase4\specs\social-groups                                           |          1 |         80 |          0 |         38 |        118 |
+| openspec\changes\archive\2026-02-08-setup-phase4\specs\social-leaderboard                                      |          1 |         74 |          0 |         36 |        110 |
+| openspec\changes\setup-phase4                                                                                  |         14 |     -1,528 |          0 |       -613 |     -2,141 |
+| openspec\changes\setup-phase4 (Files)                                                                          |          4 |       -654 |          0 |       -199 |       -853 |
+| openspec\changes\setup-phase4\specs                                                                            |         10 |       -874 |          0 |       -414 |     -1,288 |
+| openspec\changes\setup-phase4\specs\admin-interface                                                            |          1 |       -141 |          0 |        -65 |       -206 |
+| openspec\changes\setup-phase4\specs\ai-integration                                                             |          1 |       -114 |          0 |        -52 |       -166 |
+| openspec\changes\setup-phase4\specs\annual-wrapped                                                             |          1 |       -102 |          0 |        -48 |       -150 |
+| openspec\changes\setup-phase4\specs\discovery-mode                                                             |          1 |        -52 |          0 |        -26 |        -78 |
+| openspec\changes\setup-phase4\specs\document-upload                                                            |          1 |        -44 |          0 |        -22 |        -66 |
+| openspec\changes\setup-phase4\specs\referentiel-automation                                                     |          1 |       -124 |          0 |        -58 |       -182 |
+| openspec\changes\setup-phase4\specs\smart-notifications                                                        |          1 |        -55 |          0 |        -27 |        -82 |
+| openspec\changes\setup-phase4\specs\social-friends                                                             |          1 |        -88 |          0 |        -42 |       -130 |
+| openspec\changes\setup-phase4\specs\social-groups                                                              |          1 |        -80 |          0 |        -38 |       -118 |
+| openspec\changes\setup-phase4\specs\social-leaderboard                                                         |          1 |        -74 |          0 |        -36 |       -110 |
+| openspec\specs                                                                                                 |         10 |        872 |          0 |        409 |      1,281 |
+| openspec\specs\admin-interface                                                                                 |          1 |        142 |          0 |         65 |        207 |
+| openspec\specs\ai-integration                                                                                  |          1 |        115 |          0 |         52 |        167 |
+| openspec\specs\annual-wrapped                                                                                  |          1 |        103 |          0 |         48 |        151 |
+| openspec\specs\discovery-mode                                                                                  |          1 |         51 |          0 |         25 |         76 |
+| openspec\specs\document-upload                                                                                 |          1 |         43 |          0 |         21 |         64 |
+| openspec\specs\referentiel-automation                                                                          |          1 |        124 |          0 |         58 |        182 |
+| openspec\specs\smart-notifications                                                                             |          1 |         52 |          0 |         24 |         76 |
+| openspec\specs\social-friends                                                                                  |          1 |         88 |          0 |         42 |        130 |
+| openspec\specs\social-groups                                                                                   |          1 |         80 |          0 |         38 |        118 |
+| openspec\specs\social-leaderboard                                                                              |          1 |         74 |          0 |         36 |        110 |
+| scripts                                                                                                        |          4 |        246 |         37 |         65 |        348 |
+| src                                                                                                            |         84 |      9,577 |        904 |      1,083 |     11,564 |
+| src\app                                                                                                        |         41 |      4,479 |        244 |        489 |      5,212 |
+| src\app (Files)                                                                                                |          2 |        349 |         13 |         30 |        392 |
+| src\app\(app)                                                                                                  |          9 |      1,382 |         56 |        140 |      1,578 |
+| src\app\(app)\admin                                                                                            |          6 |      1,083 |         44 |        107 |      1,234 |
+| src\app\(app)\admin (Files)                                                                                    |          2 |        325 |         19 |         38 |        382 |
+| src\app\(app)\admin\analytics                                                                                  |          1 |        263 |          8 |         21 |        292 |
+| src\app\(app)\admin\referentiel                                                                                |          1 |        261 |          7 |         26 |        294 |
+| src\app\(app)\admin\settings                                                                                   |          1 |        158 |          4 |         10 |        172 |
+| src\app\(app)\admin\users                                                                                      |          1 |         76 |          6 |         12 |         94 |
+| src\app\(app)\documents                                                                                        |          1 |         51 |          2 |          7 |         60 |
+| src\app\(app)\settings                                                                                         |          1 |         50 |          2 |          3 |         55 |
+| src\app\(app)\visualisations                                                                                   |          1 |        198 |          8 |         23 |        229 |
+| src\app\(auth)                                                                                                 |          2 |          2 |          0 |          0 |          2 |
+| src\app\(auth)\auth                                                                                            |          2 |          2 |          0 |          0 |          2 |
+| src\app\(auth)\auth\login                                                                                      |          1 |          1 |          0 |          0 |          1 |
+| src\app\(auth)\auth\register                                                                                   |          1 |          1 |          0 |          0 |          1 |
+| src\app\(public)                                                                                               |          6 |      1,858 |         47 |        125 |      2,030 |
+| src\app\(public)\aide                                                                                          |          1 |        326 |          6 |         16 |        348 |
+| src\app\(public)\cgu                                                                                           |          1 |        289 |         13 |         25 |        327 |
+| src\app\(public)\confidentialite                                                                               |          1 |        405 |         11 |         31 |        447 |
+| src\app\(public)\decouverte                                                                                    |          1 |         27 |          3 |          3 |         33 |
+| src\app\(public)\mentions-legales                                                                              |          1 |        154 |          9 |         12 |        175 |
+| src\app\(public)\tutoriel                                                                                      |          1 |        657 |          5 |         38 |        700 |
+| src\app\api                                                                                                    |         22 |        888 |        128 |        194 |      1,210 |
+| src\app\api\admin                                                                                              |         14 |        641 |         96 |        152 |        889 |
+| src\app\api\admin\analytics                                                                                    |          3 |        102 |         15 |         24 |        141 |
+| src\app\api\admin\analytics\export                                                                             |          1 |         50 |          6 |         10 |         66 |
+| src\app\api\admin\analytics\features                                                                           |          1 |         25 |          4 |          6 |         35 |
+| src\app\api\admin\analytics\growth                                                                             |          1 |         27 |          5 |          8 |         40 |
+| src\app\api\admin\monitoring                                                                                   |          4 |         96 |         22 |         24 |        142 |
+| src\app\api\admin\monitoring\cache                                                                             |          1 |         35 |         10 |          7 |         52 |
+| src\app\api\admin\monitoring\errors                                                                            |          1 |         23 |          4 |          7 |         34 |
+| src\app\api\admin\monitoring\health                                                                            |          1 |         19 |          4 |          5 |         28 |
+| src\app\api\admin\monitoring\jobs                                                                              |          1 |         19 |          4 |          5 |         28 |
+| src\app\api\admin\referentiel                                                                                  |          4 |        235 |         38 |         58 |        331 |
+| src\app\api\admin\referentiel\pipeline                                                                         |          1 |         42 |          7 |         10 |         59 |
+| src\app\api\admin\referentiel\pipeline\run                                                                     |          1 |         42 |          7 |         10 |         59 |
+| src\app\api\admin\referentiel\rollback                                                                         |          1 |         41 |          5 |         11 |         57 |
+| src\app\api\admin\referentiel\updates                                                                          |          2 |        152 |         26 |         37 |        215 |
+| src\app\api\admin\referentiel\updates (Files)                                                                  |          1 |        118 |         21 |         28 |        167 |
+| src\app\api\admin\referentiel\updates\[id]                                                                     |          1 |         34 |          5 |          9 |         48 |
+| src\app\api\admin\referentiel\updates\[id]\comparison                                                          |          1 |         34 |          5 |          9 |         48 |
+| src\app\api\admin\users                                                                                        |          3 |        208 |         21 |         46 |        275 |
+| src\app\api\admin\users (Files)                                                                                |          1 |         35 |          6 |          9 |         50 |
+| src\app\api\admin\users\[id]                                                                                   |          2 |        173 |         15 |         37 |        225 |
+| src\app\api\admin\users\[id] (Files)                                                                           |          1 |        100 |          8 |         21 |        129 |
+| src\app\api\admin\users\[id]\suspend                                                                           |          1 |         73 |          7 |         16 |         96 |
+| src\app\api\ai                                                                                                 |          2 |         25 |          5 |          4 |         34 |
+| src\app\api\ai\ocr                                                                                             |          1 |         25 |          5 |          3 |         33 |
+| src\app\api\ai\test                                                                                            |          1 |          0 |          0 |          1 |          1 |
+| src\app\api\auth                                                                                               |          2 |          4 |          1 |          2 |          7 |
+| src\app\api\auth\forgot-password                                                                               |          1 |          1 |          1 |          1 |          3 |
+| src\app\api\auth\register                                                                                      |          1 |          3 |          0 |          1 |          4 |
+| src\app\api\documents                                                                                          |          1 |         57 |          8 |         13 |         78 |
+| src\app\api\documents\[id]                                                                                     |          1 |         57 |          8 |         13 |         78 |
+| src\app\api\score                                                                                              |          1 |          3 |          1 |          1 |          5 |
+| src\app\api\social                                                                                             |          1 |          9 |         -1 |          0 |          8 |
+| src\app\api\social\friends                                                                                     |          1 |          9 |         -1 |          0 |          8 |
+| src\app\api\social\friends\[friendId]                                                                          |          1 |          9 |         -1 |          0 |          8 |
+| src\app\api\social\friends\[friendId]\data                                                                     |          1 |          9 |         -1 |          0 |          8 |
+| src\app\api\wrapped                                                                                            |          1 |        149 |         18 |         22 |        189 |
+| src\app\api\wrapped\[year]                                                                                     |          1 |        149 |         18 |         22 |        189 |
+| src\app\api\wrapped\[year]\export                                                                              |          1 |        149 |         18 |         22 |        189 |
+| src\components                                                                                                 |         24 |      2,344 |         98 |        249 |      2,691 |
+| src\components\admin                                                                                           |          4 |        698 |         34 |         62 |        794 |
+| src\components\decouverte                                                                                      |          2 |        324 |         26 |         31 |        381 |
+| src\components\shared                                                                                          |          1 |        140 |          5 |          7 |        152 |
+| src\components\social                                                                                          |          1 |        122 |         15 |         19 |        156 |
+| src\components\ui                                                                                              |         12 |        702 |          0 |         94 |        796 |
+| src\components\upload                                                                                          |          3 |        356 |         18 |         36 |        410 |
+| src\components\wrapped                                                                                         |          1 |          2 |          0 |          0 |          2 |
+| src\hooks                                                                                                      |          1 |         97 |         10 |         21 |        128 |
+| src\lib                                                                                                        |          2 |        173 |         74 |         32 |        279 |
+| src\modules                                                                                                    |         16 |      2,484 |        478 |        292 |      3,254 |
+| src\modules\admin                                                                                              |          6 |      1,390 |        324 |        180 |      1,894 |
+| src\modules\auth                                                                                               |          1 |        241 |         19 |         21 |        281 |
+| src\modules\decouverte                                                                                         |          1 |        294 |          0 |          0 |        294 |
+| src\modules\notifications                                                                                      |          3 |         80 |          0 |          9 |         89 |
+| src\modules\referentiel                                                                                        |          2 |        313 |         42 |         42 |        397 |
+| src\modules\referentiel\automation                                                                             |          2 |        313 |         42 |         42 |        397 |
+| src\modules\social                                                                                             |          2 |         34 |         43 |         13 |         90 |
+| src\modules\social\friends                                                                                     |          1 |          0 |         31 |          1 |         32 |
+| src\modules\social\leaderboard                                                                                 |          1 |         34 |         12 |         12 |         58 |
+| src\modules\wrapped                                                                                            |          1 |        132 |         50 |         27 |        209 |
+| test-results                                                                                                   |          1 |          4 |          0 |          0 |          4 |
+| tests                                                                                                          |         32 |     10,246 |      1,079 |        924 |     12,249 |
+| tests\admin                                                                                                    |          1 |        242 |          7 |         48 |        297 |
+| tests\ai                                                                                                       |          1 |        127 |          9 |         37 |        173 |
+| tests\e2e                                                                                                      |         27 |      9,467 |      1,031 |        727 |     11,225 |
+| tests\load                                                                                                     |          1 |         99 |         14 |         29 |        142 |
+| tests\referentiel                                                                                              |          1 |        213 |          8 |         59 |        280 |
+| tests\social                                                                                                   |          1 |         98 |         10 |         24 |        132 |
++----------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| filename                                                                                                       | language       | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| c:\Dev\Empreinte Fiscale\.claude\settings.local.json                                                           | JSON           |         29 |          0 |          0 |         29 |
+| c:\Dev\Empreinte Fiscale\ARCHITECTURE.md                                                                       | Markdown       |        338 |          0 |         69 |        407 |
+| c:\Dev\Empreinte Fiscale\docs\ADMIN_REFERENTIEL_GUIDE.md                                                       | Markdown       |        258 |          0 |         98 |        356 |
+| c:\Dev\Empreinte Fiscale\docs\DEPLOYMENT_GUIDE.md                                                              | Markdown       |        432 |          0 |        135 |        567 |
+| c:\Dev\Empreinte Fiscale\docs\PHASE4_ARCHITECTURE.md                                                           | Markdown       |        459 |          0 |        122 |        581 |
+| c:\Dev\Empreinte Fiscale\docs\USER_AI_GUIDE.md                                                                 | Markdown       |        353 |          0 |        112 |        465 |
+| c:\Dev\Empreinte Fiscale\docs\lighthouse-accessibility-final.json                                              | JSON           |      2,422 |          0 |          0 |      2,422 |
+| c:\Dev\Empreinte Fiscale\docs\lighthouse-accessibility-report.html                                             | HTML           |      2,537 |          5 |        317 |      2,859 |
+| c:\Dev\Empreinte Fiscale\docs\lighthouse-accessibility.json                                                    | JSON           |      2,464 |          0 |          0 |      2,464 |
+| c:\Dev\Empreinte Fiscale\docs\lighthouse-final.html                                                            | HTML           |      2,537 |          5 |        317 |      2,859 |
+| c:\Dev\Empreinte Fiscale\openspec\changes\archive\2026-02-08-setup-phase4\.openspec.yaml                       | YAML           |          2 |          0 |          1 |          3 |
+| c:\Dev\Empreinte Fiscale\openspec\changes\archive\2026-02-08-setup-phase4\design.md                            | Markdown       |        333 |          0 |        113 |        446 |
+| c:\Dev\Empreinte Fiscale\openspec\changes\archive\2026-02-08-setup-phase4\proposal.md                          | Markdown       |         62 |          0 |         19 |         81 |
+| c:\Dev\Empreinte Fiscale\openspec\changes\archive\2026-02-08-setup-phase4\specs\admin-interface\spec.md        | Markdown       |        141 |          0 |         65 |        206 |
+| c:\Dev\Empreinte Fiscale\openspec\changes\archive\2026-02-08-setup-phase4\specs\ai-integration\spec.md         | Markdown       |        114 |          0 |         52 |        166 |
+| c:\Dev\Empreinte Fiscale\openspec\changes\archive\2026-02-08-setup-phase4\specs\annual-wrapped\spec.md         | Markdown       |        102 |          0 |         48 |        150 |
+| c:\Dev\Empreinte Fiscale\openspec\changes\archive\2026-02-08-setup-phase4\specs\discovery-mode\spec.md         | Markdown       |         52 |          0 |         26 |         78 |
+| c:\Dev\Empreinte Fiscale\openspec\changes\archive\2026-02-08-setup-phase4\specs\document-upload\spec.md        | Markdown       |         44 |          0 |         22 |         66 |
+| c:\Dev\Empreinte Fiscale\openspec\changes\archive\2026-02-08-setup-phase4\specs\referentiel-automation\spec.md | Markdown       |        124 |          0 |         58 |        182 |
+| c:\Dev\Empreinte Fiscale\openspec\changes\archive\2026-02-08-setup-phase4\specs\smart-notifications\spec.md    | Markdown       |         55 |          0 |         27 |         82 |
+| c:\Dev\Empreinte Fiscale\openspec\changes\archive\2026-02-08-setup-phase4\specs\social-friends\spec.md         | Markdown       |         88 |          0 |         42 |        130 |
+| c:\Dev\Empreinte Fiscale\openspec\changes\archive\2026-02-08-setup-phase4\specs\social-groups\spec.md          | Markdown       |         80 |          0 |         38 |        118 |
+| c:\Dev\Empreinte Fiscale\openspec\changes\archive\2026-02-08-setup-phase4\specs\social-leaderboard\spec.md     | Markdown       |         74 |          0 |         36 |        110 |
+| c:\Dev\Empreinte Fiscale\openspec\changes\archive\2026-02-08-setup-phase4\tasks.md                             | Markdown       |        257 |          0 |         66 |        323 |
+| c:\Dev\Empreinte Fiscale\openspec\changes\setup-phase4\.openspec.yaml                                          | YAML           |         -2 |          0 |         -1 |         -3 |
+| c:\Dev\Empreinte Fiscale\openspec\changes\setup-phase4\design.md                                               | Markdown       |       -333 |          0 |       -113 |       -446 |
+| c:\Dev\Empreinte Fiscale\openspec\changes\setup-phase4\proposal.md                                             | Markdown       |        -62 |          0 |        -19 |        -81 |
+| c:\Dev\Empreinte Fiscale\openspec\changes\setup-phase4\specs\admin-interface\spec.md                           | Markdown       |       -141 |          0 |        -65 |       -206 |
+| c:\Dev\Empreinte Fiscale\openspec\changes\setup-phase4\specs\ai-integration\spec.md                            | Markdown       |       -114 |          0 |        -52 |       -166 |
+| c:\Dev\Empreinte Fiscale\openspec\changes\setup-phase4\specs\annual-wrapped\spec.md                            | Markdown       |       -102 |          0 |        -48 |       -150 |
+| c:\Dev\Empreinte Fiscale\openspec\changes\setup-phase4\specs\discovery-mode\spec.md                            | Markdown       |        -52 |          0 |        -26 |        -78 |
+| c:\Dev\Empreinte Fiscale\openspec\changes\setup-phase4\specs\document-upload\spec.md                           | Markdown       |        -44 |          0 |        -22 |        -66 |
+| c:\Dev\Empreinte Fiscale\openspec\changes\setup-phase4\specs\referentiel-automation\spec.md                    | Markdown       |       -124 |          0 |        -58 |       -182 |
+| c:\Dev\Empreinte Fiscale\openspec\changes\setup-phase4\specs\smart-notifications\spec.md                       | Markdown       |        -55 |          0 |        -27 |        -82 |
+| c:\Dev\Empreinte Fiscale\openspec\changes\setup-phase4\specs\social-friends\spec.md                            | Markdown       |        -88 |          0 |        -42 |       -130 |
+| c:\Dev\Empreinte Fiscale\openspec\changes\setup-phase4\specs\social-groups\spec.md                             | Markdown       |        -80 |          0 |        -38 |       -118 |
+| c:\Dev\Empreinte Fiscale\openspec\changes\setup-phase4\specs\social-leaderboard\spec.md                        | Markdown       |        -74 |          0 |        -36 |       -110 |
+| c:\Dev\Empreinte Fiscale\openspec\changes\setup-phase4\tasks.md                                                | Markdown       |       -257 |          0 |        -66 |       -323 |
+| c:\Dev\Empreinte Fiscale\openspec\specs\admin-interface\spec.md                                                | Markdown       |        142 |          0 |         65 |        207 |
+| c:\Dev\Empreinte Fiscale\openspec\specs\ai-integration\spec.md                                                 | Markdown       |        115 |          0 |         52 |        167 |
+| c:\Dev\Empreinte Fiscale\openspec\specs\annual-wrapped\spec.md                                                 | Markdown       |        103 |          0 |         48 |        151 |
+| c:\Dev\Empreinte Fiscale\openspec\specs\discovery-mode\spec.md                                                 | Markdown       |         51 |          0 |         25 |         76 |
+| c:\Dev\Empreinte Fiscale\openspec\specs\document-upload\spec.md                                                | Markdown       |         43 |          0 |         21 |         64 |
+| c:\Dev\Empreinte Fiscale\openspec\specs\referentiel-automation\spec.md                                         | Markdown       |        124 |          0 |         58 |        182 |
+| c:\Dev\Empreinte Fiscale\openspec\specs\smart-notifications\spec.md                                            | Markdown       |         52 |          0 |         24 |         76 |
+| c:\Dev\Empreinte Fiscale\openspec\specs\social-friends\spec.md                                                 | Markdown       |         88 |          0 |         42 |        130 |
+| c:\Dev\Empreinte Fiscale\openspec\specs\social-groups\spec.md                                                  | Markdown       |         80 |          0 |         38 |        118 |
+| c:\Dev\Empreinte Fiscale\openspec\specs\social-leaderboard\spec.md                                             | Markdown       |         74 |          0 |         36 |        110 |
+| c:\Dev\Empreinte Fiscale\package-lock.json                                                                     | JSON           |      1,519 |          0 |          0 |      1,519 |
+| c:\Dev\Empreinte Fiscale\package.json                                                                          | JSON           |         10 |          0 |          0 |         10 |
+| c:\Dev\Empreinte Fiscale\read_t6.py                                                                            | Python         |         29 |          0 |          8 |         37 |
+| c:\Dev\Empreinte Fiscale\scripts\clean-test-users.ts                                                           | TypeScript     |         39 |          8 |         13 |         60 |
+| c:\Dev\Empreinte Fiscale\scripts\create-test-user-complete.ts                                                  | TypeScript     |        110 |         12 |         21 |        143 |
+| c:\Dev\Empreinte Fiscale\scripts\create-test-user.ts                                                           | TypeScript     |         51 |          8 |         15 |         74 |
+| c:\Dev\Empreinte Fiscale\scripts\verify-test-user.ts                                                           | TypeScript     |         46 |          9 |         16 |         71 |
+| c:\Dev\Empreinte Fiscale\src\app\(app)\admin\analytics\page.tsx                                                | TypeScript JSX |        263 |          8 |         21 |        292 |
+| c:\Dev\Empreinte Fiscale\src\app\(app)\admin\layout.tsx                                                        | TypeScript JSX |        144 |         11 |         19 |        174 |
+| c:\Dev\Empreinte Fiscale\src\app\(app)\admin\page.tsx                                                          | TypeScript JSX |        181 |          8 |         19 |        208 |
+| c:\Dev\Empreinte Fiscale\src\app\(app)\admin\referentiel\page.tsx                                              | TypeScript JSX |        261 |          7 |         26 |        294 |
+| c:\Dev\Empreinte Fiscale\src\app\(app)\admin\settings\page.tsx                                                 | TypeScript JSX |        158 |          4 |         10 |        172 |
+| c:\Dev\Empreinte Fiscale\src\app\(app)\admin\users\page.tsx                                                    | TypeScript JSX |         76 |          6 |         12 |         94 |
+| c:\Dev\Empreinte Fiscale\src\app\(app)\documents\page.tsx                                                      | TypeScript JSX |         51 |          2 |          7 |         60 |
+| c:\Dev\Empreinte Fiscale\src\app\(app)\settings\page.tsx                                                       | TypeScript JSX |         50 |          2 |          3 |         55 |
+| c:\Dev\Empreinte Fiscale\src\app\(app)\visualisations\page.tsx                                                 | TypeScript JSX |        198 |          8 |         23 |        229 |
+| c:\Dev\Empreinte Fiscale\src\app\(auth)\auth\login\page.tsx                                                    | TypeScript JSX |          1 |          0 |          0 |          1 |
+| c:\Dev\Empreinte Fiscale\src\app\(auth)\auth\register\page.tsx                                                 | TypeScript JSX |          1 |          0 |          0 |          1 |
+| c:\Dev\Empreinte Fiscale\src\app\(public)\aide\page.tsx                                                        | TypeScript JSX |        326 |          6 |         16 |        348 |
+| c:\Dev\Empreinte Fiscale\src\app\(public)\cgu\page.tsx                                                         | TypeScript JSX |        289 |         13 |         25 |        327 |
+| c:\Dev\Empreinte Fiscale\src\app\(public)\confidentialite\page.tsx                                             | TypeScript JSX |        405 |         11 |         31 |        447 |
+| c:\Dev\Empreinte Fiscale\src\app\(public)\decouverte\page.tsx                                                  | TypeScript JSX |         27 |          3 |          3 |         33 |
+| c:\Dev\Empreinte Fiscale\src\app\(public)\mentions-legales\page.tsx                                            | TypeScript JSX |        154 |          9 |         12 |        175 |
+| c:\Dev\Empreinte Fiscale\src\app\(public)\tutoriel\page.tsx                                                    | TypeScript JSX |        657 |          5 |         38 |        700 |
+| c:\Dev\Empreinte Fiscale\src\app\api\admin\analytics\export\route.ts                                           | TypeScript     |         50 |          6 |         10 |         66 |
+| c:\Dev\Empreinte Fiscale\src\app\api\admin\analytics\features\route.ts                                         | TypeScript     |         25 |          4 |          6 |         35 |
+| c:\Dev\Empreinte Fiscale\src\app\api\admin\analytics\growth\route.ts                                           | TypeScript     |         27 |          5 |          8 |         40 |
+| c:\Dev\Empreinte Fiscale\src\app\api\admin\monitoring\cache\route.ts                                           | TypeScript     |         35 |         10 |          7 |         52 |
+| c:\Dev\Empreinte Fiscale\src\app\api\admin\monitoring\errors\route.ts                                          | TypeScript     |         23 |          4 |          7 |         34 |
+| c:\Dev\Empreinte Fiscale\src\app\api\admin\monitoring\health\route.ts                                          | TypeScript     |         19 |          4 |          5 |         28 |
+| c:\Dev\Empreinte Fiscale\src\app\api\admin\monitoring\jobs\route.ts                                            | TypeScript     |         19 |          4 |          5 |         28 |
+| c:\Dev\Empreinte Fiscale\src\app\api\admin\referentiel\pipeline\run\route.ts                                   | TypeScript     |         42 |          7 |         10 |         59 |
+| c:\Dev\Empreinte Fiscale\src\app\api\admin\referentiel\rollback\route.ts                                       | TypeScript     |         41 |          5 |         11 |         57 |
+| c:\Dev\Empreinte Fiscale\src\app\api\admin\referentiel\updates\[id]\comparison\route.ts                        | TypeScript     |         34 |          5 |          9 |         48 |
+| c:\Dev\Empreinte Fiscale\src\app\api\admin\referentiel\updates\route.ts                                        | TypeScript     |        118 |         21 |         28 |        167 |
+| c:\Dev\Empreinte Fiscale\src\app\api\admin\users\[id]\route.ts                                                 | TypeScript     |        100 |          8 |         21 |        129 |
+| c:\Dev\Empreinte Fiscale\src\app\api\admin\users\[id]\suspend\route.ts                                         | TypeScript     |         73 |          7 |         16 |         96 |
+| c:\Dev\Empreinte Fiscale\src\app\api\admin\users\route.ts                                                      | TypeScript     |         35 |          6 |          9 |         50 |
+| c:\Dev\Empreinte Fiscale\src\app\api\ai\ocr\route.ts                                                           | TypeScript     |         25 |          5 |          3 |         33 |
+| c:\Dev\Empreinte Fiscale\src\app\api\ai\test\route.ts                                                          | TypeScript     |          0 |          0 |          1 |          1 |
+| c:\Dev\Empreinte Fiscale\src\app\api\auth\forgot-password\route.ts                                             | TypeScript     |          1 |          1 |          1 |          3 |
+| c:\Dev\Empreinte Fiscale\src\app\api\auth\register\route.ts                                                    | TypeScript     |          3 |          0 |          1 |          4 |
+| c:\Dev\Empreinte Fiscale\src\app\api\documents\[id]\route.ts                                                   | TypeScript     |         57 |          8 |         13 |         78 |
+| c:\Dev\Empreinte Fiscale\src\app\api\score\route.ts                                                            | TypeScript     |          3 |          1 |          1 |          5 |
+| c:\Dev\Empreinte Fiscale\src\app\api\social\friends\[friendId]\data\route.ts                                   | TypeScript     |          9 |         -1 |          0 |          8 |
+| c:\Dev\Empreinte Fiscale\src\app\api\wrapped\[year]\export\route.ts                                            | TypeScript     |        149 |         18 |         22 |        189 |
+| c:\Dev\Empreinte Fiscale\src\app\layout.tsx                                                                    | TypeScript JSX |         12 |          1 |          1 |         14 |
+| c:\Dev\Empreinte Fiscale\src\app\page.tsx                                                                      | TypeScript JSX |        337 |         12 |         29 |        378 |
+| c:\Dev\Empreinte Fiscale\src\components\admin\AnalyticsChart.tsx                                               | TypeScript JSX |        133 |         10 |         13 |        156 |
+| c:\Dev\Empreinte Fiscale\src\components\admin\ReferentielReviewCard.tsx                                        | TypeScript JSX |        256 |         10 |         19 |        285 |
+| c:\Dev\Empreinte Fiscale\src\components\admin\SystemHealthCard.tsx                                             | TypeScript JSX |        124 |          9 |         13 |        146 |
+| c:\Dev\Empreinte Fiscale\src\components\admin\UserManagementTable.tsx                                          | TypeScript JSX |        185 |          5 |         17 |        207 |
+| c:\Dev\Empreinte Fiscale\src\components\decouverte\InternationalComparison.tsx                                 | TypeScript JSX |        198 |         14 |         17 |        229 |
+| c:\Dev\Empreinte Fiscale\src\components\decouverte\ShareResult.tsx                                             | TypeScript JSX |        126 |         12 |         14 |        152 |
+| c:\Dev\Empreinte Fiscale\src\components\shared\Footer.tsx                                                      | TypeScript JSX |        140 |          5 |          7 |        152 |
+| c:\Dev\Empreinte Fiscale\src\components\social\GroupRadarChart.tsx                                             | TypeScript JSX |        122 |         15 |         19 |        156 |
+| c:\Dev\Empreinte Fiscale\src\components\ui\alert.tsx                                                           | TypeScript JSX |         53 |          0 |          7 |         60 |
+| c:\Dev\Empreinte Fiscale\src\components\ui\avatar.tsx                                                          | TypeScript JSX |         44 |          0 |          7 |         51 |
+| c:\Dev\Empreinte Fiscale\src\components\ui\badge.tsx                                                           | TypeScript JSX |         31 |          0 |          6 |         37 |
+| c:\Dev\Empreinte Fiscale\src\components\ui\card.tsx                                                            | TypeScript JSX |         71 |          0 |          9 |         80 |
+| c:\Dev\Empreinte Fiscale\src\components\ui\dropdown-menu.tsx                                                   | TypeScript JSX |        182 |          0 |         19 |        201 |
+| c:\Dev\Empreinte Fiscale\src\components\ui\radio-group.tsx                                                     | TypeScript JSX |         39 |          0 |          6 |         45 |
+| c:\Dev\Empreinte Fiscale\src\components\ui\scroll-area.tsx                                                     | TypeScript JSX |         43 |          0 |          6 |         49 |
+| c:\Dev\Empreinte Fiscale\src\components\ui\sonner.tsx                                                          | TypeScript JSX |         40 |          0 |          6 |         46 |
+| c:\Dev\Empreinte Fiscale\src\components\ui\switch.tsx                                                          | TypeScript JSX |         25 |          0 |          5 |         30 |
+| c:\Dev\Empreinte Fiscale\src\components\ui\table.tsx                                                           | TypeScript JSX |        107 |          0 |         11 |        118 |
+| c:\Dev\Empreinte Fiscale\src\components\ui\tabs.tsx                                                            | TypeScript JSX |         48 |          0 |          8 |         56 |
+| c:\Dev\Empreinte Fiscale\src\components\ui\textarea.tsx                                                        | TypeScript JSX |         19 |          0 |          4 |         23 |
+| c:\Dev\Empreinte Fiscale\src\components\upload\DeleteConfirmDialog.tsx                                         | TypeScript JSX |         75 |          0 |          8 |         83 |
+| c:\Dev\Empreinte Fiscale\src\components\upload\OCRComparisonView.tsx                                           | TypeScript JSX |        197 |         14 |         22 |        233 |
+| c:\Dev\Empreinte Fiscale\src\components\upload\UploadZone.tsx                                                  | TypeScript JSX |         84 |          4 |          6 |         94 |
+| c:\Dev\Empreinte Fiscale\src\components\wrapped\WrappedAnimation.tsx                                           | TypeScript JSX |          2 |          0 |          0 |          2 |
+| c:\Dev\Empreinte Fiscale\src\hooks\use-toast.ts                                                                | TypeScript     |         97 |         10 |         21 |        128 |
+| c:\Dev\Empreinte Fiscale\src\lib\cache.ts                                                                      | TypeScript     |        169 |         62 |         28 |        259 |
+| c:\Dev\Empreinte Fiscale\src\lib\featureFlags.ts                                                               | TypeScript     |          4 |         12 |          4 |         20 |
+| c:\Dev\Empreinte Fiscale\src\modules\admin\analytics.ts                                                        | TypeScript     |        249 |         39 |         33 |        321 |
+| c:\Dev\Empreinte Fiscale\src\modules\admin\auth.ts                                                             | TypeScript     |        223 |        128 |         36 |        387 |
+| c:\Dev\Empreinte Fiscale\src\modules\admin\logging.ts                                                          | TypeScript     |        260 |         25 |         30 |        315 |
+| c:\Dev\Empreinte Fiscale\src\modules\admin\monitoring.ts                                                       | TypeScript     |        268 |         50 |         26 |        344 |
+| c:\Dev\Empreinte Fiscale\src\modules\admin\types.ts                                                            | TypeScript     |         86 |         25 |          8 |        119 |
+| c:\Dev\Empreinte Fiscale\src\modules\admin\users.ts                                                            | TypeScript     |        304 |         57 |         47 |        408 |
+| c:\Dev\Empreinte Fiscale\src\modules\auth\email.ts                                                             | TypeScript     |        241 |         19 |         21 |        281 |
+| c:\Dev\Empreinte Fiscale\src\modules\decouverte\profiles.ts                                                    | TypeScript     |        294 |          0 |          0 |        294 |
+| c:\Dev\Empreinte Fiscale\src\modules\notifications\service.ts                                                  | TypeScript     |          4 |          0 |          0 |          4 |
+| c:\Dev\Empreinte Fiscale\src\modules\notifications\templates.ts                                                | TypeScript     |         33 |          0 |          4 |         37 |
+| c:\Dev\Empreinte Fiscale\src\modules\notifications\types.ts                                                    | TypeScript     |         43 |          0 |          5 |         48 |
+| c:\Dev\Empreinte Fiscale\src\modules\referentiel\automation\pipeline.ts                                        | TypeScript     |          2 |          0 |          0 |          2 |
+| c:\Dev\Empreinte Fiscale\src\modules\referentiel\automation\review.ts                                          | TypeScript     |        311 |         42 |         42 |        395 |
+| c:\Dev\Empreinte Fiscale\src\modules\social\friends\service.ts                                                 | TypeScript     |          0 |         31 |          1 |         32 |
+| c:\Dev\Empreinte Fiscale\src\modules\social\leaderboard\service.ts                                             | TypeScript     |         34 |         12 |         12 |         58 |
+| c:\Dev\Empreinte Fiscale\src\modules\wrapped\export.ts                                                         | TypeScript     |        132 |         50 |         27 |        209 |
+| c:\Dev\Empreinte Fiscale\test-results\.last-run.json                                                           | JSON           |          4 |          0 |          0 |          4 |
+| c:\Dev\Empreinte Fiscale\tests\admin\permissions.test.ts                                                       | TypeScript     |        242 |          7 |         48 |        297 |
+| c:\Dev\Empreinte Fiscale\tests\ai\encryption.test.ts                                                           | TypeScript     |        127 |          9 |         37 |        173 |
+| c:\Dev\Empreinte Fiscale\tests\e2e\accessibility-test.spec.ts                                                  | TypeScript     |        931 |        140 |         15 |      1,086 |
+| c:\Dev\Empreinte Fiscale\tests\e2e\admin-test.spec.ts                                                          | TypeScript     |        417 |        137 |         17 |        571 |
+| c:\Dev\Empreinte Fiscale\tests\e2e\ai-chat.spec.ts                                                             | TypeScript     |        102 |         42 |         49 |        193 |
+| c:\Dev\Empreinte Fiscale\tests\e2e\ai-integration-test.spec.ts                                                 | TypeScript     |        393 |         12 |         14 |        419 |
+| c:\Dev\Empreinte Fiscale\tests\e2e\ai-test.spec.ts                                                             | TypeScript     |        494 |          2 |         34 |        530 |
+| c:\Dev\Empreinte Fiscale\tests\e2e\auth-visual-test.spec.ts                                                    | TypeScript     |        124 |         30 |         51 |        205 |
+| c:\Dev\Empreinte Fiscale\tests\e2e\dashboard-test.spec.ts                                                      | TypeScript     |        101 |          5 |         18 |        124 |
+| c:\Dev\Empreinte Fiscale\tests\e2e\decouverte-test.spec.ts                                                     | TypeScript     |        241 |          2 |         25 |        268 |
+| c:\Dev\Empreinte Fiscale\tests\e2e\documents-test.spec.ts                                                      | TypeScript     |        167 |          7 |         19 |        193 |
+| c:\Dev\Empreinte Fiscale\tests\e2e\friend-invitation.spec.ts                                                   | TypeScript     |        115 |         48 |         47 |        210 |
+| c:\Dev\Empreinte Fiscale\tests\e2e\gamification-test.spec.ts                                                   | TypeScript     |        315 |          2 |         28 |        345 |
+| c:\Dev\Empreinte Fiscale\tests\e2e\integration-e2e-test.spec.ts                                                | TypeScript     |        730 |         10 |         14 |        754 |
+| c:\Dev\Empreinte Fiscale\tests\e2e\journal-test.spec.ts                                                        | TypeScript     |        227 |          1 |         25 |        253 |
+| c:\Dev\Empreinte Fiscale\tests\e2e\load-testing-test.spec.ts                                                   | TypeScript     |         33 |         15 |         14 |         62 |
+| c:\Dev\Empreinte Fiscale\tests\e2e\mode-decouverte-test.spec.ts                                                | TypeScript     |        893 |         12 |         14 |        919 |
+| c:\Dev\Empreinte Fiscale\tests\e2e\notifications-test.spec.ts                                                  | TypeScript     |         33 |         13 |         14 |         60 |
+| c:\Dev\Empreinte Fiscale\tests\e2e\performance-test.spec.ts                                                    | TypeScript     |        646 |        133 |         15 |        794 |
+| c:\Dev\Empreinte Fiscale\tests\e2e\profil-wizard-full.spec.ts                                                  | TypeScript     |        142 |         29 |         67 |        238 |
+| c:\Dev\Empreinte Fiscale\tests\e2e\profil-wizard-simple.spec.ts                                                | TypeScript     |         46 |          9 |         24 |         79 |
+| c:\Dev\Empreinte Fiscale\tests\e2e\profil-wizard-test.spec.ts                                                  | TypeScript     |        150 |         46 |         65 |        261 |
+| c:\Dev\Empreinte Fiscale\tests\e2e\quiz-test.spec.ts                                                           | TypeScript     |        247 |          2 |         25 |        274 |
+| c:\Dev\Empreinte Fiscale\tests\e2e\responsive-test.spec.ts                                                     | TypeScript     |        682 |        132 |         16 |        830 |
+| c:\Dev\Empreinte Fiscale\tests\e2e\rgpd-test.spec.ts                                                           | TypeScript     |        674 |        178 |         18 |        870 |
+| c:\Dev\Empreinte Fiscale\tests\e2e\security-test.spec.ts                                                       | TypeScript     |        639 |         17 |         14 |        670 |
+| c:\Dev\Empreinte Fiscale\tests\e2e\simulations-test.spec.ts                                                    | TypeScript     |        318 |          2 |         30 |        350 |
+| c:\Dev\Empreinte Fiscale\tests\e2e\social-test.spec.ts                                                         | TypeScript     |        524 |          2 |         40 |        566 |
+| c:\Dev\Empreinte Fiscale\tests\e2e\visualizations-test.spec.ts                                                 | TypeScript     |         83 |          3 |         15 |        101 |
+| c:\Dev\Empreinte Fiscale\tests\load\leaderboard.test.ts                                                        | TypeScript     |         99 |         14 |         29 |        142 |
+| c:\Dev\Empreinte Fiscale\tests\referentiel\pipeline.test.ts                                                    | TypeScript     |        213 |          8 |         59 |        280 |
+| c:\Dev\Empreinte Fiscale\tests\social\permissions.test.ts                                                      | TypeScript     |         98 |         10 |         24 |        132 |
+| Total                                                                                                          |                |     34,332 |      2,030 |      3,659 |     40,021 |
++----------------------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
