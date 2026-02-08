@@ -301,15 +301,24 @@ export default function CGUPage() {
             <h2 className="font-display text-2xl font-bold mb-4" style={{ color: "var(--color-navy, #1A2332)" }}>
               Article 12 - Contact
             </h2>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
+            <div className="bg-white p-6 rounded-lg shadow-sm space-y-2">
               <p className="mb-4">
                 Pour toute question relative aux présentes CGU :
               </p>
               <p>
+                <strong>Société :</strong> NEXELANS
+              </p>
+              <p>
+                <strong>Adresse :</strong> 141 Chemin de la Basse Biousse, 38890 Saint-Chef, France
+              </p>
+              <p>
                 <strong>Email :</strong>{" "}
-                <a href="mailto:contact@empreinte-fiscale.fr" className="text-blue-600 hover:underline">
-                  contact@empreinte-fiscale.fr
+                <a href="mailto:contact@nexelans.fr" className="text-blue-600 hover:underline">
+                  contact@nexelans.fr
                 </a>
+              </p>
+              <p>
+                <strong>Téléphone :</strong> 09 72 02 75 90
               </p>
             </div>
           </section>
@@ -317,7 +326,7 @@ export default function CGUPage() {
           {/* Version */}
           <section className="text-sm text-gray-500 text-center pt-8 border-t">
             <p><strong>Version des CGU :</strong> 1.0</p>
-            <p><strong>Dernière mise à jour :</strong> Janvier 2026</p>
+            <p><strong>Dernière mise à jour :</strong> Février 2026</p>
           </section>
         </div>
       </div>

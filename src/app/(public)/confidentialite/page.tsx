@@ -31,14 +31,17 @@ export default function ConfidentialitePage() {
             <h2 className="font-display text-2xl font-bold mb-4" style={{ color: "var(--color-navy, #1A2332)" }}>
               1. Qui est responsable de vos données ?
             </h2>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
+            <div className="bg-white p-6 rounded-lg shadow-sm space-y-2">
               <p className="mb-4">
                 Le responsable du traitement des données personnelles est :
               </p>
-              <p><strong>Empreinte Fiscale</strong></p>
-              <p>Email : <a href="mailto:dpo@empreinte-fiscale.fr" className="text-blue-600 hover:underline">dpo@empreinte-fiscale.fr</a></p>
+              <p><strong>NEXELANS</strong></p>
+              <p><strong>Adresse :</strong> 141 Chemin de la Basse Biousse, 38890 Saint-Chef, France</p>
+              <p><strong>SIRET :</strong> 952 552 420 00012</p>
+              <p><strong>Email :</strong> <a href="mailto:contact@nexelans.fr" className="text-blue-600 hover:underline">contact@nexelans.fr</a></p>
+              <p><strong>Téléphone :</strong> 09 72 02 75 90</p>
               <p className="mt-4 text-sm text-gray-600">
-                Pour toute question concernant vos données personnelles, vous pouvez nous contacter à cette adresse.
+                Pour toute question concernant vos données personnelles, vous pouvez nous contacter par email ou téléphone.
               </p>
             </div>
           </section>
@@ -337,7 +340,7 @@ export default function ConfidentialitePage() {
             <div className="mt-6 bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
               <p className="text-blue-900 text-sm">
                 <strong>Comment exercer vos droits ?</strong> Contactez-nous à{" "}
-                <a href="mailto:dpo@empreinte-fiscale.fr" className="underline">dpo@empreinte-fiscale.fr</a>.
+                <a href="mailto:contact@nexelans.fr" className="underline">contact@nexelans.fr</a>.
                 Nous répondons sous 1 mois maximum (délai légal RGPD).
               </p>
             </div>
@@ -433,11 +436,16 @@ export default function ConfidentialitePage() {
               Notre délégué à la protection des données (DPO) est à votre disposition :
             </p>
             <p className="font-semibold">
-              📧 <a href="mailto:dpo@empreinte-fiscale.fr" className="text-blue-600 hover:underline">dpo@empreinte-fiscale.fr</a>
+              📧 <a href="mailto:contact@nexelans.fr" className="text-blue-600 hover:underline">contact@nexelans.fr</a>
             </p>
             <p className="text-sm text-gray-600 mt-4">
               Nous nous engageons à répondre sous 1 mois maximum (délai légal RGPD).
             </p>
+          </section>
+
+          {/* Mise à jour */}
+          <section className="text-sm text-gray-500 text-center pt-8 border-t">
+            <p>Dernière mise à jour : Février 2026</p>
           </section>
         </div>
       </div>

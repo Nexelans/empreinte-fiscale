@@ -21,12 +21,18 @@ export default function MentionsLegalesPage() {
             </h2>
             <div className="bg-white p-6 rounded-lg shadow-sm space-y-2">
               <p><strong>Nom de l'application :</strong> Empreinte Fiscale</p>
-              <p><strong>Forme juridique :</strong> [À compléter - SAS, Association, etc.]</p>
-              <p><strong>Siège social :</strong> [À compléter]</p>
-              <p><strong>SIRET :</strong> [À compléter]</p>
-              <p><strong>Capital social :</strong> [À compléter]</p>
-              <p><strong>Email :</strong> contact@empreinte-fiscale.fr</p>
-              <p><strong>Directeur de la publication :</strong> [À compléter]</p>
+              <p><strong>Éditeur :</strong> NEXELANS</p>
+              <p><strong>Forme juridique :</strong> SAS (Société par Actions Simplifiée)</p>
+              <p><strong>Siège social :</strong> 141 Chemin de la Basse Biousse, 38890 Saint-Chef, France</p>
+              <p><strong>SIRET :</strong> 952 552 420 00012</p>
+              <p><strong>SIREN :</strong> 952 552 420</p>
+              <p><strong>RCS :</strong> Vienne</p>
+              <p><strong>Capital social :</strong> 7 024,07 €</p>
+              <p><strong>NAF/APE :</strong> 7022Z - Conseil pour les affaires et autres conseils de gestion</p>
+              <p><strong>Email :</strong> <a href="mailto:contact@nexelans.fr" className="text-blue-600 hover:underline">contact@nexelans.fr</a></p>
+              <p><strong>Téléphone :</strong> 09 72 02 75 90</p>
+              <p><strong>Site web :</strong> <a href="https://www.nexelans.fr" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">www.nexelans.fr</a></p>
+              <p><strong>Directeur de la publication :</strong> Emmanuel Chaumery</p>
             </div>
           </section>
 
@@ -41,8 +47,7 @@ export default function MentionsLegalesPage() {
               <p><strong>Site web :</strong> <a href="https://vercel.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">vercel.com</a></p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-sm space-y-2 mt-4">
-              <p><strong>Base de données :</strong> [Supabase / Railway / À compléter]</p>
-              <p><strong>Adresse :</strong> [À compléter]</p>
+              <p><strong>Base de données :</strong> À définir lors du déploiement (Supabase, Railway ou Vercel Postgres)</p>
             </div>
           </section>
 
@@ -53,13 +58,13 @@ export default function MentionsLegalesPage() {
             </h2>
             <div className="bg-white p-6 rounded-lg shadow-sm">
               <p className="mb-4">
-                L'ensemble du contenu de ce site (structure, textes, logos, images, vidéos, code source) est la propriété exclusive d'Empreinte Fiscale, sauf mention contraire.
+                L'ensemble du contenu de ce site (structure, textes, logos, images, vidéos, code source) est la propriété exclusive de NEXELANS, sauf mention contraire.
               </p>
               <p className="mb-4">
-                Toute reproduction, représentation, modification, publication, transmission ou dénaturation, totale ou partielle du site ou de son contenu, par quelque procédé que ce soit, et sur quelque support que ce soit, est interdite sans l'autorisation écrite préalable d'Empreinte Fiscale.
+                Toute reproduction, représentation, modification, publication, transmission ou dénaturation, totale ou partielle du site ou de son contenu, par quelque procédé que ce soit, et sur quelque support que ce soit, est interdite sans l'autorisation écrite préalable de NEXELANS.
               </p>
               <p>
-                Le code source de l'application est disponible en open source sous licence [À compléter - MIT, GPL, etc.] sur <a href="https://github.com/Nexelans/empreinte-fiscale" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">GitHub</a>.
+                Le code source de l'application est disponible sur <a href="https://github.com/Nexelans/empreinte-fiscale" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">GitHub</a>. Tous droits réservés.
               </p>
             </div>
           </section>
@@ -124,7 +129,8 @@ export default function MentionsLegalesPage() {
                 </a>.
               </p>
               <p>
-                <strong>Déclaration CNIL :</strong> [Numéro de déclaration si applicable]
+                <strong>Responsable du traitement des données :</strong> NEXELANS<br />
+                <strong>Contact DPO :</strong> <a href="mailto:contact@nexelans.fr" className="text-blue-600 hover:underline">contact@nexelans.fr</a>
               </p>
             </div>
           </section>
@@ -150,22 +156,28 @@ export default function MentionsLegalesPage() {
             <h2 className="font-display text-2xl font-bold mb-4" style={{ color: "var(--color-navy, #1A2332)" }}>
               8. Contact
             </h2>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
+            <div className="bg-white p-6 rounded-lg shadow-sm space-y-2">
               <p className="mb-2">
                 Pour toute question concernant ces mentions légales ou le fonctionnement du site :
               </p>
               <p>
                 <strong>Email :</strong>{" "}
-                <a href="mailto:contact@empreinte-fiscale.fr" className="text-blue-600 hover:underline">
-                  contact@empreinte-fiscale.fr
+                <a href="mailto:contact@nexelans.fr" className="text-blue-600 hover:underline">
+                  contact@nexelans.fr
                 </a>
+              </p>
+              <p>
+                <strong>Téléphone :</strong> 09 72 02 75 90
+              </p>
+              <p>
+                <strong>Adresse postale :</strong> NEXELANS, 141 Chemin de la Basse Biousse, 38890 Saint-Chef, France
               </p>
             </div>
           </section>
 
           {/* Mise à jour */}
           <section className="text-sm text-gray-500 text-center pt-8 border-t">
-            <p>Dernière mise à jour : Janvier 2026</p>
+            <p>Dernière mise à jour : Février 2026</p>
           </section>
         </div>
       </div>
