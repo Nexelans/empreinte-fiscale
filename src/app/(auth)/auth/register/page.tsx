@@ -110,7 +110,7 @@ export default function RegisterPage() {
               type="submit"
               disabled={loading}
               size="lg"
-              className="group relative w-full flex justify-center py-3 px-4 text-base font-semibold"
+              className="group relative w-full flex justify-center py-3 px-4 text-base font-semibold transition-all duration-300 ease-out hover:scale-105 hover:shadow-lg hover:-translate-y-0.5 active:scale-95 active:translate-y-0 disabled:hover:scale-100 disabled:hover:translate-y-0 disabled:hover:shadow-sm"
             >
               {loading ? "Création..." : "Créer mon compte"}
             </Button>
