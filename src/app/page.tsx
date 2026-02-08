@@ -37,7 +37,7 @@ export default function HomePage() {
         vx: (Math.random() - 0.5) * 0.3,
         vy: (Math.random() - 0.5) * 0.3,
         size: Math.random() * 3 + 1,
-        color: colors[Math.floor(Math.random() * colors.length)],
+        color: colors[Math.floor(Math.random() * colors.length)] || "#81B29A",
         opacity: Math.random() * 0.3 + 0.1,
       });
     }

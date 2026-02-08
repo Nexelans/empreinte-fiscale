@@ -642,13 +642,13 @@ export default function TutorielPage() {
         {/* Main Content */}
         <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12 mb-8">
           <div className="flex items-center gap-4 mb-6">
-            <div className="text-5xl">{currentStepData.icon}</div>
+            <div className="text-5xl">{currentStepData?.icon}</div>
             <h2 className="font-display text-3xl font-bold" style={{ color: "var(--color-navy, #1A2332)" }}>
-              {currentStepData.title}
+              {currentStepData?.title}
             </h2>
           </div>
 
-          <div className="prose prose-lg max-w-none">{currentStepData.content}</div>
+          <div className="prose prose-lg max-w-none">{currentStepData?.content}</div>
         </div>
 
         {/* Navigation Buttons */}

@@ -1,0 +1,27 @@
+# Empreinte Fiscale - Robots.txt
+
+# Allow all bots to crawl public pages
+User-agent: *
+Allow: /
+Allow: /decouverte
+Allow: /quiz
+Allow: /aide
+Allow: /tutoriel
+
+# Disallow authenticated pages
+Disallow: /dashboard
+Disallow: /profil
+Disallow: /journal
+Disallow: /simulations
+Disallow: /settings
+Disallow: /documents
+Disallow: /social
+Disallow: /wrapped
+Disallow: /gamification
+Disallow: /visualisations
+Disallow: /evolution
+Disallow: /api/
+Disallow: /auth/
+
+# Sitemap
+Sitemap: https://empreinte-fiscale.fr/sitemap.xml

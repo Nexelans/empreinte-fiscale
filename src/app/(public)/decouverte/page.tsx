@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,7 @@ import { BreakdownChart } from "@/components/dashboard/BreakdownChart";
 import { InternationalComparison } from "@/components/decouverte/InternationalComparison";
 import { ShareResult } from "@/components/decouverte/ShareResult";
 
-export default function DecouvertePage() {
+function DecouverteContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [selectedProfil, setSelectedProfil] = useState<ProfilType | null>(null);
@@ -281,5 +281,13 @@ export default function DecouvertePage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function DecouvertePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Chargement...</div>}>
+      <DecouverteContent />
+    </Suspense>
   );
 }
