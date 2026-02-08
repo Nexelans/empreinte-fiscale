@@ -10,7 +10,7 @@ export interface ProfilType {
   nom: string;
   description: string;
   emoji: string;
-  categorie: "revenus_modestes" | "classe_moyenne" | "cadres" | "independants" | "retraites" | "etudiants";
+  categorie: "revenus_modestes" | "classe_moyenne" | "cadres" | "independants" | "retraites" | "etudiants" | "famille";
   profil: Partial<ProfilFiscalComplete>;
 }
 
@@ -402,6 +402,300 @@ export const PROFILS_TYPES: ProfilType[] = [
           { age: 19, niveauScolaire: "superieur_public" },
         ],
         frequenceServices: { transportsCommun: "occasionnelle", hopitalMedecin: "mensuelle", bibliotheque: "jamais", equipementsSportifs: "jamais" },
+        aides: { caf: false, apl: false, rsa: false, bourses: false, chomage: false, cmuc: false },
+      },
+      statusData: {},
+    },
+  },
+  {
+    id: "stagiaire",
+    nom: "Stagiaire",
+    description: "Stage de fin d'études, gratification minimale",
+    emoji: "🎯",
+    categorie: "etudiants",
+    profil: {
+      situation: {
+        statut: "celibataire",
+        nombreParts: 1,
+        commune: "Lyon",
+        age: 22,
+      },
+      revenus: {
+        salaireBrut: 4500, // 6 mois × 750€/mois
+        salaireNet: 4400,
+        typeContrat: "CDD",
+        revenusFonciers: 0,
+        revenusCapitaux: 0,
+        autresRevenus: 0,
+      },
+      patrimoine: {
+        proprietaire: false,
+        valeurLocative: 0,
+        taxeFonciere: 0,
+        vehicules: [],
+        patrimoineIFI: 0,
+      },
+      consommation: {
+        mode: "profil_type",
+        profilType: "sobre",
+        budgetMensuel: {
+          courses: 120,
+          restaurants: 40,
+          carburant: 0,
+          loisirs: 50,
+        },
+      },
+      familleServices: {
+        nombreEnfants: 0,
+        enfants: [],
+        frequenceServices: { transportsCommun: "quotidienne", hopitalMedecin: "annuelle", bibliotheque: "jamais", equipementsSportifs: "jamais" },
+        aides: { caf: false, apl: true, rsa: false, bourses: false, chomage: false, cmuc: false },
+      },
+      statusData: {},
+    },
+  },
+  {
+    id: "apprenti",
+    nom: "Apprenti",
+    description: "Apprentissage CAP/BTS, rémunération apprenti",
+    emoji: "🔨",
+    categorie: "etudiants",
+    profil: {
+      situation: {
+        statut: "celibataire",
+        nombreParts: 1,
+        commune: "Marseille",
+        age: 19,
+      },
+      revenus: {
+        salaireBrut: 12000, // ~1000€/mois
+        salaireNet: 11800,
+        typeContrat: "CDI",
+        revenusFonciers: 0,
+        revenusCapitaux: 0,
+        autresRevenus: 0,
+      },
+      patrimoine: {
+        proprietaire: false,
+        valeurLocative: 0,
+        taxeFonciere: 0,
+        vehicules: [],
+        patrimoineIFI: 0,
+      },
+      consommation: {
+        mode: "profil_type",
+        profilType: "sobre",
+        budgetMensuel: {
+          courses: 180,
+          restaurants: 60,
+          carburant: 80,
+          loisirs: 100,
+        },
+      },
+      familleServices: {
+        nombreEnfants: 0,
+        enfants: [],
+        frequenceServices: { transportsCommun: "quotidienne", hopitalMedecin: "annuelle", bibliotheque: "jamais", equipementsSportifs: "jamais" },
+        aides: { caf: false, apl: true, rsa: false, bourses: false, chomage: false, cmuc: false },
+      },
+      statusData: {},
+    },
+  },
+  {
+    id: "parent_isole",
+    nom: "Parent isolé",
+    description: "Parent seul, 2 enfants, temps partiel",
+    emoji: "👨‍👧‍👦",
+    categorie: "famille",
+    profil: {
+      situation: {
+        statut: "divorce",
+        nombreParts: 2.5, // 1 + 0.5×2 + 0.5 majoration parent isolé
+        commune: "Lille",
+        age: 35,
+      },
+      revenus: {
+        salaireBrut: 18000,
+        salaireNet: 14500,
+        typeContrat: "CDI",
+        revenusFonciers: 0,
+        revenusCapitaux: 0,
+        autresRevenus: 2400, // pension alimentaire
+      },
+      patrimoine: {
+        proprietaire: false,
+        valeurLocative: 0,
+        taxeFonciere: 0,
+        vehicules: [{ type: "thermique", kmAnnuels: 10000 }],
+        patrimoineIFI: 0,
+      },
+      consommation: {
+        mode: "profil_type",
+        profilType: "sobre",
+        budgetMensuel: {
+          courses: 400,
+          restaurants: 40,
+          carburant: 120,
+          loisirs: 80,
+        },
+      },
+      familleServices: {
+        nombreEnfants: 2,
+        enfants: [
+          { age: 7, niveauScolaire: "primaire" },
+          { age: 10, niveauScolaire: "primaire" },
+        ],
+        frequenceServices: { transportsCommun: "occasionnelle", hopitalMedecin: "mensuelle", bibliotheque: "jamais", equipementsSportifs: "jamais" },
+        aides: { caf: true, apl: true, rsa: false, bourses: false, chomage: false, cmuc: false },
+      },
+      statusData: {},
+    },
+  },
+  {
+    id: "famille_nombreuse",
+    nom: "Famille nombreuse",
+    description: "Couple, 4 enfants, classe moyenne",
+    emoji: "👨‍👩‍👧‍👦",
+    categorie: "famille",
+    profil: {
+      situation: {
+        statut: "marie_pacse",
+        nombreParts: 5, // 2 + 1 + 1 + 1
+        commune: "Strasbourg",
+        age: 42,
+      },
+      revenus: {
+        salaireBrut: 55000,
+        salaireNet: 43000,
+        typeContrat: "CDI",
+        revenusFonciers: 0,
+        revenusCapitaux: 0,
+        autresRevenus: 0,
+      },
+      patrimoine: {
+        proprietaire: true,
+        valeurLocative: 14000,
+        taxeFonciere: 1400,
+        vehicules: [
+          { type: "thermique", kmAnnuels: 18000 },
+        ],
+        patrimoineIFI: 0,
+      },
+      consommation: {
+        mode: "profil_type",
+        profilType: "moyen",
+        budgetMensuel: {
+          courses: 900,
+          restaurants: 120,
+          carburant: 250,
+          loisirs: 300,
+        },
+      },
+      familleServices: {
+        nombreEnfants: 4,
+        enfants: [
+          { age: 5, niveauScolaire: "maternelle" },
+          { age: 8, niveauScolaire: "primaire" },
+          { age: 12, niveauScolaire: "college" },
+          { age: 16, niveauScolaire: "lycee_general" },
+        ],
+        frequenceServices: { transportsCommun: "quotidienne", hopitalMedecin: "mensuelle", bibliotheque: "jamais", equipementsSportifs: "hebdomadaire" },
+        aides: { caf: true, apl: false, rsa: false, bourses: false, chomage: false, cmuc: false },
+      },
+      statusData: {},
+    },
+  },
+  {
+    id: "cadre_dirigeant",
+    nom: "Cadre dirigeant",
+    description: "Directeur général, célibataire, très haut revenu",
+    emoji: "🎩",
+    categorie: "cadres",
+    profil: {
+      situation: {
+        statut: "celibataire",
+        nombreParts: 1,
+        commune: "Paris",
+        age: 48,
+      },
+      revenus: {
+        salaireBrut: 250000,
+        salaireNet: 190000,
+        typeContrat: "CDI",
+        revenusFonciers: 35000,
+        revenusCapitaux: 25000,
+        autresRevenus: 0,
+      },
+      patrimoine: {
+        proprietaire: true,
+        valeurLocative: 50000,
+        taxeFonciere: 6000,
+        vehicules: [
+          { type: "hybride", kmAnnuels: 20000 },
+        ],
+        patrimoineIFI: 2500000,
+      },
+      consommation: {
+        mode: "profil_type",
+        profilType: "eleve",
+        budgetMensuel: {
+          courses: 800,
+          restaurants: 1200,
+          carburant: 200,
+          loisirs: 1500,
+        },
+      },
+      familleServices: {
+        nombreEnfants: 0,
+        enfants: [],
+        frequenceServices: { transportsCommun: "jamais", hopitalMedecin: "mensuelle", bibliotheque: "jamais", equipementsSportifs: "jamais" },
+        aides: { caf: false, apl: false, rsa: false, bourses: false, chomage: false, cmuc: false },
+      },
+      statusData: {},
+    },
+  },
+  {
+    id: "entrepreneur",
+    nom: "Créateur d'entreprise",
+    description: "Start-up tech, revenus variables, 1ère année",
+    emoji: "🚀",
+    categorie: "independants",
+    profil: {
+      situation: {
+        statut: "celibataire",
+        nombreParts: 1,
+        commune: "Lyon",
+        age: 32,
+      },
+      revenus: {
+        salaireBrut: 25000,
+        salaireNet: 20000,
+        typeContrat: "independant",
+        revenusFonciers: 0,
+        revenusCapitaux: 0,
+        autresRevenus: 0,
+      },
+      patrimoine: {
+        proprietaire: false,
+        valeurLocative: 0,
+        taxeFonciere: 0,
+        vehicules: [],
+        patrimoineIFI: 0,
+      },
+      consommation: {
+        mode: "profil_type",
+        profilType: "sobre",
+        budgetMensuel: {
+          courses: 250,
+          restaurants: 100,
+          carburant: 0,
+          loisirs: 120,
+        },
+      },
+      familleServices: {
+        nombreEnfants: 0,
+        enfants: [],
+        frequenceServices: { transportsCommun: "quotidienne", hopitalMedecin: "annuelle", bibliotheque: "jamais", equipementsSportifs: "jamais" },
         aides: { caf: false, apl: false, rsa: false, bourses: false, chomage: false, cmuc: false },
       },
       statusData: {},

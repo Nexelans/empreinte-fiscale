@@ -18,6 +18,11 @@ model User {
   passwordHash  String?
   emailVerified DateTime?
   image         String?
+
+  // Phase 4: Social preferences
+  socialPreferences Json?  // { leaderboardOptIn: boolean, showActivity: boolean, discoveryEnabled: boolean }
+  adminRole         String? // SUPER_ADMIN, DATA_ADMIN, SUPPORT_ADMIN, ANALYTICS_VIEWER
+
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -25,7 +30,12 @@ model User {
   aiConfig               AIConfig?
   documents              DocumentUpload[]
   journalEntries         JournalEntry[]
-  friendLinks            FriendLink[]
+  friends                Friend[]           @relation(name: "UserFriends")
+  friendOf               Friend[]           @relation(name: "FriendOf")
+  sentInvitations        FriendInvitation[] @relation(name: "SentInvitations")
+  ownedGroups            Group[]            @relation(name: "OwnedGroups")
+  groupMemberships       GroupMember[]      @relation(name: "GroupMemberships")
+  friendLinks            FriendLink[]       @relation(name: "UserFriendLinks")
   badges                 UserBadge[]
   challenges             UserChallenge[]
   streak                 UserStreak?
@@ -36,6 +46,9 @@ model User {
   scoreHistory           ScoreHistory[]
   quizAttempts           QuizAttempt[]
   sharedAnimations       SharedAnimation[]
+  wrappedGenerations     WrappedGeneration[]
+  referentielReviews     ReferentielUpdate[] @relation(name: "ReferentielReviews")
+  adminLogs              AdminLog[]          @relation(name: "AdminActions")
 
   accounts      Account[]
   sessions      Session[]
@@ -143,6 +156,44 @@ model Referentiel {
   @@unique([millesime, categorie, cle])
 }
 
+model ReferentielUpdate {
+  id           String    @id @default(cuid())
+  millesime    String
+  categorie    String
+  cle          String
+  source       String
+  status       String    // DETECTED, PENDING_REVIEW, APPROVED, REJECTED
+
+  oldValue     Json?
+  newValue     Json
+  diffSummary  String?   @db.Text
+
+  detectedAt   DateTime  @default(now())
+  reviewedAt   DateTime?
+  reviewedBy   String?   // Admin user ID
+  reviewer     User?     @relation(name: "ReferentielReviews", fields: [reviewedBy], references: [id], onDelete: SetNull)
+
+  @@index([status])
+  @@index([millesime, categorie, cle])
+}
+
+model AdminLog {
+  id           String   @id @default(cuid())
+  adminUserId  String
+  admin        User     @relation(name: "AdminActions", fields: [adminUserId], references: [id], onDelete: Cascade)
+
+  action       String   // APPROVE_UPDATE, REJECT_UPDATE, SUSPEND_USER, DELETE_USER, MODIFY_REFERENTIEL, etc.
+  resourceType String   // REFERENTIEL, USER, GROUP, etc.
+  resourceId   String?
+  details      Json?
+  ipAddress    String?
+
+  timestamp    DateTime @default(now())
+
+  @@index([adminUserId, timestamp])
+  @@index([resourceType, resourceId])
+}
+
 model ScoreFiscal {
   id          String   @id @default(cuid())
   userId      String
@@ -200,16 +251,16 @@ model AIConfig {
   userId            String   @unique
   user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  provider          String
-  apiKey            String
-  endpoint          String?
+  provider          String   // openai, anthropic, mistral, google, custom
+  encryptedKey      String   @db.Text // AES-256 encrypted API key
+  endpoint          String?  // For custom provider
   model             String
   temperature       Float    @default(0.3)
   maxTokens         Int      @default(2048)
-  customSystemPrompt String?
+  customSystemPrompt String? @db.Text
 
   lastTestedAt      DateTime?
-  lastTestStatus    String   @default("UNTESTED")
+  lastTestStatus    String   @default("UNTESTED") // UNTESTED, SUCCESS, FAILED
 
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
@@ -258,10 +309,78 @@ model UserStreak {
   updatedAt       DateTime  @updatedAt
 }
 
+model Friend {
+  id           String    @id @default(cuid())
+  userId       String
+  user         User      @relation(name: "UserFriends", fields: [userId], references: [id], onDelete: Cascade)
+
+  friendId     String
+  friend       User      @relation(name: "FriendOf", fields: [friendId], references: [id], onDelete: Cascade)
+
+  status       String    // PENDING, ACTIVE, BLOCKED
+  sharingLevel String    // SCORE_ONLY, SUMMARY, DETAILED
+
+  createdAt    DateTime  @default(now())
+  acceptedAt   DateTime?
+
+  @@unique([userId, friendId])
+  @@index([userId, status])
+}
+
+model FriendInvitation {
+  id            String    @id @default(cuid())
+  inviterId     String
+  inviter       User      @relation(name: "SentInvitations", fields: [inviterId], references: [id], onDelete: Cascade)
+
+  inviteeEmail  String
+  token         String    @unique
+  expiresAt     DateTime
+  status        String    // PENDING, ACCEPTED, DECLINED, EXPIRED
+
+  createdAt     DateTime  @default(now())
+  acceptedAt    DateTime?
+
+  @@index([token])
+  @@index([inviterId, status])
+}
+
+model Group {
+  id         String        @id @default(cuid())
+  name       String
+  type       String        // FAMILY, COLLEAGUES, FRIENDS, CUSTOM
+  ownerId    String
+  owner      User          @relation(name: "OwnedGroups", fields: [ownerId], references: [id], onDelete: Cascade)
+
+  anonymous  Boolean       @default(false)
+  createdAt  DateTime      @default(now())
+  archivedAt DateTime?
+
+  members    GroupMember[]
+
+  @@index([ownerId])
+}
+
+model GroupMember {
+  id       String   @id @default(cuid())
+  groupId  String
+  group    Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  userId   String
+  user     User     @relation(name: "GroupMemberships", fields: [userId], references: [id], onDelete: Cascade)
+
+  role     String   // OWNER, ADMIN, MEMBER
+  joinedAt DateTime @default(now())
+
+  @@unique([groupId, userId])
+  @@index([groupId, userId])
+  @@index([userId])
+}
+
+// Legacy model - to be migrated to Friend
 model FriendLink {
   id        String   @id @default(cuid())
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation(name: "UserFriendLinks", fields: [userId], references: [id], onDelete: Cascade)
 
   friendId  String
   status    String
@@ -320,6 +439,12 @@ model UserNotificationPreferences {
   pushChannel         Boolean @default(false)
   inAppChannel        Boolean @default(true)
 
+  // Social notification settings (Phase 4)
+  socialNotificationsEnabled Boolean @default(true)
+  socialDigestMode           Boolean @default(false)
+  socialEmailChannel         Boolean @default(true)
+  socialPushChannel          Boolean @default(false)
+
   quietHoursStart     Int     @default(22) // 10pm
   quietHoursEnd       Int     @default(8)  // 8am
   timezone            String  @default("Europe/Paris")
@@ -350,7 +475,7 @@ model Notification {
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  type      String   // DAILY_FACT, FISCAL_ALERT, WEEKLY_DIGEST, EVENT_TRIGGERED
+  type      String   // DAILY_FACT, FISCAL_ALERT, WEEKLY_DIGEST, EVENT_TRIGGERED, FRIEND_REQUEST, FRIEND_ACCEPTED, GROUP_INVITE, GROUP_JOINED, LEADERBOARD_CHANGE, REFERENTIEL_UPDATE
   title     String
   body      String   @db.Text
   data      Json?
@@ -391,4 +516,18 @@ model SharedAnimation {
 
   @@index([expiresAt])
   @@index([userId, createdAt])
+}
+
+model WrappedGeneration {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  year        Int
+  data        Json     // Données du wrapped (totaux, top catégories, badges)
+  shareId     String   @unique // ID public pour partage
+  generatedAt DateTime @default(now())
+  viewCount   Int      @default(0)
+
+  @@unique([userId, year])
+  @@index([userId])
 }

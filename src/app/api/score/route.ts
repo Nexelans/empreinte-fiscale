@@ -7,6 +7,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { calculerScoreFiscal } from "@/modules/score";
 import { ProfilFiscalComplete } from "@/modules/profil/types";
+import { invalidateUserSharedData } from "@/lib/cache";
 
 /**
  * GET /api/score
@@ -105,6 +106,10 @@ export async function GET(request: NextRequest) {
       totalRecu: score.totalRecu,
       soldeNet: score.soldeNet,
     });
+
+    // Invalidate cached shared data (Task 30.4)
+    console.log("[Score API] Invalidating cached shared data...");
+    await invalidateUserSharedData(user.id);
 
     const totalTime = Date.now() - startTime;
     console.log(`[Score API] <== Total request time: ${totalTime}ms`);

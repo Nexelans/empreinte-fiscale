@@ -82,8 +82,45 @@ export const NOTIFICATION_TEMPLATES: Record<string, NotificationTemplate> = {
     type: "REFERENTIEL_UPDATE",
     titleTemplate: "📚 Nouveaux barèmes disponibles",
     bodyTemplate:
-      "Les barèmes fiscaux ont été mis à jour (millésime {{millesime}}). Voulez-vous recalculer votre score ?",
+      "Les barèmes fiscaux ont été mis à jour (millésime {{millesime}}). {{categoriesUpdated}} catégories affectées. {{impactDescription}}",
     channels: ["in-app", "email"],
+    requiresUserPreference: "fiscalAlertsEnabled",
+  },
+
+  FRIEND_REQUEST: {
+    type: "FRIEND_REQUEST",
+    titleTemplate: "👋 Nouvelle demande d'ami",
+    bodyTemplate:
+      "{{fromUserName}} vous a envoyé une demande d'ami. {{message}}",
+    channels: ["in-app", "push", "email"],
+    requiresUserPreference: "socialNotificationsEnabled",
+  },
+
+  GROUP_INVITE: {
+    type: "GROUP_INVITE",
+    titleTemplate: "👥 Invitation à rejoindre un groupe",
+    bodyTemplate:
+      "{{invitedBy}} vous invite à rejoindre le groupe «{{groupName}}» ({{memberCount}} membres)",
+    channels: ["in-app", "push", "email"],
+    requiresUserPreference: "socialNotificationsEnabled",
+  },
+
+  LEADERBOARD_CHANGE: {
+    type: "LEADERBOARD_CHANGE",
+    titleTemplate: "📊 Changement au classement",
+    bodyTemplate:
+      "Vous êtes passé de la {{previousPosition}}e à la {{newPosition}}e place {{leaderboardName}}!",
+    channels: ["in-app", "push"],
+    requiresUserPreference: "socialNotificationsEnabled",
+  },
+
+  SOCIAL_DIGEST: {
+    type: "SOCIAL_DIGEST",
+    titleTemplate: "📬 Résumé social quotidien",
+    bodyTemplate:
+      "Vous avez {{totalNotifications}} nouvelles notifications sociales : {{friendRequests}} demandes d'ami, {{groupInvites}} invitations de groupe, {{leaderboardChanges}} changements de classement.",
+    channels: ["in-app", "email"],
+    requiresUserPreference: "socialNotificationsEnabled",
   },
 };
 

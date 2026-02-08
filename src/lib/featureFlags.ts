@@ -41,6 +41,26 @@ export const FEATURE_FLAGS = {
    * Enable social features (friends, leaderboard, sharing)
    */
   SOCIAL: process.env.NEXT_PUBLIC_ENABLE_SOCIAL !== "false",
+
+  /**
+   * Enable social features phase 4 (friends, groups, leaderboard, wrapped)
+   */
+  SOCIAL_FEATURES: process.env.NEXT_PUBLIC_ENABLE_SOCIAL_FEATURES !== "false",
+
+  /**
+   * Enable AI integration (OCR, chat, analysis)
+   */
+  AI_INTEGRATION: process.env.NEXT_PUBLIC_ENABLE_AI_INTEGRATION !== "false",
+
+  /**
+   * Enable automated referentiel updates (backend only)
+   */
+  REFERENTIEL_AUTOMATION: process.env.ENABLE_REFERENTIEL_AUTOMATION !== "false",
+
+  /**
+   * Enable admin interface access (backend only)
+   */
+  ADMIN_INTERFACE: process.env.ENABLE_ADMIN_INTERFACE !== "false",
 } as const;
 
 /**

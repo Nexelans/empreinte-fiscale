@@ -1,13 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { PROFILS_TYPES, ProfilType } from "@/modules/decouverte/profiles";
 import { ScoreCard } from "@/components/dashboard/ScoreCard";
 import { BreakdownChart } from "@/components/dashboard/BreakdownChart";
+import { InternationalComparison } from "@/components/decouverte/InternationalComparison";
+import { ShareResult } from "@/components/decouverte/ShareResult";
 
 export default function DecouvertePage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [selectedProfil, setSelectedProfil] = useState<ProfilType | null>(null);
   const [score, setScore] = useState<any>(null);
   const [isCalculating, setIsCalculating] = useState(false);
@@ -17,9 +22,21 @@ export default function DecouvertePage() {
     { id: "classe_moyenne", nom: "Classe moyenne", color: "bg-green-100" },
     { id: "cadres", nom: "Cadres", color: "bg-purple-100" },
     { id: "independants", nom: "Indépendants", color: "bg-orange-100" },
+    { id: "famille", nom: "Familles", color: "bg-rose-100" },
     { id: "retraites", nom: "Retraités", color: "bg-gray-100" },
     { id: "etudiants", nom: "Étudiants", color: "bg-pink-100" },
   ];
+
+  // Handle shared profil from URL
+  useEffect(() => {
+    const profilId = searchParams.get('profil');
+    if (profilId) {
+      const profil = PROFILS_TYPES.find(p => p.id === profilId);
+      if (profil) {
+        handleSelectProfil(profil);
+      }
+    }
+  }, [searchParams]);
 
   const handleSelectProfil = async (profil: ProfilType) => {
     setSelectedProfil(profil);
@@ -184,6 +201,15 @@ export default function DecouvertePage() {
             {/* Score */}
             {!isCalculating && score && (
               <div className="space-y-8">
+                {/* Share Button */}
+                <div className="flex justify-end">
+                  <ShareResult
+                    profilId={selectedProfil.id}
+                    profilName={selectedProfil.nom}
+                    score={score}
+                  />
+                </div>
+
                 {/* Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <ScoreCard
@@ -226,6 +252,13 @@ export default function DecouvertePage() {
                     total={score.totalRecu}
                   />
                 </div>
+
+                {/* International Comparison */}
+                <InternationalComparison
+                  currentScore={score}
+                  salaireBrut={selectedProfil.profil.revenus?.salaireBrut || 35000}
+                  onConversionPrompt={() => router.push('/auth/register')}
+                />
 
                 {/* CTA */}
                 <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-8 text-center text-white">

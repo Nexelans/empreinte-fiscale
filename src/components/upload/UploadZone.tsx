@@ -1,17 +1,44 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { AIWarningModal } from "@/components/ai/AIWarningModal";
 import { DocumentType } from "@/modules/documents/types";
+import { Sparkles, AlertCircle } from "lucide-react";
 
 interface UploadZoneProps {
-  onFileSelect: (file: File, documentType: DocumentType) => void;
+  onFileSelect: (file: File, documentType: DocumentType, useAIocr?: boolean) => void;
   isLoading?: boolean;
 }
 
 export function UploadZone({ onFileSelect, isLoading }: UploadZoneProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [selectedType, setSelectedType] = useState<DocumentType | null>(null);
+  const [aiAvailable, setAiAvailable] = useState(false);
+  const [useAIOcr, setUseAIOcr] = useState(false);
+  const [showAIWarning, setShowAIWarning] = useState(false);
+  const [pendingFile, setPendingFile] = useState<File | null>(null);
+  const [loadingAIConfig, setLoadingAIConfig] = useState(true);
+
+  // Check if user has AI configured
+  useEffect(() => {
+    const checkAIConfig = async () => {
+      try {
+        const response = await fetch('/api/ai/config');
+        if (response.ok) {
+          const data = await response.json();
+          setAiAvailable(!!data.config);
+        }
+      } catch (error) {
+        console.error('Failed to check AI config:', error);
+      } finally {
+        setLoadingAIConfig(false);
+      }
+    };
+
+    checkAIConfig();
+  }, []);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -23,15 +50,41 @@ export function UploadZone({ onFileSelect, isLoading }: UploadZoneProps) {
     setIsDragging(false);
   }, []);
 
-  const handleDrop = useCallback(
-    (e: React.DragEvent) => {
-      e.preventDefault();
-      setIsDragging(false);
-
+  const handleFileSelection = useCallback(
+    (file: File) => {
       if (!selectedType) {
         alert("Veuillez d'abord sélectionner le type de document");
         return;
       }
+
+      // If AI OCR is enabled, show warning modal first
+      if (useAIOcr && aiAvailable) {
+        setPendingFile(file);
+        setShowAIWarning(true);
+      } else {
+        onFileSelect(file, selectedType, false);
+      }
+    },
+    [selectedType, useAIOcr, aiAvailable, onFileSelect]
+  );
+
+  const handleAIWarningConfirm = useCallback(() => {
+    if (pendingFile && selectedType) {
+      onFileSelect(pendingFile, selectedType, true);
+      setPendingFile(null);
+      setShowAIWarning(false);
+    }
+  }, [pendingFile, selectedType, onFileSelect]);
+
+  const handleAIWarningCancel = useCallback(() => {
+    setPendingFile(null);
+    setShowAIWarning(false);
+  }, []);
+
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      setIsDragging(false);
 
       const files = Array.from(e.dataTransfer.files);
       const pdfFile = files.find((f) => f.type === "application/pdf");
@@ -41,24 +94,19 @@ export function UploadZone({ onFileSelect, isLoading }: UploadZoneProps) {
         return;
       }
 
-      onFileSelect(pdfFile, selectedType);
+      handleFileSelection(pdfFile);
     },
-    [selectedType, onFileSelect]
+    [handleFileSelection]
   );
 
   const handleFileInput = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (!selectedType) {
-        alert("Veuillez d'abord sélectionner le type de document");
-        return;
-      }
-
       const file = e.target.files?.[0];
       if (file) {
-        onFileSelect(file, selectedType);
+        handleFileSelection(file);
       }
     },
-    [selectedType, onFileSelect]
+    [handleFileSelection]
   );
 
   const documentTypes: { value: DocumentType; label: string }[] = [
@@ -143,6 +191,52 @@ export function UploadZone({ onFileSelect, isLoading }: UploadZoneProps) {
           ⚠️ Sélectionnez d'abord le type de document ci-dessus
         </p>
       )}
+
+      {/* AI OCR Option */}
+      {!loadingAIConfig && aiAvailable && selectedType && (
+        <div className="border-t pt-4 mt-4">
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <Sparkles className="h-5 w-5 text-blue-600" />
+                  <h4 className="font-medium text-blue-900">OCR amélioré par IA</h4>
+                </div>
+                <p className="text-sm text-blue-800 mb-2">
+                  Utiliser votre IA personnelle pour une extraction de données plus précise
+                </p>
+                <div className="flex items-center gap-4 text-xs text-blue-700">
+                  <span>Coût estimé: ~0.02€ / document</span>
+                  <span>•</span>
+                  <span>Précision: +15-20%</span>
+                </div>
+                {useAIOcr && (
+                  <div className="mt-2 flex items-start gap-2 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded p-2">
+                    <AlertCircle className="h-3 w-3 mt-0.5 flex-shrink-0" />
+                    <span>
+                      Le document sera envoyé à votre fournisseur d'IA. Un avertissement sera
+                      affiché avant l'envoi.
+                    </span>
+                  </div>
+                )}
+              </div>
+              <Switch
+                checked={useAIOcr}
+                onCheckedChange={setUseAIOcr}
+                disabled={isLoading}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* AI Warning Modal */}
+      <AIWarningModal
+        open={showAIWarning}
+        onOpenChange={(open) => !open && handleAIWarningCancel()}
+        onConfirm={handleAIWarningConfirm}
+        dataDescription="Le contenu du document PDF sera envoyé à votre IA pour extraction automatique des données fiscales (revenus, impôts, cotisations, etc.)"
+      />
     </div>
   );
 }

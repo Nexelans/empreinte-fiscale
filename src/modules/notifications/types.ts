@@ -12,7 +12,11 @@ export type NotificationType =
   | "LEVEL_UP"
   | "STREAK_REMINDER"
   | "SCORE_RECALCULATION_AVAILABLE"
-  | "REFERENTIEL_UPDATE";
+  | "REFERENTIEL_UPDATE"
+  | "FRIEND_REQUEST"
+  | "GROUP_INVITE"
+  | "LEADERBOARD_CHANGE"
+  | "SOCIAL_DIGEST";
 
 export type NotificationChannel = "email" | "push" | "in-app";
 
@@ -30,9 +34,13 @@ export interface NotificationPreferences {
   dailyFactsEnabled: boolean;
   fiscalAlertsEnabled: boolean;
   weeklyDigestEnabled: boolean;
+  socialNotificationsEnabled: boolean; // Master toggle for social features
+  socialDigestMode: boolean; // Group 5+ social notifications into daily summary
   emailChannel: boolean;
   pushChannel: boolean;
   inAppChannel: boolean;
+  socialEmailChannel: boolean; // Separate email toggle for social notifications
+  socialPushChannel: boolean; // Separate push toggle for social notifications
   quietHoursStart: number; // 0-23
   quietHoursEnd: number; // 0-23
   timezone: string;
@@ -91,4 +99,44 @@ export interface EventTriggeredContext {
   description: string;
   actionUrl?: string;
   actionLabel?: string;
+}
+
+export interface ReferentielUpdateContext {
+  millesime: string;
+  categoriesUpdated: number;
+  impactDescription: string;
+  recalculationUrl: string;
+}
+
+export interface FriendRequestContext {
+  fromUserId: string;
+  fromUserName: string;
+  message?: string;
+  acceptUrl: string;
+  declineUrl: string;
+}
+
+export interface GroupInviteContext {
+  groupId: string;
+  groupName: string;
+  invitedBy: string;
+  memberCount: number;
+  joinUrl: string;
+}
+
+export interface LeaderboardChangeContext {
+  previousPosition: number;
+  newPosition: number;
+  leaderboardType: 'friends' | 'group' | 'national';
+  leaderboardName?: string;
+  leaderboardUrl: string;
+}
+
+export interface SocialDigestContext {
+  friendRequests: number;
+  groupInvites: number;
+  leaderboardChanges: number;
+  totalNotifications: number;
+  periodStart: Date;
+  periodEnd: Date;
 }

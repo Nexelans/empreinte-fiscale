@@ -1,11 +1,49 @@
 "use client";
 
 import { useSession } from "next-auth/react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Bell, Download, Trash2 } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { Bell, Download, Trash2, Sparkles } from "lucide-react";
 
 export default function SettingsPage() {
   const { data: session } = useSession();
+  const [wrappedOptIn, setWrappedOptIn] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  // Charger les préférences wrapped
+  useEffect(() => {
+    const loadPreferences = async () => {
+      try {
+        const response = await fetch('/api/user/preferences');
+        const data = await response.json();
+        setWrappedOptIn(data.wrappedOptIn || false);
+      } catch (error) {
+        console.error('Error loading preferences:', error);
+      }
+    };
+    loadPreferences();
+  }, []);
+
+  // Sauvegarder la préférence wrapped
+  const handleWrappedToggle = async (checked: boolean) => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/user/preferences', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ wrappedOptIn: checked }),
+      });
+
+      if (response.ok) {
+        setWrappedOptIn(checked);
+      }
+    } catch (error) {
+      console.error('Error updating preference:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="py-8">
@@ -34,6 +72,23 @@ export default function SettingsPage() {
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Confidentialité & Données</h2>
           <div className="space-y-4">
             <div className="flex justify-between items-center">
+              <div className="flex-1">
+                <p className="font-medium flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-purple-600" />
+                  Wrapped Fiscal annuel
+                </p>
+                <p className="text-sm text-gray-600">
+                  Générer automatiquement un bilan annuel de votre empreinte fiscale (à la fin de chaque année).
+                  Vous pourrez le consulter, le télécharger et le partager sur les réseaux sociaux.
+                </p>
+              </div>
+              <Switch
+                checked={wrappedOptIn}
+                onCheckedChange={handleWrappedToggle}
+                disabled={loading}
+              />
+            </div>
+            <div className="flex justify-between items-center pt-4 border-t">
               <div>
                 <p className="font-medium">Exporter mes données</p>
                 <p className="text-sm text-gray-600">
