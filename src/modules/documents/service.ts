@@ -2,9 +2,20 @@
  * Service de parsing et extraction de documents fiscaux
  */
 
-import * as pdfParse from "pdf-parse";
 import { DocumentType, ExtractedData, ParseResult, ExtractionStatus } from "./types";
 import { extractDataFromText, calculateConfidence } from "./patterns";
+
+// Dynamic require for pdf-parse (CommonJS module)
+const getPdfParse = () => {
+  try {
+    // Using require for CommonJS module compatibility
+    // eslint-disable-next-line
+    return require("pdf-parse");
+  } catch (error) {
+    console.error("pdf-parse not installed. Run: npm install pdf-parse");
+    throw new Error("pdf-parse package is required for document parsing");
+  }
+};
 
 /**
  * Parse un document PDF et extrait les données structurées
@@ -15,8 +26,8 @@ export async function parseDocument(
 ): Promise<ParseResult> {
   try {
     // Extraire le texte du PDF avec pdf-parse
-    const pdf = (pdfParse as any).default || pdfParse;
-    const pdfData = await pdf(fileBuffer);
+    const pdfParse = getPdfParse();
+    const pdfData = await pdfParse(fileBuffer);
     const rawText = pdfData.text;
 
     if (!rawText || rawText.trim().length === 0) {

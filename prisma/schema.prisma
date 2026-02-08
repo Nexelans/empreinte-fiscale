@@ -21,14 +21,21 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  profilFiscal  ProfilFiscal?
-  aiConfig      AIConfig?
-  documents     DocumentUpload[]
-  journalEntries JournalEntry[]
-  friendLinks   FriendLink[]
-  badges        UserBadge[]
-  simulations   Simulation[]
-  preferences   UserPreferences?
+  profilFiscal           ProfilFiscal?
+  aiConfig               AIConfig?
+  documents              DocumentUpload[]
+  journalEntries         JournalEntry[]
+  friendLinks            FriendLink[]
+  badges                 UserBadge[]
+  challenges             UserChallenge[]
+  streak                 UserStreak?
+  simulations            Simulation[]
+  preferences            UserPreferences?
+  notificationPreferences UserNotificationPreferences?
+  notifications          Notification[]
+  scoreHistory           ScoreHistory[]
+  quizAttempts           QuizAttempt[]
+  sharedAnimations       SharedAnimation[]
 
   accounts      Account[]
   sessions      Session[]
@@ -215,7 +222,40 @@ model UserBadge {
 
   badgeId   String
   earnedAt  DateTime @default(now())
-  progress  Json?
+  progress  Float    @default(0)
+
+  @@index([userId])
+}
+
+model UserChallenge {
+  id           String    @id @default(cuid())
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  challengeId  String
+  status       String    @default("ACTIVE") // ACTIVE, COMPLETED, EXPIRED
+  progress     Int       @default(0)
+  target       Int
+  startedAt    DateTime  @default(now())
+  completedAt  DateTime?
+  expiresAt    DateTime?
+
+  @@index([userId, status])
+}
+
+model UserStreak {
+  id              String    @id @default(cuid())
+  userId          String    @unique
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  currentStreak   Int       @default(0)
+  longestStreak   Int       @default(0)
+  lastLoggedDate  DateTime?
+  freezeTokens    Int       @default(0)
+  gracePeriodEnds DateTime?
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 }
 
 model FriendLink {
@@ -233,12 +273,14 @@ model Simulation {
   userId             String
   user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  name               String
-  scenarioType       String
-  parametresModifies Json
-  resultat           Json
+  name               String?
+  scenarioType       String   // NEW_CHILD, JOB_CHANGE, RELOCATION, RETIREMENT, SALARY_CHANGE, CUSTOM
+  inputData          Json     // Modified profile fields
+  outputScore        Json     // Complete ScoreFiscal result
 
   createdAt          DateTime @default(now())
+
+  @@index([userId, createdAt])
 }
 
 model UserPreferences {
@@ -263,4 +305,90 @@ model ProfilType {
   data      Json     // ProfilFiscalComplete data
   score     Json     // Pre-calculated ScoreFiscal
   updatedAt DateTime @default(now()) @updatedAt
+}
+
+model UserNotificationPreferences {
+  id                  String  @id @default(cuid())
+  userId              String  @unique
+  user                User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  dailyFactsEnabled   Boolean @default(false)
+  fiscalAlertsEnabled Boolean @default(true)
+  weeklyDigestEnabled Boolean @default(false)
+
+  emailChannel        Boolean @default(true)
+  pushChannel         Boolean @default(false)
+  inAppChannel        Boolean @default(true)
+
+  quietHoursStart     Int     @default(22) // 10pm
+  quietHoursEnd       Int     @default(8)  // 8am
+  timezone            String  @default("Europe/Paris")
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+model ScoreHistory {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  month           Int      // 1-12
+  year            Int      // 2026
+  scoreFiscalData Json     // Complete ScoreFiscal object snapshot
+  confidenceScore Float
+  millesime       String   // Which barème version was used
+
+  createdAt       DateTime @default(now())
+
+  @@unique([userId, year, month])
+  @@index([userId, createdAt])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  type      String   // DAILY_FACT, FISCAL_ALERT, WEEKLY_DIGEST, EVENT_TRIGGERED
+  title     String
+  body      String   @db.Text
+  data      Json?
+  channels  String[] // ['email', 'push', 'in-app']
+
+  read      Boolean  @default(false)
+  sentAt    DateTime @default(now())
+
+  @@index([userId, read, sentAt])
+}
+
+model QuizAttempt {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  quizType   String   // GENERIC, PERSONALIZED, FOCUSED, CHALLENGE
+  questions  Json     // Array of question objects
+  answers    Json     // Array of user's answers
+  score      Int      // Number of correct answers
+  totalQuestions Int
+
+  completedAt DateTime @default(now())
+
+  @@index([userId, completedAt])
+}
+
+model SharedAnimation {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  animationData Json     // Anonymized FiscalDayData
+  expiresAt     DateTime
+  viewCount     Int      @default(0)
+
+  createdAt     DateTime @default(now())
+
+  @@index([expiresAt])
+  @@index([userId, createdAt])
 }

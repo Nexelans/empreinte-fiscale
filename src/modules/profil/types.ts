@@ -134,6 +134,9 @@ export interface ProfilFiscalComplete {
   updatedAt: Date;
 }
 
+// Type alias for backwards compatibility
+export type ProfilFiscalData = Partial<ProfilFiscalComplete>;
+
 // Poids des données pour le score de confiance
 export const DATA_WEIGHTS: Record<string, number> = {
   salaireBrut: 10,

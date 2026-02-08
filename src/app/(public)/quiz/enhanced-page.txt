@@ -1,0 +1,6 @@
+Key additions needed:
+1. Import useSession to check if user is authenticated
+2. Add "personalized" as a quiz type option
+3. Fetch personalized questions from API when selected
+4. Add quiz history section below the selection (Task 27.8)
+5. Show related glossary terms after wrong answers (Task 28.3)

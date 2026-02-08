@@ -5,6 +5,8 @@ import { calculTotalRecu, calculCoutEducation } from "./calculRecu";
 import { ScoreFiscal } from "./types";
 import { validateProfilForScore, handleEdgeCases, safeDivide } from "./validation";
 import { calculerScoreConfiance } from "./scoreConfiance";
+import { emitGameEvent } from "../gamification/events";
+import { saveScoreHistory } from "./history";
 
 /**
  * Calcule le score fiscal complet d'un utilisateur
@@ -48,7 +50,7 @@ export async function calculerScoreFiscal(
   const resultConfiance = calculerScoreConfiance(profil);
   const scoreConfiance = resultConfiance.scoreGlobal;
 
-  return {
+  const score: ScoreFiscal = {
     annee,
     millesime: millesimeActif,
     totalPaye: Math.round(totalPaye),
@@ -74,6 +76,27 @@ export async function calculerScoreFiscal(
       margeErreurEstimee: 15,
     },
   };
+
+  // Émettre l'événement pour la gamification (seulement si userId fourni)
+  if (options?.userId) {
+    await emitGameEvent("SCORE_CALCULATED", options.userId, {
+      totalPaye: score.totalPaye,
+      totalRecu: score.totalRecu,
+      soldeNet: score.soldeNet,
+      scoreConfiance,
+    });
+
+    // Sauvegarder l'historique du score pour le suivi temporel
+    try {
+      await saveScoreHistory(options.userId, score, scoreConfiance);
+      console.log(`[Score] History saved for user ${options.userId}`);
+    } catch (error) {
+      console.error("[Score] Failed to save score history:", error);
+      // Ne pas bloquer le calcul du score si la sauvegarde échoue
+    }
+  }
+
+  return score;
 }
 
 export * from "./types";

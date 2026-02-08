@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -23,22 +23,139 @@ import { TicketValidation } from "@/components/scan/TicketValidation";
 import { JournalEntryData } from "@/modules/journal/types";
 import { getCurrentYearAggregation } from "@/modules/journal/aggregations";
 import { SpendingCategory, SPENDING_CATEGORY_LABELS } from "@/modules/tickets/types";
+import { StreakBanner } from "@/components/gamification/StreakBanner";
+import { FreezeModal } from "@/components/gamification/FreezeModal";
+import { ChallengesCarousel } from "@/components/gamification/ChallengesCarousel";
+import { ChallengeCompletionToast, useChallengeCompletionToast } from "@/components/gamification/ChallengeCompletionToast";
+import type { StreakData, UserChallenge } from "@/modules/gamification/types";
 
 type ViewMode = "timeline" | "add" | "scan";
 
 export default function JournalPage() {
   const journal = useJournal();
   const ticketScan = useTicketScan();
+  const { toast, showToast, hideToast } = useChallengeCompletionToast();
   const [viewMode, setViewMode] = useState<ViewMode>("timeline");
   const [editingEntry, setEditingEntry] = useState<JournalEntryData | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<SpendingCategory | "all">("all");
+  const [streak, setStreak] = useState<StreakData | null>(null);
+  const [showFreezeModal, setShowFreezeModal] = useState(false);
+  const [activeChallenges, setActiveChallenges] = useState<UserChallenge[]>([]);
+  const [previousChallenges, setPreviousChallenges] = useState<UserChallenge[]>([]);
+
+  // Fetch streak data and challenges
+  useEffect(() => {
+    async function fetchGamificationData() {
+      try {
+        // Fetch streak
+        const streakRes = await fetch("/api/gamification/streak");
+        if (streakRes.ok) {
+          const streakData = await streakRes.json();
+          setStreak(streakData.streak);
+        }
+
+        // Fetch active challenges
+        const challengesRes = await fetch("/api/gamification/challenges");
+        if (challengesRes.ok) {
+          const challengesData = await challengesRes.json();
+          const active = challengesData.challenges.filter(
+            (c: UserChallenge) => c.status === "ACTIVE"
+          );
+          setActiveChallenges(active);
+        }
+      } catch (error) {
+        console.error("[Journal] Error fetching gamification data:", error);
+      }
+    }
+    fetchGamificationData();
+  }, []);
+
+  // Refresh streak and challenges when a new entry is added
+  useEffect(() => {
+    if (journal.entries.length > 0) {
+      const refreshGamificationData = async () => {
+        try {
+          // Refresh streak
+          const streakRes = await fetch("/api/gamification/streak");
+          if (streakRes.ok) {
+            const streakData = await streakRes.json();
+            setStreak(streakData.streak);
+          }
+
+          // Refresh challenges
+          const challengesRes = await fetch("/api/gamification/challenges");
+          if (challengesRes.ok) {
+            const challengesData = await challengesRes.json();
+            const allChallenges = challengesData.challenges || [];
+            const active = allChallenges.filter(
+              (c: UserChallenge) => c.status === "ACTIVE"
+            );
+
+            // Detect newly completed challenges
+            const newlyCompleted = allChallenges.filter(
+              (c: UserChallenge) =>
+                c.status === "COMPLETED" &&
+                previousChallenges.find(
+                  (pc) => pc.id === c.id && pc.status === "ACTIVE"
+                )
+            );
+
+            // Show toast for each newly completed challenge
+            if (newlyCompleted.length > 0) {
+              // Show only the first one to avoid overwhelming
+              const completed = newlyCompleted[0];
+              const xpAwarded = completed.definition?.recompenseXP || 50;
+              const educationalTip = completed.definition?.educationalTip;
+              const relatedGlossaryTerms = completed.definition?.relatedGlossaryTerms || [];
+              showToast(
+                completed.definition?.nom || "Défi terminé",
+                xpAwarded,
+                educationalTip,
+                relatedGlossaryTerms
+              );
+            }
+
+            setPreviousChallenges(allChallenges);
+            setActiveChallenges(active);
+          }
+        } catch (error) {
+          console.error("[Journal] Error refreshing gamification data:", error);
+        }
+      };
+      refreshGamificationData();
+    }
+  }, [journal.entries.length]);
 
   // Calculate yearly aggregation for charts
   const yearlyAgg = getCurrentYearAggregation(journal.entries);
 
   // Estimate daily services value (simplified: annual services / 365)
   const estimatedDailyServices = 30;
+
+  const handleFreezeClick = () => {
+    if (!streak || streak.freezeTokens <= 0) return;
+    setShowFreezeModal(true);
+  };
+
+  const handleFreezeConfirm = async () => {
+    if (!streak || streak.freezeTokens <= 0) return;
+
+    try {
+      const res = await fetch("/api/gamification/streak", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "use_freeze_token" }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setStreak(data.streak);
+      }
+    } catch (error) {
+      console.error("[Journal] Error using freeze token:", error);
+    }
+  };
 
   // Filter entries by search query and category
   const filteredEntries = journal.entries.filter((e) => {
@@ -107,6 +224,20 @@ export default function JournalPage() {
           <span>Scanner un ticket</span>
         </Button>
       </div>
+
+      {/* Streak Banner */}
+      {streak && (
+        <div className="mb-6">
+          <StreakBanner streak={streak} onFreezeClick={handleFreezeClick} />
+        </div>
+      )}
+
+      {/* Active Challenges Carousel */}
+      {activeChallenges.length > 0 && (
+        <div className="mb-6">
+          <ChallengesCarousel challenges={activeChallenges} />
+        </div>
+      )}
 
       <div className="flex items-center gap-4 mb-6">
         <Button
@@ -281,6 +412,26 @@ export default function JournalPage() {
           isSubmitting={journal.isLoading}
         />
       )}
+
+      {/* Freeze Modal */}
+      {streak && (
+        <FreezeModal
+          isOpen={showFreezeModal}
+          onClose={() => setShowFreezeModal(false)}
+          onConfirm={handleFreezeConfirm}
+          freezeTokens={streak.freezeTokens}
+        />
+      )}
+
+      {/* Challenge Completion Toast */}
+      <ChallengeCompletionToast
+        show={toast.show}
+        challengeName={toast.challengeName}
+        xpAwarded={toast.xpAwarded}
+        educationalTip={toast.educationalTip}
+        relatedGlossaryTerms={toast.relatedGlossaryTerms}
+        onClose={hideToast}
+      />
     </div>
   );
 }

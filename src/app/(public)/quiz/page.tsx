@@ -26,6 +26,8 @@ export default function QuizPage() {
 
   const handleReponse = (questionId: string, reponseId: string) => {
     const question = questions[currentQuestion];
+    if (!question) return;
+
     const nouvellescoreponses = { ...reponses, [questionId]: reponseId };
     setReponses(nouvellescoreponses);
 
@@ -137,6 +139,14 @@ export default function QuizPage() {
   // Écran de quiz
   if (mode === "quiz") {
     const question = questions[currentQuestion];
+    if (!question) {
+      return (
+        <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white flex items-center justify-center">
+          <p className="text-gray-600">Question non trouvée</p>
+        </div>
+      );
+    }
+
     const aRepondu = reponses[question.id] !== undefined;
     const reponseSelectionnee = reponses[question.id];
     const estCorrecte = reponseSelectionnee === question.reponseCorrecte;

@@ -7,6 +7,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { validateExtraction } from "@/modules/documents/service";
 import { DocumentType, ExtractedData } from "@/modules/documents/types";
+import { emitGameEvent } from "@/modules/gamification/events";
 
 /**
  * POST /api/documents/validate
@@ -125,7 +126,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Créer un enregistrement DocumentUpload pour traçabilité
-    await prisma.documentUpload.create({
+    const document = await prisma.documentUpload.create({
       data: {
         userId: user.id,
         type: documentType,
@@ -137,6 +138,12 @@ export async function POST(request: NextRequest) {
     console.log(
       `[Validate] Document ${documentType} validated and injected for user ${user.email}`
     );
+
+    // Émettre l'événement pour la gamification
+    await emitGameEvent("DOCUMENT_UPLOADED", user.id, {
+      documentType,
+      documentId: document.id,
+    });
 
     return NextResponse.json({
       success: true,

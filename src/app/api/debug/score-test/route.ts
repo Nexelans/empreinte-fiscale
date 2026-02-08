@@ -75,20 +75,33 @@ export async function GET() {
         proprietaire: false,
         valeurLocative: 0,
         taxeFonciere: 0,
-        vehicules: null,
+        vehicules: [],
         patrimoineIFI: 0
       },
       consommation: {
-        mode: "moyen",
-        budgetMensuel: null,
-        detailCategories: null,
-        alcoolTabac: null
+        mode: "profil_type",
+        profilType: "moyen",
+        budgetMensuel: undefined,
+        detailCategories: undefined,
+        alcoolTabac: undefined
       },
       familleServices: {
         nombreEnfants: 0,
         enfants: [],
-        frequenceServices: null,
-        aides: null
+        frequenceServices: {
+          transportsCommun: "jamais",
+          hopitalMedecin: "annuelle",
+          bibliotheque: "jamais",
+          equipementsSportifs: "jamais",
+        },
+        aides: {
+          caf: false,
+          apl: false,
+          rsa: false,
+          bourses: false,
+          chomage: false,
+          cmuc: false,
+        }
       },
       statusData: {}
     };

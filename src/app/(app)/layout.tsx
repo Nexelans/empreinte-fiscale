@@ -4,7 +4,9 @@ import { useSession, signOut } from "next-auth/react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Bell } from "lucide-react";
+import { GlobalCelebrations } from "@/components/shared/GlobalCelebrations";
 
 export default function AppLayout({
   children,
@@ -14,12 +16,35 @@ export default function AppLayout({
   const { data: session, status } = useSession();
   const router = useRouter();
   const pathname = usePathname();
+  const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/auth/login");
     }
   }, [status, router]);
+
+  // Fetch unread notification count
+  useEffect(() => {
+    async function fetchUnreadCount() {
+      try {
+        const response = await fetch("/api/notifications?unreadOnly=true");
+        if (response.ok) {
+          const data = await response.json();
+          setUnreadCount(data.notifications?.length || 0);
+        }
+      } catch (error) {
+        console.error("Error fetching unread count:", error);
+      }
+    }
+
+    if (status === "authenticated") {
+      fetchUnreadCount();
+      // Poll every 60 seconds
+      const interval = setInterval(fetchUnreadCount, 60000);
+      return () => clearInterval(interval);
+    }
+  }, [status]);
 
   if (status === "loading") {
     return (
@@ -37,6 +62,9 @@ export default function AppLayout({
     { href: "/dashboard", label: "Dashboard" },
     { href: "/profil", label: "Mon Profil" },
     { href: "/journal", label: "Journal" },
+    { href: "/evolution", label: "Évolution" },
+    { href: "/animations", label: "Animation" },
+    { href: "/gamification", label: "Gamification" },
     { href: "/simulations", label: "Simulations" },
     { href: "/settings", label: "Paramètres" },
   ];
@@ -73,6 +101,18 @@ export default function AppLayout({
                   {item.label}
                 </Link>
               ))}
+
+              {/* Notification Bell */}
+              <Link href="/notifications" className="relative">
+                <Button variant="ghost" size="sm" className="relative">
+                  <Bell className="w-5 h-5" />
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                      {unreadCount > 9 ? "9+" : unreadCount}
+                    </span>
+                  )}
+                </Button>
+              </Link>
 
               {/* User menu */}
               <div className="flex items-center space-x-3 ml-4 pl-4 border-l border-gray-200">
@@ -127,6 +167,9 @@ export default function AppLayout({
 
       {/* Main content */}
       <main>{children}</main>
+
+      {/* Global celebration animations */}
+      <GlobalCelebrations />
     </div>
   );
 }

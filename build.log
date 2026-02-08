@@ -1,0 +1,23 @@
+
+> empreinte-fiscale@0.1.0 build
+> next build
+
+  ▲ Next.js 14.2.35
+  - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+Failed to compile.
+
+./src/app/api/score/history/projection/route.ts:71:26
+Type error: Object is possibly 'undefined'.
+
+[0m [90m 69 |[39m       projectionMonths[33m:[39m months[33m,[39m[0m
+[0m [90m 70 |[39m       basedOnDataPoints[33m:[39m history[33m.[39mlength[33m,[39m[0m
+[0m[31m[1m>[22m[39m[90m 71 |[39m       lastActualDate[33m:[39m [32m`${history[history.length - 1].year}-${String(history[history.length - 1].month).padStart(2, "0")}`[39m[33m,[39m[0m
+[0m [90m    |[39m                          [31m[1m^[22m[39m[0m
+[0m [90m 72 |[39m       projection[33m,[39m[0m
+[0m [90m 73 |[39m       disclaimer[33m:[39m[0m
+[0m [90m 74 |[39m         [32m"Cette projection est une estimation basée sur les données historiques. Elle ne prend pas en compte les changements futurs de votre situation (nouvel emploi, mariage, naissance, etc.) ni les changements de barèmes fiscaux."[39m[33m,[39m[0m
+Next.js build worker exited with code: 1 and signal: null

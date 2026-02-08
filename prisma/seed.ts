@@ -56,6 +56,12 @@ async function main() {
   await seedTaxesIndirectes();
   await seedAutresTaux();
 
+  // Phase 3: Gamification & Engagement
+  await seedBadgeDefinitions();
+  await seedChallengeDefinitions();
+  await seedNotificationTemplates();
+  await seedFiscalCalendar();
+
   console.log("✅ Seed completed successfully!");
 }
 
@@ -624,6 +630,379 @@ async function seedAutresTaux() {
   });
 
   console.log("✓ Autres taux et seuils seeded");
+}
+
+async function seedBadgeDefinitions() {
+  console.log("Seeding Badge definitions...");
+
+  const badges = [
+    {
+      id: "PREMIER_PAS",
+      nom: "📄 Premier pas",
+      description: "Uploadez votre premier document",
+      critere: "document_uploaded",
+      seuil: 1,
+      categorie: "onboarding",
+    },
+    {
+      id: "BATISSEUR",
+      nom: "🛣️ Bâtisseur",
+      description: "Votre contribution annuelle finance au moins 200 mètres de routes",
+      critere: "infrastructure_contribution",
+      seuil: 200,
+      categorie: "fiscal_contribution",
+    },
+    {
+      id: "MECENE_SCOLAIRE",
+      nom: "🏫 Mécène scolaire",
+      description: "Vous avez des enfants scolarisés et bénéficiez de services éducatifs publics",
+      critere: "education_services_received",
+      seuil: 1,
+      categorie: "fiscal_services",
+    },
+    {
+      id: "PILIER_SANTE",
+      nom: "🏥 Pilier de santé",
+      description: "Vos services de santé reçus dépassent 2000€ annuellement",
+      critere: "health_services_received",
+      seuil: 2000,
+      categorie: "fiscal_services",
+    },
+    {
+      id: "PROFIL_CRISTALLIN",
+      nom: "🔍 Profil cristallin",
+      description: "Votre score de confiance atteint 90% ou plus",
+      critere: "confidence_score",
+      seuil: 90,
+      categorie: "data_quality",
+    },
+    {
+      id: "ASSIDU_7J",
+      nom: "📅 Semaine parfaite",
+      description: "Loggez des dépenses pendant 7 jours consécutifs",
+      critere: "streak_days",
+      seuil: 7,
+      categorie: "engagement",
+    },
+    {
+      id: "ASSIDU_14J",
+      nom: "📅 Deux semaines d'or",
+      description: "Loggez des dépenses pendant 14 jours consécutifs",
+      critere: "streak_days",
+      seuil: 14,
+      categorie: "engagement",
+    },
+    {
+      id: "ASSIDU_30J",
+      nom: "📅 Assidu",
+      description: "Loggez des dépenses pendant 30 jours consécutifs",
+      critere: "streak_days",
+      seuil: 30,
+      categorie: "engagement",
+    },
+    {
+      id: "ASSIDU_50J",
+      nom: "🔥 Expert de la régularité",
+      description: "Loggez des dépenses pendant 50 jours consécutifs",
+      critere: "streak_days",
+      seuil: 50,
+      categorie: "engagement",
+    },
+    {
+      id: "ASSIDU_100J",
+      nom: "🔥 Champion fiscal",
+      description: "Loggez des dépenses pendant 100 jours consécutifs (légendaire)",
+      critere: "streak_days",
+      seuil: 100,
+      categorie: "engagement",
+    },
+    {
+      id: "CHASSEUR_TAXES",
+      nom: "🧮 Chasseur de taxes",
+      description: "Découvrez 10 taxes indirectes différentes via le journal ou les détails",
+      critere: "taxes_discovered",
+      seuil: 10,
+      categorie: "pedagogical",
+    },
+    {
+      id: "EXPERT_FISCAL",
+      nom: "🎓 Expert fiscal",
+      description: "Obtenez un score parfait (100%) à n'importe quel quiz",
+      critere: "quiz_perfect_score",
+      seuil: 1,
+      categorie: "pedagogical",
+    },
+  ];
+
+  for (const badge of badges) {
+    await createReferentielEntry({
+      millesime: "2026",
+      categorie: "BADGE_DEFINITION",
+      cle: badge.id,
+      valeur: {
+        nom: badge.nom,
+        description: badge.description,
+        critere: badge.critere,
+        seuil: badge.seuil,
+        categorie: badge.categorie,
+      },
+      unite: "badge",
+      source: "Empreinte Fiscale - Système de gamification",
+      urlSource: "https://empreinte-fiscale.fr/gamification",
+      datePublication: new Date("2026-02-07"),
+      statut: "OFFICIEL",
+      notes: `Badge ${badge.categorie}: ${badge.description}`,
+    });
+  }
+
+  console.log("✓ Badge definitions seeded");
+}
+
+async function seedChallengeDefinitions() {
+  console.log("Seeding Challenge definitions...");
+
+  const challenges = [
+    {
+      id: "UPLOAD_AVIS_IMPOSITION",
+      nom: "Importez votre avis d'imposition",
+      description: "Uploadez votre avis d'imposition pour améliorer la précision de votre score",
+      type: "document_upload",
+      target: 1,
+      recompenseXP: 100,
+      duree: null,
+      recurrent: false,
+    },
+    {
+      id: "LOG_5_EXPENSES",
+      nom: "Loggez 5 dépenses cette semaine",
+      description: "Enregistrez au moins 5 dépenses dans votre journal fiscal cette semaine",
+      type: "journal_entries",
+      target: 5,
+      recompenseXP: 50,
+      duree: 7,
+      recurrent: true,
+    },
+    {
+      id: "COMPLETE_QUIZ",
+      nom: "Complétez un quiz fiscal",
+      description: "Testez vos connaissances en complétant n'importe quel quiz",
+      type: "quiz_completion",
+      target: 1,
+      recompenseXP: 30,
+      duree: null,
+      recurrent: false,
+    },
+    {
+      id: "REACH_90_CONFIDENCE",
+      nom: "Atteignez 90% de confiance",
+      description: "Améliorez la qualité de vos données pour atteindre un score de confiance de 90%",
+      type: "confidence_milestone",
+      target: 90,
+      recompenseXP: 200,
+      duree: null,
+      recurrent: false,
+    },
+    {
+      id: "SCAN_TICKET",
+      nom: "Scannez votre premier ticket",
+      description: "Utilisez la fonction scan pour enregistrer un ticket de caisse",
+      type: "ticket_scan",
+      target: 1,
+      recompenseXP: 50,
+      duree: null,
+      recurrent: false,
+    },
+    {
+      id: "CREATE_SIMULATION",
+      nom: "Créez une simulation what-if",
+      description: "Explorez un scénario de vie alternatif avec le simulateur",
+      type: "simulation_created",
+      target: 1,
+      recompenseXP: 75,
+      duree: null,
+      recurrent: false,
+    },
+  ];
+
+  for (const challenge of challenges) {
+    await createReferentielEntry({
+      millesime: "2026",
+      categorie: "CHALLENGE_DEFINITION",
+      cle: challenge.id,
+      valeur: {
+        nom: challenge.nom,
+        description: challenge.description,
+        type: challenge.type,
+        target: challenge.target,
+        recompenseXP: challenge.recompenseXP,
+        duree: challenge.duree,
+        recurrent: challenge.recurrent,
+      },
+      unite: "challenge",
+      source: "Empreinte Fiscale - Système de gamification",
+      urlSource: "https://empreinte-fiscale.fr/gamification",
+      datePublication: new Date("2026-02-07"),
+      statut: "OFFICIEL",
+      notes: `Défi ${challenge.type}: ${challenge.description}`,
+    });
+  }
+
+  console.log("✓ Challenge definitions seeded");
+}
+
+async function seedNotificationTemplates() {
+  console.log("Seeding Notification templates...");
+
+  const templates = [
+    {
+      id: "DAILY_FACT_COFFEE",
+      type: "DAILY_FACT",
+      titre: "☕ Votre café du matin",
+      corps: "Votre contribution routes aujourd'hui = {montantRoutes}€ = prix d'un café !",
+      variables: ["montantRoutes"],
+    },
+    {
+      id: "DAILY_FACT_EDUCATION",
+      type: "DAILY_FACT",
+      titre: "🏫 Éducation publique",
+      corps: "Vos enfants bénéficient de {montantEducation}€ de services éducatifs publics cette année.",
+      variables: ["montantEducation"],
+    },
+    {
+      id: "FISCAL_ALERT_TAX_DECLARATION",
+      type: "FISCAL_ALERT",
+      titre: "📅 Déclaration d'impôts",
+      corps: "La période de déclaration d'impôts se termine le {dateLimit}. N'oubliez pas !",
+      variables: ["dateLimit"],
+    },
+    {
+      id: "FISCAL_ALERT_TAXE_FONCIERE",
+      type: "FISCAL_ALERT",
+      titre: "🏠 Taxe foncière",
+      corps: "Le paiement de votre taxe foncière est prévu le {dateLimit}.",
+      variables: ["dateLimit"],
+    },
+    {
+      id: "EVENT_SITUATION_CHANGED",
+      type: "EVENT_TRIGGERED",
+      titre: "🔄 Situation mise à jour",
+      corps: "Votre situation a changé. Recalculer votre score pour voir l'impact ?",
+      variables: [],
+    },
+    {
+      id: "EVENT_NEW_BAREME",
+      type: "EVENT_TRIGGERED",
+      titre: "📊 Nouveaux barèmes disponibles",
+      corps: "Les barèmes {millesime} sont disponibles. Recalculez votre score avec les nouvelles données.",
+      variables: ["millesime"],
+    },
+    {
+      id: "STREAK_REMINDER",
+      type: "EVENT_TRIGGERED",
+      titre: "🔥 Ne perdez pas votre série !",
+      corps: "Vous avez une série de {streakDays} jours. Ajoutez une dépense avant minuit pour la maintenir !",
+      variables: ["streakDays"],
+    },
+    {
+      id: "WEEKLY_DIGEST",
+      type: "WEEKLY_DIGEST",
+      titre: "📊 Votre semaine fiscale",
+      corps: "Cette semaine : {nbEntries} dépenses loguées, {totalTaxes}€ de taxes, série de {streak} jours.",
+      variables: ["nbEntries", "totalTaxes", "streak"],
+    },
+  ];
+
+  for (const template of templates) {
+    await createReferentielEntry({
+      millesime: "2026",
+      categorie: "NOTIFICATION_TEMPLATE",
+      cle: template.id,
+      valeur: {
+        type: template.type,
+        titre: template.titre,
+        corps: template.corps,
+        variables: template.variables,
+      },
+      unite: "template",
+      source: "Empreinte Fiscale - Système de notifications",
+      urlSource: "https://empreinte-fiscale.fr/notifications",
+      datePublication: new Date("2026-02-07"),
+      statut: "OFFICIEL",
+      notes: `Template de notification: ${template.type}`,
+    });
+  }
+
+  console.log("✓ Notification templates seeded");
+}
+
+async function seedFiscalCalendar() {
+  console.log("Seeding Fiscal calendar dates...");
+
+  const dates = [
+    {
+      id: "DECLARATION_REVENUS_2026",
+      evenement: "Déclaration des revenus 2026",
+      dateDebut: new Date("2027-04-08"),
+      dateFin: new Date("2027-06-08"),
+      type: "deadline",
+      description: "Période de déclaration des revenus en ligne pour l'année fiscale 2026",
+    },
+    {
+      id: "TAXE_FONCIERE_2026",
+      evenement: "Paiement taxe foncière 2026",
+      dateDebut: new Date("2026-10-01"),
+      dateFin: new Date("2026-10-15"),
+      type: "payment",
+      description: "Date limite de paiement de la taxe foncière 2026",
+    },
+    {
+      id: "TAXE_HABITATION_2026",
+      evenement: "Paiement taxe d'habitation 2026",
+      dateDebut: new Date("2026-11-01"),
+      dateFin: new Date("2026-11-15"),
+      type: "payment",
+      description: "Date limite de paiement de la taxe d'habitation 2026 (résidences secondaires)",
+    },
+    {
+      id: "IFI_2027",
+      evenement: "Déclaration IFI 2027",
+      dateDebut: new Date("2027-05-01"),
+      dateFin: new Date("2027-06-08"),
+      type: "deadline",
+      description: "Déclaration de l'Impôt sur la Fortune Immobilière pour l'année 2027",
+    },
+    {
+      id: "PLF_2027_PUBLICATION",
+      evenement: "Publication PLF 2027",
+      dateDebut: new Date("2026-09-27"),
+      dateFin: new Date("2026-09-27"),
+      type: "publication",
+      description: "Publication du Projet de Loi de Finances 2027",
+    },
+  ];
+
+  for (const date of dates) {
+    await createReferentielEntry({
+      millesime: "2026",
+      categorie: "FISCAL_CALENDAR",
+      cle: date.id,
+      valeur: {
+        evenement: date.evenement,
+        dateDebut: date.dateDebut.toISOString(),
+        dateFin: date.dateFin.toISOString(),
+        type: date.type,
+        description: date.description,
+      },
+      unite: "date",
+      source: "Calendrier fiscal officiel - Direction générale des Finances publiques",
+      urlSource: "https://www.impots.gouv.fr/calendrier-fiscal",
+      datePublication: new Date("2026-01-01"),
+      statut: "OFFICIEL",
+      notes: `Événement fiscal: ${date.evenement}`,
+    });
+  }
+
+  console.log("✓ Fiscal calendar dates seeded");
 }
 
 main()

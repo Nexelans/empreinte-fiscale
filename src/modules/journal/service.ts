@@ -2,6 +2,8 @@ import { prisma } from "@/lib/prisma";
 import { JournalEntryData, JournalFilters } from "./types";
 import { TicketData } from "../tickets/types";
 import { calculateTaxBreakdown, getTotalTax } from "./taxRates";
+import { emitGameEvent } from "../gamification/events";
+import { updateStreak } from "../gamification/streak";
 
 /**
  * Create a journal entry from ticket data
@@ -46,6 +48,17 @@ export async function createJournalEntry(
       statut: entryData.status,
     },
   });
+
+  // Émettre l'événement pour la gamification
+  await emitGameEvent("JOURNAL_ENTRY_CREATED", userId, {
+    entryId: created.id,
+    category: entryData.category,
+    montantTTC: entryData.montantTTC,
+    isScanned: ticketData.sourceType === "SCAN",
+  });
+
+  // Mettre à jour la série (streak) de l'utilisateur
+  await updateStreak(userId);
 
   return {
     ...entryData,

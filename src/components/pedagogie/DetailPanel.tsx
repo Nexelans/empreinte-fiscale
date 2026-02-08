@@ -237,11 +237,35 @@ export function DetailPanel({
               {statut === "verifie" &&
                 "Cette donnée est déjà vérifiée, aucune action nécessaire."}
             </p>
-            {statut !== "verifie" && (
-              <Button variant="outline" size="sm" className="w-full">
-                📄 Uploader un document
+            <div className="flex flex-col gap-2">
+              {statut !== "verifie" && (
+                <Button variant="outline" size="sm" className="w-full">
+                  📄 Uploader un document
+                </Button>
+              )}
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full bg-white hover:bg-blue-50 border-blue-300"
+                onClick={() => {
+                  // Extract category from titre for quiz topic
+                  const category = titre.toLowerCase().includes("impôt")
+                    ? "IR"
+                    : titre.toLowerCase().includes("csg") || titre.toLowerCase().includes("crds")
+                    ? "CSG"
+                    : titre.toLowerCase().includes("cotisation")
+                    ? "Cotisations"
+                    : titre.toLowerCase().includes("tva")
+                    ? "TVA"
+                    : titre.toLowerCase().includes("éducation") || titre.toLowerCase().includes("santé")
+                    ? "Services publics"
+                    : "Score fiscal";
+                  window.location.href = `/quiz/focused?topic=${encodeURIComponent(category)}`;
+                }}
+              >
+                🎯 Tester mes connaissances sur ce sujet
               </Button>
-            )}
+            </div>
           </div>
         </div>
       </SheetContent>
