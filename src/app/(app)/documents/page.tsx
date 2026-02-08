@@ -6,6 +6,7 @@ import { UploadZone } from "@/components/upload/UploadZone";
 import { ConsentDialog } from "@/components/upload/ConsentDialog";
 import { DocumentPreview } from "@/components/upload/DocumentPreview";
 import { ValidationForm } from "@/components/upload/ValidationForm";
+import { DeleteConfirmDialog } from "@/components/upload/DeleteConfirmDialog";
 import { Button } from "@/components/ui/button";
 import { DocumentType } from "@/modules/documents/types";
 
@@ -42,6 +43,8 @@ export default function DocumentsPage() {
 
   const [history, setHistory] = useState<DocumentHistoryItem[]>([]);
   const [isLoadingHistory, setIsLoadingHistory] = useState(true);
+  const [documentToDelete, setDocumentToDelete] = useState<DocumentHistoryItem | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Fetch upload history on mount and after successful upload
   useEffect(() => {
@@ -79,6 +82,39 @@ export default function DocumentsPage() {
       hour: "2-digit",
       minute: "2-digit",
     });
+  };
+
+  const handleDeleteClick = (document: DocumentHistoryItem) => {
+    setDocumentToDelete(document);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!documentToDelete) return;
+
+    setIsDeleting(true);
+    try {
+      const response = await fetch(`/api/documents/${documentToDelete.id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Erreur lors de la suppression");
+      }
+
+      // Refresh history after deletion
+      await fetchHistory();
+      setDocumentToDelete(null);
+    } catch (err) {
+      console.error("[DocumentsPage] Delete error:", err);
+      alert(err instanceof Error ? err.message : "Erreur lors de la suppression");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDocumentToDelete(null);
   };
 
   return (
@@ -220,6 +256,9 @@ export default function DocumentsPage() {
                   <th className="text-left py-3 px-4 text-sm font-medium text-gray-700">
                     Statut
                   </th>
+                  <th className="text-right py-3 px-4 text-sm font-medium text-gray-700">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -248,6 +287,16 @@ export default function DocumentsPage() {
                           : item.status}
                       </span>
                     </td>
+                    <td className="py-3 px-4 text-right">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleDeleteClick(item)}
+                        className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                      >
+                        🗑️ Supprimer
+                      </Button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -255,6 +304,17 @@ export default function DocumentsPage() {
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      {documentToDelete && (
+        <DeleteConfirmDialog
+          isOpen={true}
+          onConfirm={handleDeleteConfirm}
+          onCancel={handleDeleteCancel}
+          documentType={DOCUMENT_TYPE_LABELS[documentToDelete.type as DocumentType] || documentToDelete.type}
+          uploadedAt={documentToDelete.uploadedAt}
+        />
+      )}
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { hashPassword } from "@/modules/auth/password";
 import { generateVerificationToken } from "@/modules/auth/tokens";
+import { sendVerificationEmail } from "@/modules/auth/email";
 
 // Force dynamic rendering
 export const dynamic = 'force-dynamic';
@@ -53,10 +54,13 @@ export async function POST(request: Request) {
     // Generate verification token
     const token = await generateVerificationToken(email);
 
-    // TODO: Send verification email (will be implemented later)
-    // For now, we just log the token
-    console.log(`Verification token for ${email}: ${token}`);
-    console.log(`Verification URL: ${process.env.NEXTAUTH_URL}/auth/verify-email?token=${token}`);
+    // Send verification email
+    const emailResult = await sendVerificationEmail(email, token);
+
+    if (!emailResult.success) {
+      console.error("Failed to send verification email:", emailResult.error);
+      // Continue anyway - user can request a new verification email
+    }
 
     return NextResponse.json(
       {

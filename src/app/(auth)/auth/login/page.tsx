@@ -99,7 +99,7 @@ export default function LoginPage() {
             <div className="text-sm">
               <a
                 href="/auth/forgot-password"
-                className="font-medium text-indigo-600 hover:text-indigo-500"
+                className="font-medium text-indigo-600 hover:text-indigo-700 transition-colors duration-200 hover:underline underline-offset-4"
               >
                 Mot de passe oublié ?
               </a>
@@ -110,7 +110,8 @@ export default function LoginPage() {
             <Button
               type="submit"
               disabled={loading}
-              className="group relative w-full flex justify-center py-2 px-4"
+              size="lg"
+              className="group relative w-full flex justify-center py-3 px-4 text-base font-semibold"
             >
               {loading ? "Connexion..." : "Se connecter"}
             </Button>
@@ -141,7 +142,7 @@ export default function LoginPage() {
           <div className="text-center">
             <a
               href="/auth/register"
-              className="font-medium text-indigo-600 hover:text-indigo-500"
+              className="inline-block font-medium text-indigo-600 hover:text-indigo-700 transition-colors duration-200 hover:underline underline-offset-4"
             >
               Pas encore de compte ? S'inscrire
             </a>

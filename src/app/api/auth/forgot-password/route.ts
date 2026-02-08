@@ -4,6 +4,7 @@ export const dynamic = 'force-dynamic';
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { generatePasswordResetToken } from "@/modules/auth/tokens";
+import { sendPasswordResetEmail } from "@/modules/auth/email";
 
 export async function POST(request: Request) {
   try {
@@ -30,11 +31,13 @@ export async function POST(request: Request) {
     // Generate reset token
     const token = await generatePasswordResetToken(email);
 
-    // TODO: Send reset email (will be implemented later)
-    console.log(`Password reset token for ${email}: ${token}`);
-    console.log(
-      `Reset URL: ${process.env.NEXTAUTH_URL}/auth/reset-password?token=${token}`
-    );
+    // Send password reset email
+    const emailResult = await sendPasswordResetEmail(email, token);
+
+    if (!emailResult.success) {
+      console.error("Failed to send password reset email:", emailResult.error);
+      // Continue anyway to prevent email enumeration
+    }
 
     return NextResponse.json({
       message:
