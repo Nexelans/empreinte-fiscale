@@ -15,9 +15,15 @@ async function extractPdfText(fileBuffer: Buffer): Promise<string> {
 
     pdfParser.on("pdfParser_dataReady", (pdfData: any) => {
       try {
+        console.log('[extractPdfText] pdfParser_dataReady fired');
+        console.log('[extractPdfText] pdfData type:', typeof pdfData);
+        console.log('[extractPdfText] pdfData keys:', pdfData ? Object.keys(pdfData) : 'null');
+
         // Méthode 1 : getRawTextContent() si disponible
         if (typeof pdfParser.getRawTextContent === 'function') {
+          console.log('[extractPdfText] Trying getRawTextContent()');
           const text = pdfParser.getRawTextContent();
+          console.log('[extractPdfText] getRawTextContent() result length:', text?.length || 0);
           if (text && text.trim().length > 0) {
             resolve(text);
             return;
@@ -26,10 +32,12 @@ async function extractPdfText(fileBuffer: Buffer): Promise<string> {
 
         // Méthode 2 : Extraire depuis pdfData.Pages
         if (pdfData && pdfData.Pages) {
+          console.log('[extractPdfText] Using manual extraction, pages:', pdfData.Pages.length);
           const textParts: string[] = [];
 
           for (const page of pdfData.Pages) {
             if (page.Texts) {
+              console.log('[extractPdfText] Page has', page.Texts.length, 'text elements');
               for (const text of page.Texts) {
                 if (text.R) {
                   for (const run of text.R) {
@@ -45,11 +53,14 @@ async function extractPdfText(fileBuffer: Buffer): Promise<string> {
           }
 
           const extractedText = textParts.join(' ');
+          console.log('[extractPdfText] Extracted text parts:', textParts.length);
+          console.log('[extractPdfText] Total text length:', extractedText.length);
           resolve(extractedText);
           return;
         }
 
         // Si aucune méthode ne fonctionne
+        console.log('[extractPdfText] No extraction method worked');
         resolve('');
       } catch (err) {
         console.error('[extractPdfText] Error extracting text:', err);
@@ -75,6 +86,11 @@ export async function parseDocument(
   try {
     // Extraire le texte du PDF avec pdf2json (pas de DOMMatrix, 100% JS)
     const rawText = await extractPdfText(fileBuffer);
+
+    // Logging pour debug
+    console.log('[parseDocument] Buffer size:', fileBuffer.length);
+    console.log('[parseDocument] Extracted text length:', rawText?.length || 0);
+    console.log('[parseDocument] First 200 chars:', rawText?.substring(0, 200));
 
     if (!rawText || rawText.trim().length === 0) {
       return {
