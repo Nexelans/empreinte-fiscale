@@ -294,9 +294,17 @@ export default function DashboardPage() {
           <div className="lg:col-span-2 space-y-6">
             {/* Ce que je paie */}
             <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <h2 className="text-xl font-semibold text-gray-900 mb-2 flex items-center gap-2">
                 💸 <FiscalTooltip terme="impot_revenu">Ce que je paie</FiscalTooltip>
               </h2>
+              <div className="mb-4 flex items-center gap-2 text-sm">
+                <div className="flex items-center gap-1 px-3 py-1 bg-red-50 border border-red-200 rounded-full">
+                  <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                  <span className="text-red-900 font-medium">Impôts & taxes</span>
+                </div>
+                <span className="text-gray-500">•</span>
+                <span className="text-gray-600">Survolez chaque ligne pour voir les détails, cliquez pour tout comprendre</span>
+              </div>
               <div className="space-y-3">
                 {score.detailPaye.impotRevenu > 0 && (
                   <DetailPanel
@@ -355,9 +363,17 @@ export default function DashboardPage() {
 
             {/* Ce que je reçois - Transferts */}
             <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <h2 className="text-xl font-semibold text-gray-900 mb-2 flex items-center gap-2">
                 🎁 <FiscalTooltip terme="transferts_directs">Transferts directs</FiscalTooltip>
               </h2>
+              <div className="mb-3 flex items-center gap-2 text-sm">
+                <div className="flex items-center gap-1 px-3 py-1 bg-green-50 border border-green-200 rounded-full">
+                  <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                  <span className="text-green-900 font-medium">Argent reçu</span>
+                </div>
+                <span className="text-gray-500">•</span>
+                <span className="text-gray-600">Versements sur votre compte</span>
+              </div>
               <p className="text-sm text-gray-600 mb-4 bg-green-50 border border-green-200 rounded p-3">
                 💰 <strong>Argent que vous recevez</strong> : allocations, aides, remboursements versés directement sur votre compte bancaire ou à votre médecin/pharmacien.
               </p>
@@ -397,9 +413,17 @@ export default function DashboardPage() {
 
             {/* Services mutualisés */}
             <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <h2 className="text-xl font-semibold text-gray-900 mb-2 flex items-center gap-2">
                 🏛️ <FiscalTooltip terme="services_mutualises">Services mutualisés</FiscalTooltip>
               </h2>
+              <div className="mb-3 flex items-center gap-2 text-sm">
+                <div className="flex items-center gap-1 px-3 py-1 bg-blue-50 border border-blue-200 rounded-full">
+                  <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                  <span className="text-blue-900 font-medium">Services publics</span>
+                </div>
+                <span className="text-gray-500">•</span>
+                <span className="text-gray-600">Valeur des infrastructures et services dont vous bénéficiez</span>
+              </div>
               <p className="text-sm text-gray-600 mb-4 bg-blue-50 border border-blue-200 rounded p-3">
                 🏗️ <strong>Services dont vous bénéficiez</strong> : infrastructures publiques (écoles, hôpitaux, routes) et services financés par l'impôt. Ce n'est pas de l'argent versé directement, mais la valeur estimée de ce que l'État met à votre disposition.
               </p>

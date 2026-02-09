@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { FiscalTooltip } from "./FiscalTooltip";
 
 export interface FormulaStep {
@@ -64,33 +65,65 @@ export function DetailPanel({
   const config = STATUT_CONFIG[statut];
 
   return (
-    <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetTrigger asChild>
-        <button className="w-full flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow group">
-          <div className="flex items-center gap-3">
-            {icon && <span className="text-2xl">{icon}</span>}
-            <div className="text-left">
-              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-                {titre}
-              </h3>
-              <p className="text-sm text-gray-600">{description}</p>
+    <TooltipProvider>
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <Tooltip delayDuration={200}>
+          <TooltipTrigger asChild>
+            <SheetTrigger asChild>
+              <button className="w-full flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow group">
+                <div className="flex items-center gap-3">
+                  {icon && <span className="text-2xl">{icon}</span>}
+                  <div className="text-left">
+                    <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                      {titre}
+                    </h3>
+                    <p className="text-sm text-gray-600">{description}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-xl font-bold text-gray-900">
+                    {montant.toLocaleString("fr-FR")} €
+                  </span>
+                  <span
+                    className={`px-2 py-1 text-xs font-medium rounded border ${config.color}`}
+                  >
+                    {config.icon} {config.label}
+                  </span>
+                  <span className="text-blue-500 group-hover:translate-x-1 transition-transform">
+                    →
+                  </span>
+                </div>
+              </button>
+            </SheetTrigger>
+          </TooltipTrigger>
+          <TooltipContent side="left" className="max-w-md p-4">
+            <div className="space-y-2">
+              <p className="font-semibold text-sm">{titre}</p>
+              <p className="text-xs text-gray-600">{description}</p>
+              {formule && (
+                <div className="mt-2 pt-2 border-t border-gray-200">
+                  <p className="text-xs font-mono text-gray-700">{formule}</p>
+                </div>
+              )}
+              {hypotheses && hypotheses.length > 0 && (
+                <div className="mt-2 pt-2 border-t border-gray-200">
+                  <p className="text-xs font-semibold text-gray-700 mb-1">Hypothèses :</p>
+                  <ul className="text-xs text-gray-600 space-y-1">
+                    {hypotheses.slice(0, 2).map((hyp, idx) => (
+                      <li key={idx}>• {hyp}</li>
+                    ))}
+                    {hypotheses.length > 2 && (
+                      <li className="italic">... et {hypotheses.length - 2} autre(s)</li>
+                    )}
+                  </ul>
+                </div>
+              )}
+              <div className="mt-2 pt-2 border-t border-gray-200">
+                <p className="text-xs text-blue-600 font-medium">💡 Cliquez pour voir le détail complet</p>
+              </div>
             </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-xl font-bold text-gray-900">
-              {montant.toLocaleString("fr-FR")} €
-            </span>
-            <span
-              className={`px-2 py-1 text-xs font-medium rounded border ${config.color}`}
-            >
-              {config.icon} {config.label}
-            </span>
-            <span className="text-blue-500 group-hover:translate-x-1 transition-transform">
-              →
-            </span>
-          </div>
-        </button>
-      </SheetTrigger>
+          </TooltipContent>
+        </Tooltip>
       <SheetContent className="w-[600px] sm:max-w-[600px] overflow-y-auto">
         <SheetHeader>
           <SheetTitle className="flex items-center gap-3 text-2xl">
@@ -269,6 +302,7 @@ export function DetailPanel({
           </div>
         </div>
       </SheetContent>
-    </Sheet>
+      </Sheet>
+    </TooltipProvider>
   );
 }
