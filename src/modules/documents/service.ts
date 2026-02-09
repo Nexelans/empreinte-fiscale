@@ -14,7 +14,7 @@ export async function parseDocument(
 ): Promise<ParseResult> {
   try {
     // Extraire le texte du PDF avec pdf-parse (dynamic import for CommonJS module)
-    const pdfParse = (await import("pdf-parse")).default;
+    const { default: pdfParse } = await import("pdf-parse") as any;
     const pdfData = await pdfParse(fileBuffer);
     const rawText = pdfData.text;
 
