@@ -38,7 +38,6 @@
     "@types/d3-sankey": "^0.12.5",
     "@vercel/kv": "^3.0.0",
     "bcryptjs": "^3.0.3",
-    "canvas": "^3.2.1",
     "canvas-confetti": "^1.9.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
