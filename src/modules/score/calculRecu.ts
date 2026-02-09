@@ -85,22 +85,79 @@ export async function calculPrimeActivite(
 
 /**
  * Calcule les allocations familiales
+ *
+ * Les allocations familiales sont versées à partir de 2 enfants.
+ * Elles sont modulées selon les ressources du foyer (3 tranches).
+ *
+ * Barème 2026 CAF :
+ * - 2 enfants : 148.52€/mois = 1,782€/an (taux plein)
+ * - 3 enfants : ~338€/mois = 4,056€/an (taux plein)
+ * - Par enfant supplémentaire : ~189€/mois
+ *
+ * Modulation selon revenus (couple 2 enfants) :
+ * - < 74,884€ : taux plein (100%)
+ * - 74,884€ - 99,845€ : taux réduit (50%)
+ * - > 99,845€ : taux réduit (25%)
+ *
+ * Source : CAF - Allocations familiales 2026
  */
 export async function calculAllocations(
   nombreEnfants: number,
-  revenuAnnuel: number
+  revenuAnnuel: number,
+  millesime: string
 ): Promise<number> {
-  if (nombreEnfants === 0) return 0;
+  // Les allocations familiales ne sont versées qu'à partir de 2 enfants
+  if (nombreEnfants < 2) return 0;
 
-  // Montant de base par enfant (à affiner selon barème réel)
-  const montantBase = nombreEnfants === 1 ? 0 : nombreEnfants === 2 ? 1500 : 2000 + (nombreEnfants - 2) * 800;
+  // Récupérer le montant de base depuis le Référentiel CAF
+  const montantBaseEntry = await getReferentiel<number>(
+    millesime,
+    "PRESTATIONS_CAF",
+    "allocations_familiales_montant_base"
+  );
+  const montantBaseMensuel = montantBaseEntry.valeur;
 
-  // Plafonnement selon revenus (simplifié)
-  if (revenuAnnuel > 100000) {
-    return Math.round(montantBase * 0.5);
+  // Récupérer le plafond de ressources pour le taux plein
+  const plafondEntry = await getReferentiel<number>(
+    millesime,
+    "PRESTATIONS_CAF",
+    "allocations_familiales_plafond_taux_plein"
+  );
+  const plafondTauxPlein = plafondEntry.valeur;
+
+  // Calcul du montant brut annuel selon nombre d'enfants
+  let montantBrutAnnuel: number;
+
+  if (nombreEnfants === 2) {
+    // 2 enfants : 148.52€/mois × 2 × 12 = 1,782€/an
+    montantBrutAnnuel = montantBaseMensuel * 2 * 12;
+  } else if (nombreEnfants === 3) {
+    // 3 enfants : montant de base × 2 + majoration (environ 41€/mois)
+    // Simplifié : 338€/mois × 12 = 4,056€/an
+    montantBrutAnnuel = (montantBaseMensuel * 2 + 41) * 12;
+  } else {
+    // 4 enfants et + : base 3 enfants + 189€/mois par enfant supplémentaire
+    const base3Enfants = (montantBaseMensuel * 2 + 41) * 12;
+    const parEnfantSupplementaire = 189 * 12;
+    montantBrutAnnuel = base3Enfants + (nombreEnfants - 3) * parEnfantSupplementaire;
   }
 
-  return Math.round(montantBase);
+  // Application de la modulation selon revenus
+  // Plafonds approximatifs pour un couple avec 2 enfants :
+  // - Taux plein : < 74,884€
+  // - Taux réduit 50% : 74,884€ - 99,845€
+  // - Taux réduit 25% : > 99,845€
+  const plafondTauxReduit50 = plafondTauxPlein * 1.33; // ~99,845€
+  let tauxModulation = 1.0;
+
+  if (revenuAnnuel > plafondTauxReduit50) {
+    tauxModulation = 0.25; // Taux réduit 25%
+  } else if (revenuAnnuel > plafondTauxPlein) {
+    tauxModulation = 0.5; // Taux réduit 50%
+  }
+  // Sinon : taux plein (1.0)
+
+  return Math.round(montantBrutAnnuel * tauxModulation);
 }
 
 /**
@@ -221,7 +278,7 @@ export async function calculTotalRecu(
   const nombrePersonnesFoyer = nombreAdultes + nombreEnfants;
 
   const primeActivite = await calculPrimeActivite(salaireBrut, salaireNet, nombreEnfants, millesime);
-  const allocations = await calculAllocations(nombreEnfants, revenuAnnuel);
+  const allocations = await calculAllocations(nombreEnfants, revenuAnnuel, millesime);
   const remboursementsSante = await calculRemboursementsSante(nombrePersonnesFoyer, millesime);
   const servicesMutualises = await calculServicesMutualises(nombrePersonnesFoyer, millesime);
 
