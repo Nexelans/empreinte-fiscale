@@ -507,27 +507,27 @@ async function seedStatsINSEE() {
     millesime: "2026",
     categorie: "STATS_DREES",
     cle: "remboursement_sante_moyen_par_personne",
-    valeur: 2984,
+    valeur: 2956,
     unite: "euros_annuel",
-    source: "DREES - Les dépenses de santé en 2025",
+    source: "DREES - Les dépenses de santé en 2024 (Comptes de la santé)",
     urlSource: "https://drees.solidarites-sante.gouv.fr/",
     datePublication: new Date("2025-09-15"),
     statut: "OFFICIEL",
-    notes: "Remboursement moyen par la Sécurité Sociale par personne et par an, tous régimes confondus (hors complémentaires). Inclut consultations, hospitalisations, médicaments, soins dentaires et optiques.",
+    notes: "Part des dépenses de santé remboursée par la Sécurité Sociale = 79.4% × 3,723€ (dépense totale/habitant DREES 2024). Inclut consultations, hospitalisations, médicaments, soins. C'est ce que les citoyens 'voient' comme remboursement direct de la Sécu.",
   });
 
-  // Dépenses publiques de santé par habitant (services mutualisés)
+  // Infrastructure sanitaire publique (services mutualisés - hors remboursements)
   await createReferentielEntry({
     millesime: "2026",
     categorie: "STATS_DREES",
     cle: "sante_publique_par_habitant",
-    valeur: 4200,
+    valeur: 767,
     unite: "euros_annuel",
-    source: "DREES - Comptes de la santé 2025 + PLF 2026",
+    source: "DREES - Comptes de la santé 2024 (Comptes de la santé)",
     urlSource: "https://drees.solidarites-sante.gouv.fr/",
     datePublication: new Date("2025-09-15"),
     statut: "OFFICIEL",
-    notes: "Part des dépenses publiques de santé attribuable par habitant (hôpitaux publics, prévention, recherche médicale, formation des soignants). Ne pas confondre avec les remboursements individuels.",
+    notes: "Part des dépenses publiques de santé NON remboursée directement = 20.6% × 3,723€ (dépense totale/habitant DREES 2024). Couvre : recherche médicale, formation des soignants, prévention, administration sanitaire. IMPORTANT : évite le double comptage avec les remboursements Sécu.",
   });
 
   console.log("✓ Stats INSEE seeded");
