@@ -16,26 +16,50 @@ export function parseNumber(str: string): number | undefined {
 // Patterns pour bulletin de paie
 export const BULLETIN_PAIE_PATTERNS = {
   salaireBrut: [
+    // Format moderne : "Total rémunération brute"
+    /Total\s+rémunération\s+brute\s*:?\s*([\d\s,]+)/i,
+    /Rémunération\s+brute\s*:?\s*([\d\s,]+)/i,
+    // Formats classiques
     /Salaire\s+brut\s*:?\s*([\d\s,]+)/i,
     /Brut\s*:?\s*([\d\s,]+)/i,
     /SALAIRE\s+BRUT\s*:?\s*([\d\s,]+)/i,
+    // Avec beaucoup d'espaces (format tableau)
+    /(?:Total\s+)?(?:rémunération|salaire)\s+brute?\s+[\s\.]*\s*([\d\s,]+)/i,
   ],
   salaireNet: [
-    /Salaire\s+net\s+(?:à\s+payer|imposable)\s*:?\s*([\d\s,]+)/i,
-    /Net\s+(?:à\s+payer|imposable)\s*:?\s*([\d\s,]+)/i,
+    // Format moderne : "Net à payer"
+    /Net\s+à\s+payer\s*:?\s*([\d\s,]+)/i,
+    /Net\s+payé\s*:?\s*([\d\s,]+)/i,
+    // Net imposable
+    /Salaire\s+net\s+imposable\s*:?\s*([\d\s,]+)/i,
+    /Net\s+imposable\s*:?\s*([\d\s,]+)/i,
+    // Formats classiques
+    /Salaire\s+net\s+(?:à\s+payer)?\s*:?\s*([\d\s,]+)/i,
     /NET\s+A\s+PAYER\s*:?\s*([\d\s,]+)/i,
+    // Avec beaucoup d'espaces
+    /Net\s+(?:à\s+payer|imposable)?\s+[\s\.]*\s*([\d\s,]+)/i,
   ],
   csg: [
+    // CSG totale ou détaillée
     /CSG[^:]*:?\s*([\d\s,]+)/i,
     /C\.S\.G\.\s*:?\s*([\d\s,]+)/i,
+    /Contribution\s+Sociale\s+Généralisée\s*:?\s*([\d\s,]+)/i,
+    // CSG déductible + non déductible (on prend le total si visible)
+    /CSG\s+(?:déductible|non\s+déductible)?\s*[\s\.]*\s*([\d\s,]+)/i,
   ],
   cotisationsSalariales: [
-    /Total\s+cotisations\s+salariales\s*:?\s*([\d\s,]+)/i,
+    /Total\s+(?:des\s+)?cotisations\s+salariales\s*:?\s*([\d\s,]+)/i,
     /Cotisations\s+salariales\s*:?\s*([\d\s,]+)/i,
+    /Total\s+salarié\s*:?\s*([\d\s,]+)/i,
+    // Avec espaces
+    /(?:Total\s+)?cotisations?\s+salariales?\s+[\s\.]*\s*([\d\s,]+)/i,
   ],
   cotisationsPatronales: [
-    /Total\s+cotisations\s+patronales\s*:?\s*([\d\s,]+)/i,
+    /Total\s+(?:des\s+)?cotisations\s+patronales\s*:?\s*([\d\s,]+)/i,
     /Cotisations\s+patronales\s*:?\s*([\d\s,]+)/i,
+    /Total\s+employeur\s*:?\s*([\d\s,]+)/i,
+    // Avec espaces
+    /(?:Total\s+)?cotisations?\s+patronales?\s+[\s\.]*\s*([\d\s,]+)/i,
   ],
 };
 
