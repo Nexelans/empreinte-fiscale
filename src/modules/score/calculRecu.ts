@@ -161,6 +161,76 @@ export async function calculAllocations(
 }
 
 /**
+ * Calcule l'Aide Personnalisée au Logement (APL)
+ *
+ * IMPORTANT : Cette version est simplifiée pour le MVP.
+ * L'APL réelle dépend de nombreux facteurs :
+ * - Statut locataire/propriétaire (seuls les locataires sont éligibles en général)
+ * - Zone géographique (1: Paris/grandes métropoles, 2: villes moyennes, 3: rural)
+ * - Loyer réel payé (plafonné selon zone et composition familiale)
+ * - Ressources du foyer
+ * - Type de logement
+ *
+ * Pour cette version simplifiée :
+ * - On suppose un locataire en zone 2 (moyenne nationale)
+ * - On estime l'APL en fonction du revenu et de la composition familiale
+ * - L'APL est calculée comme : Loyer plafonné - Participation personnelle
+ *
+ * Source : CAF - Barème APL 2026
+ */
+export async function calculAPL(
+  salaireBrut: number,
+  nombrePersonnesFoyer: number,
+  estLocataire: boolean,
+  millesime: string
+): Promise<number> {
+  // Pas d'APL si propriétaire (sauf cas particuliers non implémentés)
+  if (!estLocataire) return 0;
+
+  // Pas d'APL si revenus trop élevés (seuil simplifié : > 2 SMIC pour personne seule)
+  const paramsRGDU = await getReferentiel<any>(millesime, "COTISATIONS", "rgdu");
+  const smicAnnuel = paramsRGDU.valeur.smicAnnuel;
+  const seuilMaxRevenu = smicAnnuel * 2.5 * nombrePersonnesFoyer;
+
+  if (salaireBrut > seuilMaxRevenu) return 0;
+
+  // Récupérer le plafond de loyer zone 2 (moyenne nationale)
+  const plafondLoyerEntry = await getReferentiel<number>(
+    millesime,
+    "PRESTATIONS_CAF",
+    "apl_plafond_loyer_zone2_personne_seule"
+  );
+  const plafondLoyerBase = plafondLoyerEntry.valeur;
+
+  // Ajuster le plafond selon la composition familiale
+  // Simplifié : +10% par personne supplémentaire
+  const plafondLoyer = plafondLoyerBase * (1 + (nombrePersonnesFoyer - 1) * 0.1);
+
+  // Calcul de la participation personnelle (formule simplifiée)
+  // Plus les revenus sont élevés, plus la participation est élevée
+  const rapportRevenuSmic = salaireBrut / smicAnnuel;
+  let tauxParticipation = 0.3; // Base 30% du loyer plafonné
+
+  if (rapportRevenuSmic < 0.5) {
+    tauxParticipation = 0.15; // Très faibles revenus : 15%
+  } else if (rapportRevenuSmic < 1.0) {
+    tauxParticipation = 0.20; // Revenus modestes : 20%
+  } else if (rapportRevenuSmic < 1.5) {
+    tauxParticipation = 0.30; // Revenus moyens : 30%
+  } else {
+    tauxParticipation = 0.40; // Revenus plus élevés : 40%
+  }
+
+  const participationPersonnelle = plafondLoyer * tauxParticipation;
+
+  // APL mensuelle = Loyer plafonné - Participation personnelle
+  const aplMensuelle = Math.max(0, plafondLoyer - participationPersonnelle);
+
+  // APL annuelle
+  return Math.round(aplMensuelle * 12);
+}
+
+/**
  * Calcule le coût éducation total
  */
 export async function calculCoutEducation(
@@ -282,10 +352,14 @@ export async function calculTotalRecu(
   const remboursementsSante = await calculRemboursementsSante(nombrePersonnesFoyer, millesime);
   const servicesMutualises = await calculServicesMutualises(nombrePersonnesFoyer, millesime);
 
+  // APL : uniquement pour les locataires
+  const estLocataire = profil.patrimoine?.proprietaire === false;
+  const apl = await calculAPL(salaireBrut, nombrePersonnesFoyer, estLocataire, millesime);
+
   return {
     transfertsDirects: {
       allocations,
-      apl: 0, // TODO: implémenter le calcul APL
+      apl,
       remboursementsSante,
       autres: primeActivite,
     },
