@@ -4,18 +4,7 @@
 
 import { DocumentType, ExtractedData, ParseResult, ExtractionStatus } from "./types";
 import { extractDataFromText, calculateConfidence } from "./patterns";
-
-// Dynamic require for pdf-parse (CommonJS module)
-const getPdfParse = () => {
-  try {
-    // Using require for CommonJS module compatibility
-    // eslint-disable-next-line
-    return require("pdf-parse");
-  } catch (error) {
-    console.error("pdf-parse not installed. Run: npm install pdf-parse");
-    throw new Error("pdf-parse package is required for document parsing");
-  }
-};
+import pdfParse from "pdf-parse";
 
 /**
  * Parse un document PDF et extrait les données structurées
@@ -26,7 +15,6 @@ export async function parseDocument(
 ): Promise<ParseResult> {
   try {
     // Extraire le texte du PDF avec pdf-parse
-    const pdfParse = getPdfParse();
     const pdfData = await pdfParse(fileBuffer);
     const rawText = pdfData.text;
 

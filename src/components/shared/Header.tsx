@@ -50,13 +50,19 @@ export function Header() {
                   📊 Dashboard
                 </Link>
                 <Link href="/profil" className={navLinkClass("/profil")}>
-                  👤 Mon Profil
+                  👤 Profil
                 </Link>
                 <Link href="/journal" className={navLinkClass("/journal")}>
                   📅 Journal
                 </Link>
+                <Link href="/evolution" className={navLinkClass("/evolution")}>
+                  📈 Évolution
+                </Link>
                 <Link href="/simulations" className={navLinkClass("/simulations")}>
                   🔮 Simulations
+                </Link>
+                <Link href="/gamification" className={navLinkClass("/gamification")}>
+                  🏆 Badges
                 </Link>
                 <Link href="/quiz" className={navLinkClass("/quiz")}>
                   🎯 Quiz
@@ -145,7 +151,7 @@ export function Header() {
                   className={`block ${navLinkClass("/profil")}`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  👤 Mon Profil
+                  👤 Profil
                 </Link>
                 <Link
                   href="/journal"
@@ -155,11 +161,25 @@ export function Header() {
                   📅 Journal
                 </Link>
                 <Link
+                  href="/evolution"
+                  className={`block ${navLinkClass("/evolution")}`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  📈 Évolution
+                </Link>
+                <Link
                   href="/simulations"
                   className={`block ${navLinkClass("/simulations")}`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   🔮 Simulations
+                </Link>
+                <Link
+                  href="/gamification"
+                  className={`block ${navLinkClass("/gamification")}`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  🏆 Badges
                 </Link>
                 <Link
                   href="/quiz"
