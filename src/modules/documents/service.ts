@@ -13,9 +13,48 @@ async function extractPdfText(fileBuffer: Buffer): Promise<string> {
   return new Promise((resolve, reject) => {
     const pdfParser = new (PDFParser as any)(null, true); // raw text mode
 
-    pdfParser.on("pdfParser_dataReady", () => {
-      const text = pdfParser.getRawTextContent();
-      resolve(text);
+    pdfParser.on("pdfParser_dataReady", (pdfData: any) => {
+      try {
+        // Méthode 1 : getRawTextContent() si disponible
+        if (typeof pdfParser.getRawTextContent === 'function') {
+          const text = pdfParser.getRawTextContent();
+          if (text && text.trim().length > 0) {
+            resolve(text);
+            return;
+          }
+        }
+
+        // Méthode 2 : Extraire depuis pdfData.Pages
+        if (pdfData && pdfData.Pages) {
+          const textParts: string[] = [];
+
+          for (const page of pdfData.Pages) {
+            if (page.Texts) {
+              for (const text of page.Texts) {
+                if (text.R) {
+                  for (const run of text.R) {
+                    if (run.T) {
+                      // Décoder le texte (pdf2json encode avec encodeURIComponent)
+                      const decoded = decodeURIComponent(run.T);
+                      textParts.push(decoded);
+                    }
+                  }
+                }
+              }
+            }
+          }
+
+          const extractedText = textParts.join(' ');
+          resolve(extractedText);
+          return;
+        }
+
+        // Si aucune méthode ne fonctionne
+        resolve('');
+      } catch (err) {
+        console.error('[extractPdfText] Error extracting text:', err);
+        resolve('');
+      }
     });
 
     pdfParser.on("pdfParser_dataError", (error: Error) => {
