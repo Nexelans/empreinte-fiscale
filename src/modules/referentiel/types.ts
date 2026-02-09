@@ -22,9 +22,11 @@ export interface TrancheIR {
 }
 
 export interface DecoteIR {
-  montantMax: number;
+  montantMaxCelibataire: number;
+  montantMaxCouple: number;
   seuilCelibataire: number;
   seuilCouple: number;
+  coefficient: number;
 }
 
 export interface PlafondQuotientFamilial {
@@ -46,6 +48,13 @@ export interface TauxCotisation {
   agff?: number;
   fnal?: number;
   contribution_solidarite?: number;
+}
+
+export interface ParametresRGDU {
+  coefficientMaximal: number;
+  seuilMin: number;
+  seuilMax: number;
+  smicAnnuel: number;
 }
 
 export interface ConsommationMoyenne {

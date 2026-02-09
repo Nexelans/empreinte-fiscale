@@ -8,6 +8,7 @@ import {
   FonctionBudgetaire,
   DecoteIR,
   PlafondQuotientFamilial,
+  ParametresRGDU,
 } from "./types";
 
 // Cache simple en mémoire (5 minutes de TTL)
@@ -128,6 +129,14 @@ export async function getTauxCotisations(
  */
 export async function getPlafondSS(millesime: string): Promise<number> {
   const entry = await getReferentiel<number>(millesime, "COTISATIONS", "plafond_ss");
+  return entry.valeur;
+}
+
+/**
+ * Récupère les paramètres de la RGDU (Réduction Générale Dégressive Unique)
+ */
+export async function getParametresRGDU(millesime: string): Promise<ParametresRGDU> {
+  const entry = await getReferentiel<ParametresRGDU>(millesime, "COTISATIONS", "rgdu");
   return entry.valeur;
 }
 

@@ -4,6 +4,7 @@ import {
   getTauxCotisations,
   getTauxTVA,
   getPlafondSS,
+  getParametresRGDU,
   getTauxCSG_CRDS_Patrimoine,
   getParametresIFI,
   getDepensesAnnuellesDefaut,
@@ -36,13 +37,22 @@ export async function calculImpotRevenu(
 
   let impot = impotParPart * nombreParts;
 
-  // Application de la décote si applicable
-  const seuilDecote =
-    nombreParts === 1 ? bareme.decote.seuilCelibataire : bareme.decote.seuilCouple;
+  // Application de la décote si applicable (Article 197-I-4 du CGI)
+  // La décote s'applique si l'impôt brut est inférieur au seuil
+  // Décote = montant forfaitaire - (impôt brut × coefficient 45,25%)
+  // Formules différenciées célibataire/couple depuis 2026
+  const isImpositionIndividuelle = nombreParts <= 1.5; // Célibataire, divorcé, veuf sans enfant
+  const seuilDecote = isImpositionIndividuelle
+    ? bareme.decote.seuilCelibataire
+    : bareme.decote.seuilCouple;
+  const montantForfaitaire = isImpositionIndividuelle
+    ? bareme.decote.montantMaxCelibataire
+    : bareme.decote.montantMaxCouple;
+  const coefficient = bareme.decote.coefficient || 0.4525;
 
   if (impot > 0 && impot < seuilDecote) {
-    const decote = bareme.decote.montantMax - impot * 0.75;
-    impot = Math.max(0, impot - decote);
+    const decote = montantForfaitaire - impot * coefficient;
+    impot = Math.max(0, impot - Math.max(0, decote));
   }
 
   return Math.max(0, Math.round(impot));
@@ -99,7 +109,49 @@ export async function calculCotisationsSalariales(
 }
 
 /**
- * Calcule les cotisations patronales
+ * Calcule le coefficient de réduction RGDU (Réduction Générale Dégressive Unique, ex-Fillon)
+ * La RGDU s'applique sur les cotisations patronales de maladie, allocations familiales et vieillesse déplafonnée
+ *
+ * Formule URSSAF 2026 : Coefficient = (T/0.6) × [(1.6 × SMIC annuel / Rémunération annuelle) - 1]
+ * - Au SMIC : coefficient = T (maximal, 0.3206 soit 32,06%)
+ * - À 1.6 SMIC : coefficient = 0 (pas de réduction)
+ *
+ * Source : https://www.urssaf.fr/portail/home/employeur/calculer-les-cotisations/les-taux-de-cotisations/la-reduction-generale.html
+ */
+async function calculateRGDU(
+  remunerationAnnuelle: number,
+  millesime: string
+): Promise<number> {
+  const params = await getParametresRGDU(millesime);
+
+  // Si la rémunération dépasse 1.6 SMIC, pas de réduction
+  if (remunerationAnnuelle >= params.seuilMax * params.smicAnnuel) {
+    return 0;
+  }
+
+  // Si la rémunération est inférieure ou égale au SMIC, réduction maximale
+  if (remunerationAnnuelle <= params.smicAnnuel) {
+    return params.coefficientMaximal;
+  }
+
+  // Calcul du coefficient selon la formule URSSAF
+  const T = params.coefficientMaximal;
+  const rapport = (params.seuilMax * params.smicAnnuel) / remunerationAnnuelle;
+  const coefficient = (T / 0.6) * (rapport - 1);
+
+  // Le coefficient ne peut pas être négatif
+  return Math.max(0, coefficient);
+}
+
+/**
+ * Calcule les cotisations patronales (avec application de la RGDU)
+ *
+ * La RGDU (Réduction Générale Dégressive Unique, ex-Fillon) s'applique sur :
+ * - Maladie-maternité
+ * - Allocations familiales
+ * - Vieillesse déplafonnée
+ *
+ * Source : URSSAF - Réduction générale de cotisations patronales 2026
  */
 export async function calculCotisationsPatronales(
   salaireBrut: number,
@@ -111,42 +163,53 @@ export async function calculCotisationsPatronales(
   const salairePlafonne = Math.min(salaireBrut, plafond);
   const salaireDeplafonne = salaireBrut;
 
-  let total = 0;
+  // Cotisations soumises à RGDU
+  let cotisationsAvecRGDU = 0;
 
-  // Maladie-maternité
+  // Maladie-maternité (soumise à RGDU)
   if (taux.maladie_maternite) {
-    total += salaireDeplafonne * taux.maladie_maternite;
+    cotisationsAvecRGDU += salaireDeplafonne * taux.maladie_maternite;
   }
 
-  // Vieillesse plafonnée
-  if (taux.vieillesse_plafonnee) {
-    total += salairePlafonne * taux.vieillesse_plafonnee;
-  }
-
-  // Vieillesse déplafonnée
-  if (taux.vieillesse_deplafonnee) {
-    total += salaireDeplafonne * taux.vieillesse_deplafonnee;
-  }
-
-  // Allocations familiales
+  // Allocations familiales (soumises à RGDU)
   if (taux.allocations_familiales) {
-    total += salaireDeplafonne * taux.allocations_familiales;
+    cotisationsAvecRGDU += salaireDeplafonne * taux.allocations_familiales;
   }
 
-  // Accidents du travail
+  // Vieillesse déplafonnée (soumise à RGDU)
+  if (taux.vieillesse_deplafonnee) {
+    cotisationsAvecRGDU += salaireDeplafonne * taux.vieillesse_deplafonnee;
+  }
+
+  // Application de la RGDU
+  const coefficientRGDU = await calculateRGDU(salaireBrut, millesime);
+  const reductionRGDU = cotisationsAvecRGDU * coefficientRGDU;
+  const cotisationsApresRGDU = cotisationsAvecRGDU - reductionRGDU;
+
+  // Cotisations NON soumises à RGDU
+  let cotisationsSansRGDU = 0;
+
+  // Vieillesse plafonnée (NON soumise à RGDU)
+  if (taux.vieillesse_plafonnee) {
+    cotisationsSansRGDU += salairePlafonne * taux.vieillesse_plafonnee;
+  }
+
+  // Accidents du travail (NON soumis à RGDU)
   if (taux.accidents_travail) {
-    total += salaireDeplafonne * taux.accidents_travail;
+    cotisationsSansRGDU += salaireDeplafonne * taux.accidents_travail;
   }
 
-  // Chômage
+  // Chômage (NON soumis à RGDU)
   if (taux.chomage) {
-    total += salaireDeplafonne * taux.chomage;
+    cotisationsSansRGDU += salaireDeplafonne * taux.chomage;
   }
 
-  // Retraite complémentaire
+  // Retraite complémentaire (NON soumise à RGDU)
   if (taux.retraite_complementaire_tranche1) {
-    total += salairePlafonne * taux.retraite_complementaire_tranche1;
+    cotisationsSansRGDU += salairePlafonne * taux.retraite_complementaire_tranche1;
   }
+
+  const total = cotisationsApresRGDU + cotisationsSansRGDU;
 
   return Math.round(total);
 }

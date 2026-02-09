@@ -68,43 +68,45 @@ async function main() {
 async function seedBaremeIR() {
   console.log("Seeding Barème IR 2026...");
 
-  // Source: Projet de loi de finances 2026
-  // https://www.legifrance.gouv.fr/
+  // Source: Loi de finances 2026 adoptée le 2 février 2026 (revalorisation +0,9%)
+  // https://www.economie.gouv.fr/particuliers/tranches-imposition-impot-revenu
   await createReferentielEntry({
     millesime: "2026",
     categorie: "BAREME_IR",
     cle: "tranches",
     valeur: [
-      { min: 0, max: 11294, taux: 0 },
-      { min: 11294, max: 28797, taux: 0.11 },
-      { min: 28797, max: 82341, taux: 0.30 },
-      { min: 82341, max: 177106, taux: 0.41 },
-      { min: 177106, max: Infinity, taux: 0.45 },
+      { min: 0, max: 11600, taux: 0 },
+      { min: 11600, max: 29579, taux: 0.11 },
+      { min: 29579, max: 84577, taux: 0.30 },
+      { min: 84577, max: 181917, taux: 0.41 },
+      { min: 181917, max: Infinity, taux: 0.45 },
     ],
     unite: "euros_et_taux",
-    source: "PLF 2026",
-    urlSource: "https://www.legifrance.gouv.fr/",
-    datePublication: new Date("2025-09-27"),
+    source: "LFI 2026 - Article 2 ter, revalorisation +0,9%",
+    urlSource: "https://www.economie.gouv.fr/particuliers/tranches-imposition-impot-revenu",
+    datePublication: new Date("2026-02-02"),
     statut: "OFFICIEL",
-    notes: "Barème progressif de l'impôt sur le revenu applicable aux revenus 2026",
+    notes: "Barème progressif de l'impôt sur le revenu applicable aux revenus 2025 (déclaration 2026)",
   });
 
-  // Décote
+  // Décote 2026 - Article 197-I-4 du CGI
   await createReferentielEntry({
     millesime: "2026",
     categorie: "BAREME_IR",
     cle: "decote",
     valeur: {
-      montantMax: 873,
-      seuilCelibataire: 1841,
-      seuilCouple: 3045,
+      montantMaxCelibataire: 889,
+      montantMaxCouple: 1470,
+      seuilCelibataire: 1965,
+      seuilCouple: 3249,
+      coefficient: 0.4525,
     },
     unite: "euros",
-    source: "PLF 2026",
-    urlSource: "https://www.legifrance.gouv.fr/",
-    datePublication: new Date("2025-09-27"),
+    source: "LFI 2026 - Article 197-I-4 CGI",
+    urlSource: "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006302374",
+    datePublication: new Date("2026-02-02"),
     statut: "OFFICIEL",
-    notes: "Décote applicable pour lisser l'entrée dans l'imposition",
+    notes: "Décote = montant forfaitaire - (impôt brut × 45,25%). Formules différenciées célibataire/couple.",
   });
 
   // Plafonnement des effets du quotient familial
@@ -113,15 +115,15 @@ async function seedBaremeIR() {
     categorie: "BAREME_IR",
     cle: "plafond_quotient_familial",
     valeur: {
-      parDemiPart: 1759,
-      premieresDemiParts: 1759,
+      parDemiPart: 1807,
+      premieresDemiParts: 1807,
     },
     unite: "euros",
-    source: "PLF 2026",
+    source: "LFI 2026",
     urlSource: "https://www.legifrance.gouv.fr/",
-    datePublication: new Date("2025-09-27"),
+    datePublication: new Date("2026-02-02"),
     statut: "OFFICIEL",
-    notes: "Plafonnement de l'avantage procuré par le quotient familial",
+    notes: "Plafonnement de l'avantage procuré par le quotient familial (1 807 € par demi-part en 2026)",
   });
 
   console.log("✓ Barème IR 2026 seeded");
@@ -130,13 +132,13 @@ async function seedBaremeIR() {
 async function seedTauxTVA() {
   console.log("Seeding Taux TVA...");
 
-  // Taux normal
+  // Taux normal - Stocké en décimale pour faciliter les calculs
   await createReferentielEntry({
     millesime: "2026",
     categorie: "TAUX_TVA",
     cle: "normal",
-    valeur: 20,
-    unite: "pourcentage",
+    valeur: 0.20,
+    unite: "decimal",
     source: "Code général des impôts, article 278",
     urlSource: "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006279261",
     datePublication: new Date("2014-01-01"),
@@ -149,8 +151,8 @@ async function seedTauxTVA() {
     millesime: "2026",
     categorie: "TAUX_TVA",
     cle: "intermediaire",
-    valeur: 10,
-    unite: "pourcentage",
+    valeur: 0.10,
+    unite: "decimal",
     source: "Code général des impôts, article 278-0 bis",
     urlSource: "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006279243",
     datePublication: new Date("2014-01-01"),
@@ -164,8 +166,8 @@ async function seedTauxTVA() {
     millesime: "2026",
     categorie: "TAUX_TVA",
     cle: "reduit",
-    valeur: 5.5,
-    unite: "pourcentage",
+    valeur: 0.055,
+    unite: "decimal",
     source: "Code général des impôts, article 278-0 bis A",
     urlSource: "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006279244",
     datePublication: new Date("2014-01-01"),
@@ -178,8 +180,8 @@ async function seedTauxTVA() {
     millesime: "2026",
     categorie: "TAUX_TVA",
     cle: "super_reduit",
-    valeur: 2.1,
-    unite: "pourcentage",
+    valeur: 0.021,
+    unite: "decimal",
     source: "Code général des impôts, article 281 quater",
     urlSource: "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006279278",
     datePublication: new Date("2014-01-01"),
@@ -215,16 +217,16 @@ async function seedCotisationsSociales() {
     notes: "Taux de cotisations salariales applicables au secteur privé en 2026",
   });
 
-  // Cotisations patronales
+  // Cotisations patronales (taux pleins avant RGDU)
   await createReferentielEntry({
     millesime: "2026",
     categorie: "COTISATIONS",
     cle: "patronales",
     valeur: {
-      maladie_maternite: 0.13,
+      maladie_maternite: 0.1110,
       vieillesse_plafonnee: 0.0855,
       vieillesse_deplafonnee: 0.0190,
-      allocations_familiales: 0.0340,
+      allocations_familiales: 0.0525,
       accidents_travail: 0.022,
       chomage: 0.0405,
       retraite_complementaire_tranche1: 0.0601,
@@ -238,7 +240,26 @@ async function seedCotisationsSociales() {
     urlSource: "https://www.urssaf.fr/",
     datePublication: new Date("2025-12-01"),
     statut: "OFFICIEL",
-    notes: "Taux de cotisations patronales applicables au secteur privé en 2026",
+    notes: "Taux de cotisations patronales applicables au secteur privé en 2026 (avant application de la RGDU)",
+  });
+
+  // RGDU (Réduction Générale Dégressive Unique, ex-Fillon)
+  await createReferentielEntry({
+    millesime: "2026",
+    categorie: "COTISATIONS",
+    cle: "rgdu",
+    valeur: {
+      coefficientMaximal: 0.3206,
+      seuilMin: 1.0,
+      seuilMax: 1.6,
+      smicAnnuel: 21600,
+    },
+    unite: "coefficient",
+    source: "URSSAF - Réduction générale de cotisations patronales 2026",
+    urlSource: "https://www.urssaf.fr/portail/home/employeur/calculer-les-cotisations/les-taux-de-cotisations/la-reduction-generale.html",
+    datePublication: new Date("2025-12-01"),
+    statut: "OFFICIEL",
+    notes: "Paramètres de la RGDU (ex-réduction Fillon). Formule : Coefficient = (T/0.6) × [(1.6 × SMIC annuel / Rémunération annuelle) - 1]. Le coefficient est maximal au SMIC (T = 0.3206) et devient nul à partir de 1.6 SMIC. Cette réduction s'applique sur les cotisations patronales de maladie, allocations familiales et vieillesse déplafonnée.",
   });
 
   // Plafond annuel de sécurité sociale
