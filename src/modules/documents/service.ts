@@ -16,9 +16,14 @@ export async function parseDocument(
     // Extraire le texte du PDF avec pdf-parse (dynamic import for CommonJS module)
     const { default: pdfParse } = await import("pdf-parse") as any;
 
-    // Parse avec options pour éviter canvas/DOMMatrix
+    // Parse avec options pour éviter canvas/DOMMatrix en serverless
     const pdfData = await pdfParse(fileBuffer, {
-      // Désactiver le rendu canvas qui cause DOMMatrix error en serverless
+      // CRITICAL: Désactiver complètement le rendu pour éviter DOMMatrix/canvas errors
+      pagerender: (pageData: any) => {
+        // Retourner null pour désactiver le rendu canvas
+        // On veut seulement le texte, pas le rendu visuel
+        return pageData.getTextContent();
+      },
       max: 0, // Ne pas limiter les pages
     });
     const rawText = pdfData.text;
