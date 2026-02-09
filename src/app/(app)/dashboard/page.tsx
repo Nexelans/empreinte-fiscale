@@ -283,7 +283,7 @@ export default function DashboardPage() {
               </FiscalTooltip>
             }
             value={score.soldeNet}
-            subtitle={score.soldeNet > 0 ? "Contributeur net" : "Bénéficiaire net"}
+            subtitle={score.soldeNet > 0 ? "Vous payez plus que vous ne recevez" : "Vous recevez plus que vous ne payez"}
             color="blue"
             icon={score.soldeNet > 0 ? "📈" : "📉"}
           />

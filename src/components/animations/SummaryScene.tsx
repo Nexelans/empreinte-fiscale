@@ -178,8 +178,8 @@ export function SummaryScene({ scene, config, summary }: SummarySceneProps) {
       >
         <p className="text-xl font-bold mb-2">
           {summary.netContribution > 0
-            ? "Vous êtes contributeur net aujourd'hui !"
-            : "Vous êtes bénéficiaire net aujourd'hui !"}
+            ? "Vous payez plus que vous ne recevez aujourd'hui !"
+            : "Vous recevez plus que vous ne payez aujourd'hui !"}
         </p>
         <p className="text-sm opacity-90">
           {summary.netContribution > 0

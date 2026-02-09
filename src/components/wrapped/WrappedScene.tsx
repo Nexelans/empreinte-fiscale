@@ -147,9 +147,9 @@ export function WrappedSceneComponent({ scene, theme, isActive }: WrappedScenePr
               <div className={`text-xl ${colors.text} opacity-70`}>
                 Ratio: {scene.data.ratio.toFixed(2)}
                 {scene.data.ratio > 1 ? (
-                  <span className="ml-2">📤 Contributeur net</span>
+                  <span className="ml-2">📤 Vous payez plus que vous ne recevez</span>
                 ) : (
-                  <span className="ml-2">📥 Bénéficiaire net</span>
+                  <span className="ml-2">📥 Vous recevez plus que vous ne payez</span>
                 )}
               </div>
             </motion.div>

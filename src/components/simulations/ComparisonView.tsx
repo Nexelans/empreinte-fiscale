@@ -82,7 +82,7 @@ export function ComparisonView({
             {formatCurrency(score.soldeNet)}
           </p>
           <p className="text-xs text-gray-500 mt-1">
-            {score.soldeNet >= 0 ? "Bénéficiaire net" : "Contributeur net"}
+            {score.soldeNet > 0 ? "Vous payez plus que vous ne recevez" : "Vous recevez plus que vous ne payez"}
           </p>
         </div>
 
