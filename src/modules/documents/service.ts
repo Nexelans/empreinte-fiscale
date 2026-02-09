@@ -4,7 +4,6 @@
 
 import { DocumentType, ExtractedData, ParseResult, ExtractionStatus } from "./types";
 import { extractDataFromText, calculateConfidence } from "./patterns";
-import pdfParse from "pdf-parse";
 
 /**
  * Parse un document PDF et extrait les données structurées
@@ -14,7 +13,8 @@ export async function parseDocument(
   documentType: DocumentType
 ): Promise<ParseResult> {
   try {
-    // Extraire le texte du PDF avec pdf-parse
+    // Extraire le texte du PDF avec pdf-parse (dynamic import for CommonJS module)
+    const pdfParse = (await import("pdf-parse")).default;
     const pdfData = await pdfParse(fileBuffer);
     const rawText = pdfData.text;
 
