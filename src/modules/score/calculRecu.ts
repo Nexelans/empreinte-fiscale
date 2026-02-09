@@ -3,6 +3,87 @@ import { getCoutEducation, getBudgetPLF, getStatsINSEE, getReferentiel } from "@
 import { DetailRecu } from "./types";
 
 /**
+ * Calcule la prime d'activité
+ *
+ * La prime d'activité est un complément de revenu pour les travailleurs modestes.
+ * Formule simplifiée : Prime = Montant forfaitaire + Bonifications - Ressources du foyer
+ *
+ * Conditions :
+ * - Revenu d'activité (salarié ou indépendant)
+ * - Revenus < ~1.3 SMIC pour une personne seule
+ *
+ * Source : CAF - Prime d'activité 2026
+ */
+export async function calculPrimeActivite(
+  salaireBrut: number,
+  salaireNet: number,
+  nombreEnfants: number,
+  millesime: string
+): Promise<number> {
+  // Pas de prime si pas de salaire
+  if (salaireBrut === 0) return 0;
+
+  const montantForfaitaire = await getReferentiel<number>(
+    millesime,
+    "PRESTATIONS_CAF",
+    "prime_activite_montant_forfaitaire"
+  );
+  const bonificationMax = await getReferentiel<number>(
+    millesime,
+    "PRESTATIONS_CAF",
+    "prime_activite_bonification_max"
+  );
+  const seuilRevenu = await getReferentiel<number>(
+    millesime,
+    "PRESTATIONS_CAF",
+    "prime_activite_seuil_revenu"
+  );
+
+  // Récupérer le SMIC annuel depuis le Référentiel RGDU
+  const paramsRGDU = await getReferentiel<any>(millesime, "COTISATIONS", "rgdu");
+  const smicAnnuel = paramsRGDU.valeur.smicAnnuel;
+
+  // Vérifier l'éligibilité : salaire < seuil (1.3 SMIC)
+  if (salaireBrut > seuilRevenu.valeur * smicAnnuel) {
+    return 0; // Au-dessus du plafond, pas de prime
+  }
+
+  // Montant forfaitaire mensuel (base)
+  const montantBase = montantForfaitaire.valeur;
+
+  // Bonification individuelle : décroît linéairement entre 0.5 SMIC et 1.3 SMIC
+  // Au SMIC : bonification maximale
+  // À 1.3 SMIC : bonification = 0
+  const rapportSmic = salaireBrut / smicAnnuel;
+  let bonification = 0;
+  if (rapportSmic <= 1.0) {
+    bonification = bonificationMax.valeur;
+  } else if (rapportSmic < seuilRevenu.valeur) {
+    // Décroissance linéaire de 1 SMIC à 1.3 SMIC
+    const facteur = (seuilRevenu.valeur - rapportSmic) / (seuilRevenu.valeur - 1.0);
+    bonification = bonificationMax.valeur * facteur;
+  }
+
+  // Majoration pour enfants (simplifié : +50% du montant forfaitaire par enfant)
+  const majoration = nombreEnfants * montantBase * 0.5;
+
+  // Ressources du foyer (salaire net mensuel moyen)
+  const salaireNetMensuel = salaireNet / 12;
+
+  // Abattement forfaitaire : 62% du salaire net (pour tenir compte des frais professionnels)
+  const abattement = salaireNetMensuel * 0.62;
+
+  // Calcul de la prime mensuelle
+  const primeMensuelle = Math.max(
+    0,
+    montantBase + bonification + majoration - (salaireNetMensuel - abattement)
+  );
+
+  // Prime annuelle
+  return Math.round(primeMensuelle * 12);
+}
+
+/**
  * Calcule les allocations familiales
  */
 export async function calculAllocations(
@@ -129,7 +210,9 @@ export async function calculTotalRecu(
   millesime: string
 ): Promise<DetailRecu> {
   const nombreEnfants = profil.familleServices?.nombreEnfants || 0;
-  const revenuAnnuel = (profil.revenus?.salaireBrut || 0) + (profil.revenus?.revenusFonciers || 0);
+  const salaireBrut = profil.revenus?.salaireBrut || 0;
+  const salaireNet = profil.revenus?.salaireNet || 0;
+  const revenuAnnuel = salaireBrut + (profil.revenus?.revenusFonciers || 0);
 
   // Calcul du nombre de personnes dans le foyer
   // Adultes : célibataire = 1, couple (marié/pacsé) = 2
@@ -137,6 +220,7 @@ export async function calculTotalRecu(
   const nombreAdultes = situation === "marie_pacse" ? 2 : 1;
   const nombrePersonnesFoyer = nombreAdultes + nombreEnfants;
 
+  const primeActivite = await calculPrimeActivite(salaireBrut, salaireNet, nombreEnfants, millesime);
   const allocations = await calculAllocations(nombreEnfants, revenuAnnuel);
   const remboursementsSante = await calculRemboursementsSante(nombrePersonnesFoyer, millesime);
   const servicesMutualises = await calculServicesMutualises(nombrePersonnesFoyer, millesime);
@@ -146,7 +230,7 @@ export async function calculTotalRecu(
       allocations,
       apl: 0, // TODO: implémenter le calcul APL
       remboursementsSante,
-      autres: 0,
+      autres: primeActivite,
     },
     servicesMutualises: {
       education: coutEducation,

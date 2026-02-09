@@ -55,6 +55,7 @@ async function main() {
   await seedStatsINSEE();
   await seedTaxesIndirectes();
   await seedAutresTaux();
+  await seedPrestationsSociales();
 
   // Phase 3: Gamification & Engagement
   await seedBadgeDefinitions();
@@ -679,6 +680,124 @@ async function seedAutresTaux() {
   });
 
   console.log("✓ Autres taux et seuils seeded");
+}
+
+async function seedPrestationsSociales() {
+  console.log("Seeding Prestations sociales (CAF)...");
+
+  // Prime d'activité - Montant forfaitaire 2026
+  await createReferentielEntry({
+    millesime: "2026",
+    categorie: "PRESTATIONS_CAF",
+    cle: "prime_activite_montant_forfaitaire",
+    valeur: 622.63,
+    unite: "euros_mensuel",
+    source: "CAF - Montants au 1er avril 2026 (revalorisés +0.9%)",
+    urlSource: "https://www.caf.fr/",
+    datePublication: new Date("2026-04-01"),
+    statut: "OFFICIEL",
+    notes: "Montant forfaitaire mensuel de la prime d'activité pour une personne seule sans enfant",
+  });
+
+  // Prime d'activité - Bonification individuelle max
+  await createReferentielEntry({
+    millesime: "2026",
+    categorie: "PRESTATIONS_CAF",
+    cle: "prime_activite_bonification_max",
+    valeur: 185.16,
+    unite: "euros_mensuel",
+    source: "CAF - Montants au 1er avril 2026",
+    urlSource: "https://www.caf.fr/",
+    datePublication: new Date("2026-04-01"),
+    statut: "OFFICIEL",
+    notes: "Bonification individuelle maximale (atteinte au SMIC)",
+  });
+
+  // Prime d'activité - Seuil d'éligibilité (en multiple du SMIC)
+  await createReferentielEntry({
+    millesime: "2026",
+    categorie: "PRESTATIONS_CAF",
+    cle: "prime_activite_seuil_revenu",
+    valeur: 1.3,
+    unite: "multiple_smic",
+    source: "CAF - Conditions d'attribution",
+    urlSource: "https://www.caf.fr/",
+    datePublication: new Date("2026-01-01"),
+    statut: "OFFICIEL",
+    notes: "La prime d'activité est versée jusqu'à environ 1,3 SMIC pour une personne seule",
+  });
+
+  // APL - Plafond de loyer zone 1 (Paris, grandes métropoles)
+  await createReferentielEntry({
+    millesime: "2026",
+    categorie: "PRESTATIONS_CAF",
+    cle: "apl_plafond_loyer_zone1_personne_seule",
+    valeur: 326.76,
+    unite: "euros_mensuel",
+    source: "CAF - Barèmes APL 2026",
+    urlSource: "https://www.caf.fr/",
+    datePublication: new Date("2026-01-01"),
+    statut: "OFFICIEL",
+    notes: "Plafond de loyer pris en compte pour le calcul de l'APL en zone 1 (personne seule)",
+  });
+
+  // APL - Plafond de loyer zone 2 (villes moyennes)
+  await createReferentielEntry({
+    millesime: "2026",
+    categorie: "PRESTATIONS_CAF",
+    cle: "apl_plafond_loyer_zone2_personne_seule",
+    valeur: 282.25,
+    unite: "euros_mensuel",
+    source: "CAF - Barèmes APL 2026",
+    urlSource: "https://www.caf.fr/",
+    datePublication: new Date("2026-01-01"),
+    statut: "OFFICIEL",
+    notes: "Plafond de loyer pris en compte pour le calcul de l'APL en zone 2 (personne seule)",
+  });
+
+  // APL - Plafond de loyer zone 3 (communes rurales)
+  await createReferentielEntry({
+    millesime: "2026",
+    categorie: "PRESTATIONS_CAF",
+    cle: "apl_plafond_loyer_zone3_personne_seule",
+    valeur: 260.54,
+    unite: "euros_mensuel",
+    source: "CAF - Barèmes APL 2026",
+    urlSource: "https://www.caf.fr/",
+    datePublication: new Date("2026-01-01"),
+    statut: "OFFICIEL",
+    notes: "Plafond de loyer pris en compte pour le calcul de l'APL en zone 3 (personne seule)",
+  });
+
+  // Allocations familiales - Montant de base par enfant 2026
+  await createReferentielEntry({
+    millesime: "2026",
+    categorie: "PRESTATIONS_CAF",
+    cle: "allocations_familiales_montant_base",
+    valeur: 148.52,
+    unite: "euros_mensuel",
+    source: "CAF - Montants au 1er avril 2026 (revalorisés +0.9%)",
+    urlSource: "https://www.caf.fr/",
+    datePublication: new Date("2026-04-01"),
+    statut: "OFFICIEL",
+    notes: "Montant mensuel de base par enfant (pour 2 enfants). Modulé selon revenus (taux plein, réduit 50%, réduit 25%). Les AF ne sont versées qu'à partir de 2 enfants.",
+  });
+
+  // Allocations familiales - Plafond ressources taux plein
+  await createReferentielEntry({
+    millesime: "2026",
+    categorie: "PRESTATIONS_CAF",
+    cle: "allocations_familiales_plafond_taux_plein",
+    valeur: 74884,
+    unite: "euros_annuel",
+    source: "CAF - Barèmes 2026",
+    urlSource: "https://www.caf.fr/",
+    datePublication: new Date("2026-01-01"),
+    statut: "OFFICIEL",
+    notes: "Plafond de ressources annuelles pour bénéficier du taux plein (couple avec 2 enfants)",
+  });
+
+  console.log("✓ Prestations sociales (CAF) seeded");
 }
 
 async function seedBadgeDefinitions() {
