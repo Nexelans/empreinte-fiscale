@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { SessionProvider } from "@/components/providers/SessionProvider";
+import { Header } from "@/components/shared/Header";
 import { Footer } from "@/components/shared/Footer";
 
 export const metadata: Metadata = {
   title: "Empreinte Fiscale",
   description: "Visualisez votre relation financière avec l'État",
+  // Icon auto-detected from app/icon.svg
 };
 
 export default function RootLayout({
@@ -25,6 +27,7 @@ export default function RootLayout({
         </a>
 
         <SessionProvider>
+          <Header />
           <main id="main-content" tabIndex={-1} className="flex-grow">
             {children}
           </main>
