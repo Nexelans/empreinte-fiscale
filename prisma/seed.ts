@@ -39,7 +39,7 @@ async function createReferentielEntry(data: ReferentielData) {
   });
 }
 
-async function main() {
+export async function main() {
   console.log("🌱 Starting seed...");
 
   // Clear existing referentiel data
