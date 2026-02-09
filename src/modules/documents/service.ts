@@ -2,8 +2,29 @@
  * Service de parsing et extraction de documents fiscaux
  */
 
+import PDFParser from "pdf2json";
 import { DocumentType, ExtractedData, ParseResult, ExtractionStatus } from "./types";
 import { extractDataFromText, calculateConfidence } from "./patterns";
+
+/**
+ * Extrait le texte d'un PDF avec pdf2json (100% JavaScript, pas de dépendances natives)
+ */
+async function extractPdfText(fileBuffer: Buffer): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const pdfParser = new (PDFParser as any)(null, true); // raw text mode
+
+    pdfParser.on("pdfParser_dataReady", () => {
+      const text = pdfParser.getRawTextContent();
+      resolve(text);
+    });
+
+    pdfParser.on("pdfParser_dataError", (error: Error) => {
+      reject(error);
+    });
+
+    pdfParser.parseBuffer(fileBuffer);
+  });
+}
 
 /**
  * Parse un document PDF et extrait les données structurées
@@ -13,20 +34,8 @@ export async function parseDocument(
   documentType: DocumentType
 ): Promise<ParseResult> {
   try {
-    // Extraire le texte du PDF avec pdf-parse (dynamic import for CommonJS module)
-    const { default: pdfParse } = await import("pdf-parse") as any;
-
-    // Parse avec options pour éviter canvas/DOMMatrix en serverless
-    const pdfData = await pdfParse(fileBuffer, {
-      // CRITICAL: Désactiver complètement le rendu pour éviter DOMMatrix/canvas errors
-      pagerender: (pageData: any) => {
-        // Retourner null pour désactiver le rendu canvas
-        // On veut seulement le texte, pas le rendu visuel
-        return pageData.getTextContent();
-      },
-      max: 0, // Ne pas limiter les pages
-    });
-    const rawText = pdfData.text;
+    // Extraire le texte du PDF avec pdf2json (pas de DOMMatrix, 100% JS)
+    const rawText = await extractPdfText(fileBuffer);
 
     if (!rawText || rawText.trim().length === 0) {
       return {
