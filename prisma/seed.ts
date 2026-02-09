@@ -487,6 +487,48 @@ async function seedStatsINSEE() {
     notes: "Consommation moyenne annuelle pour le 10e décile de revenu",
   });
 
+  // Dépenses annuelles par défaut (pour estimation TVA si aucun budget renseigné)
+  await createReferentielEntry({
+    millesime: "2026",
+    categorie: "STATS_INSEE",
+    cle: "depenses_annuelles_defaut",
+    valeur: 32400,
+    unite: "euros_annuel",
+    source: "INSEE - Enquête Budget de famille 2023",
+    urlSource: "https://www.insee.fr/",
+    datePublication: new Date("2025-06-01"),
+    statut: "OFFICIEL",
+    notes: "Dépenses de consommation moyennes d'un ménage français (médiane, décile 5)",
+  });
+
+  // Remboursements santé Sécurité Sociale (données DREES)
+  await createReferentielEntry({
+    millesime: "2026",
+    categorie: "STATS_DREES",
+    cle: "remboursement_sante_moyen_par_personne",
+    valeur: 2984,
+    unite: "euros_annuel",
+    source: "DREES - Les dépenses de santé en 2025",
+    urlSource: "https://drees.solidarites-sante.gouv.fr/",
+    datePublication: new Date("2025-09-15"),
+    statut: "OFFICIEL",
+    notes: "Remboursement moyen par la Sécurité Sociale par personne et par an, tous régimes confondus (hors complémentaires). Inclut consultations, hospitalisations, médicaments, soins dentaires et optiques.",
+  });
+
+  // Dépenses publiques de santé par habitant (services mutualisés)
+  await createReferentielEntry({
+    millesime: "2026",
+    categorie: "STATS_DREES",
+    cle: "sante_publique_par_habitant",
+    valeur: 4200,
+    unite: "euros_annuel",
+    source: "DREES - Comptes de la santé 2025 + PLF 2026",
+    urlSource: "https://drees.solidarites-sante.gouv.fr/",
+    datePublication: new Date("2025-09-15"),
+    statut: "OFFICIEL",
+    notes: "Part des dépenses publiques de santé attribuable par habitant (hôpitaux publics, prévention, recherche médicale, formation des soignants). Ne pas confondre avec les remboursements individuels.",
+  });
+
   console.log("✓ Stats INSEE seeded");
 }
 
@@ -634,20 +676,6 @@ async function seedAutresTaux() {
     datePublication: new Date("2018-01-01"),
     statut: "OFFICIEL",
     notes: "Barème progressif de l'IFI applicable au patrimoine net taxable",
-  });
-
-  // Dépenses annuelles par défaut (estimation INSEE)
-  await createReferentielEntry({
-    millesime: "2026",
-    categorie: "STATS_INSEE",
-    cle: "depenses_annuelles_defaut",
-    valeur: 30000,
-    unite: "euros_annuel",
-    source: "INSEE - Enquête Budget de famille 2023",
-    urlSource: "https://www.insee.fr/",
-    datePublication: new Date("2025-06-01"),
-    statut: "OFFICIEL",
-    notes: "Dépenses de consommation annuelles moyennes par ménage (valeur par défaut si non renseigné)",
   });
 
   console.log("✓ Autres taux et seuils seeded");

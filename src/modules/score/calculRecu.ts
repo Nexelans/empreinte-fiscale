@@ -1,5 +1,5 @@
 import { ProfilFiscalComplete } from "@/modules/profil/types";
-import { getCoutEducation, getBudgetPLF, getStatsINSEE } from "@/modules/referentiel";
+import { getCoutEducation, getBudgetPLF, getStatsINSEE, getReferentiel } from "@/modules/referentiel";
 import { DetailRecu } from "./types";
 
 /**
@@ -40,10 +40,37 @@ export async function calculCoutEducation(
 }
 
 /**
+ * Calcule les remboursements santé Sécurité Sociale
+ *
+ * Basé sur les données DREES (Direction de la Recherche, des Études, de l'Évaluation et des Statistiques)
+ * Montant moyen remboursé par personne × nombre de personnes du foyer
+ *
+ * Source : DREES - Les dépenses de santé 2025
+ */
+export async function calculRemboursementsSante(
+  nombrePersonnesFoyer: number,
+  millesime: string
+): Promise<number> {
+  const entry = await getReferentiel<number>(
+    millesime,
+    "STATS_DREES",
+    "remboursement_sante_moyen_par_personne"
+  );
+  const remboursementParPersonne = entry.valeur;
+
+  return Math.round(remboursementParPersonne * nombrePersonnesFoyer);
+}
+
+/**
  * Calcule les services mutualisés
+ *
+ * IMPORTANT : Les services mutualisés sont calculés PAR HABITANT puis multipliés par le nombre
+ * de personnes du foyer. Un foyer de 4 personnes bénéficie de 4× plus de services qu'un célibataire.
+ *
+ * Source : PLF 2026 + DREES pour la santé
  */
 export async function calculServicesMutualises(
-  nombreEnfants: number,
+  nombrePersonnesFoyer: number,
   millesime: string
 ): Promise<{
   education: number;
@@ -65,23 +92,31 @@ export async function calculServicesMutualises(
   const budgetAdministration = await getBudgetPLF(millesime, "administration");
   const budgetDette = await getBudgetPLF(millesime, "charge_dette");
 
-  // Part par habitant (budget en millions / population)
-  const securite = Math.round(
+  // Santé publique par habitant (données DREES)
+  const santeEntry = await getReferentiel<number>(
+    millesime,
+    "STATS_DREES",
+    "sante_publique_par_habitant"
+  );
+  const santeParHabitant = santeEntry.valeur;
+
+  // Part par habitant (budget en millions / population), puis × nombre de personnes
+  const securiteParHabitant = Math.round(
     ((budgetDefense + budgetJustice + budgetPolice) * 1000000) / population
   );
-  const infrastructure = Math.round((budgetInfrastructure * 1000000) / population);
-  const culture = Math.round((budgetCulture * 1000000) / population);
-  const administration = Math.round((budgetAdministration * 1000000) / population);
-  const chargesDette = Math.round((budgetDette * 1000000) / population);
+  const infrastructureParHabitant = Math.round((budgetInfrastructure * 1000000) / population);
+  const cultureParHabitant = Math.round((budgetCulture * 1000000) / population);
+  const administrationParHabitant = Math.round((budgetAdministration * 1000000) / population);
+  const chargesDetteParHabitant = Math.round((budgetDette * 1000000) / population);
 
   return {
     education: 0, // Calculé séparément par enfant
-    sante: 2000, // Estimation (à affiner selon profil)
-    securite,
-    infrastructure,
-    culture,
-    administration,
-    chargesDette,
+    sante: Math.round(santeParHabitant * nombrePersonnesFoyer),
+    securite: Math.round(securiteParHabitant * nombrePersonnesFoyer),
+    infrastructure: Math.round(infrastructureParHabitant * nombrePersonnesFoyer),
+    culture: Math.round(cultureParHabitant * nombrePersonnesFoyer),
+    administration: Math.round(administrationParHabitant * nombrePersonnesFoyer),
+    chargesDette: Math.round(chargesDetteParHabitant * nombrePersonnesFoyer),
   };
 }
 
@@ -96,14 +131,21 @@ export async function calculTotalRecu(
   const nombreEnfants = profil.familleServices?.nombreEnfants || 0;
   const revenuAnnuel = (profil.revenus?.salaireBrut || 0) + (profil.revenus?.revenusFonciers || 0);
 
+  // Calcul du nombre de personnes dans le foyer
+  // Adultes : célibataire = 1, couple (marié/pacsé) = 2
+  const situation = profil.situation?.statut || "celibataire";
+  const nombreAdultes = situation === "marie_pacse" ? 2 : 1;
+  const nombrePersonnesFoyer = nombreAdultes + nombreEnfants;
+
   const allocations = await calculAllocations(nombreEnfants, revenuAnnuel);
-  const servicesMutualises = await calculServicesMutualises(nombreEnfants, millesime);
+  const remboursementsSante = await calculRemboursementsSante(nombrePersonnesFoyer, millesime);
+  const servicesMutualises = await calculServicesMutualises(nombrePersonnesFoyer, millesime);
 
   return {
     transfertsDirects: {
       allocations,
       apl: 0, // TODO: implémenter le calcul APL
-      remboursementsSante: Math.round(servicesMutualises.sante * 0.3), // Estimation
+      remboursementsSante,
       autres: 0,
     },
     servicesMutualises: {
