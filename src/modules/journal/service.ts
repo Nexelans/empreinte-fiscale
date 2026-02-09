@@ -1,38 +1,51 @@
 import { prisma } from "@/lib/prisma";
-import { JournalEntryData, JournalFilters } from "./types";
-import { TicketData } from "../tickets/types";
+import { JournalEntryData, JournalFilters, SpendingCategory } from "./types";
 import { calculateTaxBreakdown, getTotalTax } from "./taxRates";
 import { emitGameEvent } from "../gamification/events";
 import { updateStreak } from "../gamification/streak";
 
 /**
- * Create a journal entry from ticket data
+ * Simplified entry data for journal creation
+ */
+export interface JournalEntryInput {
+  date?: Date;
+  enseigne?: string;
+  category?: SpendingCategory;
+  montantTTC: number;
+  montantHT?: number;
+  montantTVA?: number;
+  notes?: string;
+}
+
+/**
+ * Create a journal entry from manual entry data
  *
  * @param userId - User ID
- * @param ticketData - Ticket data from scan or manual entry
+ * @param entryInput - Entry data from manual entry
  * @returns Created journal entry
  */
 export async function createJournalEntry(
   userId: string,
-  ticketData: TicketData
+  entryInput: JournalEntryInput
 ): Promise<JournalEntryData> {
   // Calculate tax breakdown
   const taxBreakdown = await calculateTaxBreakdown(
-    ticketData.category || "autre",
-    ticketData.montantTTC,
-    ticketData.montantTVA
+    entryInput.category || "autre",
+    entryInput.montantTTC,
+    entryInput.montantTVA
   );
 
   // Prepare entry data
   const entryData: JournalEntryData = {
     userId,
-    date: ticketData.date || new Date(),
-    enseigne: ticketData.enseigne,
-    category: ticketData.category || "autre",
-    montantTTC: ticketData.montantTTC,
-    montantHT: ticketData.montantHT,
+    date: entryInput.date || new Date(),
+    enseigne: entryInput.enseigne,
+    category: entryInput.category || "autre",
+    montantTTC: entryInput.montantTTC,
+    montantHT: entryInput.montantHT,
     taxBreakdown,
-    status: ticketData.sourceType === "SCAN" ? "VERIFIE" : "DECLARE",
+    status: "DECLARE", // All manual entries are declared
+    notes: entryInput.notes,
   };
 
   // Save to database
@@ -43,7 +56,7 @@ export async function createJournalEntry(
       enseigne: entryData.enseigne,
       categorie: entryData.category,
       montantTTC: entryData.montantTTC,
-      montantTVA: ticketData.montantTVA,
+      montantTVA: entryInput.montantTVA,
       detailLignes: entryData.taxBreakdown as any, // Prisma Json type
       statut: entryData.status,
     },
@@ -54,7 +67,7 @@ export async function createJournalEntry(
     entryId: created.id,
     category: entryData.category,
     montantTTC: entryData.montantTTC,
-    isScanned: ticketData.sourceType === "SCAN",
+    isScanned: false,
   });
 
   // Mettre à jour la série (streak) de l'utilisateur

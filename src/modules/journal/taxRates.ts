@@ -1,5 +1,4 @@
-import { SpendingCategory, DEFAULT_TVA_RATES } from "../tickets/types";
-import { TaxBreakdown } from "./types";
+import { SpendingCategory, DEFAULT_TVA_RATES, TaxBreakdown } from "./types";
 import { getReferentiel } from "../referentiel/service";
 
 /**

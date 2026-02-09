@@ -175,14 +175,6 @@ const challengeProgressUpdaters: ChallengeProgressRegistry = {
     return challenge.progress;
   },
 
-  ticket_scan: async (userId: string, event: GameEvent, challenge: UserChallenge) => {
-    if (event.type === "JOURNAL_ENTRY_CREATED" && event.payload.isScanned) {
-      await updateChallengeProgress(userId, challenge.challengeId, 1);
-      return challenge.progress + 1;
-    }
-    return challenge.progress;
-  },
-
   simulation_created: async (userId: string, event: GameEvent, challenge: UserChallenge) => {
     if (event.type === "SIMULATION_CREATED") {
       await updateChallengeProgress(userId, challenge.challengeId, 1);

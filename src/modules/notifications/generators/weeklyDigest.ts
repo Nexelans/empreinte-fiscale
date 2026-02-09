@@ -16,7 +16,6 @@ export interface WeeklyDigestData {
   entriesCount: number;
   totalTaxesPaid: number;
   totalServicesReceived: number;
-  scannedTickets: number;
 
   // Gamification
   streakDays: number;
@@ -178,10 +177,6 @@ export async function compileWeeklyDigestData(
     0
   );
 
-  const scannedTickets = journalEntries.filter(
-    (entry) => entry.statut === "VERIFIE"
-  ).length;
-
   // Estimate services received (would need actual calculation)
   const totalServicesReceived = totalTaxesPaid * 0.8; // Simplified
 
@@ -204,7 +199,6 @@ export async function compileWeeklyDigestData(
     entriesCount: journalEntries.length,
     totalTaxesPaid: Math.round(totalTaxesPaid * 100) / 100,
     totalServicesReceived: Math.round(totalServicesReceived * 100) / 100,
-    scannedTickets,
     streakDays: streak?.currentStreak || 0,
     longestStreak: streak?.longestStreak || 0,
     badgesEarned,
@@ -247,10 +241,7 @@ function createWeeklyDigestNotification(
   // Activity section
   if (data.entriesCount > 0) {
     body += `🧾 **Activité**\n`;
-    body += `• ${data.entriesCount} entrées loggées\n`;
-    if (data.scannedTickets > 0) {
-      body += `• ${data.scannedTickets} tickets scannés\n`;
-    }
+    body += `• ${data.entriesCount} entrées enregistrées\n`;
     body += `• ${formatCurrency(data.totalTaxesPaid)} de taxes payées\n`;
     body += `• ${formatCurrency(data.totalServicesReceived)} de services reçus\n\n`;
   }

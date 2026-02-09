@@ -11,25 +11,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { SpendingCategory, SPENDING_CATEGORY_LABELS } from "@/modules/tickets/types";
-import { TicketData } from "@/modules/tickets/types";
+import { SpendingCategory, SPENDING_CATEGORY_LABELS } from "@/modules/journal/types";
+import { JournalEntryInput } from "@/modules/journal/service";
 
 interface AddEntryFormProps {
-  onSubmit: (ticketData: TicketData) => void;
+  onSubmit: (entryData: JournalEntryInput) => void;
   onCancel: () => void;
   isSubmitting?: boolean;
 }
 
 export function AddEntryForm({ onSubmit, onCancel, isSubmitting = false }: AddEntryFormProps) {
-  const [formData, setFormData] = useState<Partial<TicketData>>({
+  const [formData, setFormData] = useState<Partial<JournalEntryInput>>({
     date: new Date(),
     category: "alimentation",
     montantTTC: 0,
-    sourceType: "MANUAL",
-    confidence: 100, // Manual entries are 100% confident since user entered them
   });
 
-  const handleChange = (field: keyof TicketData, value: any) => {
+  const handleChange = (field: keyof JournalEntryInput, value: any) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -39,7 +37,7 @@ export function AddEntryForm({ onSubmit, onCancel, isSubmitting = false }: AddEn
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.montantTTC && formData.montantTTC > 0) {
-      onSubmit(formData as TicketData);
+      onSubmit(formData as JournalEntryInput);
     }
   };
 

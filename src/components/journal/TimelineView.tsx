@@ -22,7 +22,7 @@ export function TimelineView({ entries, onEdit, onDelete }: TimelineViewProps) {
           Aucune dépense enregistrée
         </h3>
         <p className="text-gray-600">
-          Commencez à scanner vos tickets ou ajoutez vos dépenses manuellement
+          Ajoutez vos dépenses manuellement pour commencer à suivre vos taxes
         </p>
       </div>
     );

@@ -115,7 +115,7 @@ export default function AidePage() {
         {
           id: "q16",
           question: "Qu'est-ce que le Journal Fiscal ?",
-          answer: "C'est un outil pour logger vos dépenses quotidiennes (courses, essence, restaurants). Vous pouvez scanner vos tickets avec votre smartphone, et l'app calcule automatiquement les taxes invisibles (TVA, TICPE, etc.). Pratique pour voir votre empreinte fiscale au jour le jour.",
+          answer: "C'est un outil pour enregistrer vos dépenses quotidiennes (courses, essence, restaurants). Vous saisissez vos dépenses manuellement, et l'app calcule automatiquement les taxes invisibles (TVA, TICPE, etc.). Pratique pour voir votre empreinte fiscale au jour le jour.",
         },
       ],
     },
@@ -132,7 +132,7 @@ export default function AidePage() {
         {
           id: "q18",
           question: "L'application fonctionne-t-elle sur mobile ?",
-          answer: "Oui, Empreinte Fiscale est 100% responsive (mobile-first). Vous pouvez l'utiliser sur smartphone, tablette ou desktop. Le scan de tickets est optimisé pour la caméra mobile.",
+          answer: "Oui, Empreinte Fiscale est 100% responsive (mobile-first). Vous pouvez l'utiliser sur smartphone, tablette ou desktop avec la même expérience optimisée.",
         },
         {
           id: "q19",

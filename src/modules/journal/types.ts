@@ -1,4 +1,49 @@
-import { SpendingCategory } from "../tickets/types";
+/**
+ * Categories of spending for fiscal journal
+ */
+export type SpendingCategory =
+  | "alimentation"
+  | "restaurant"
+  | "transport"
+  | "carburant"
+  | "energie"
+  | "telecom"
+  | "loisirs"
+  | "sante"
+  | "logement"
+  | "autre";
+
+/**
+ * Spending category labels for UI
+ */
+export const SPENDING_CATEGORY_LABELS: Record<SpendingCategory, string> = {
+  alimentation: "Alimentation",
+  restaurant: "Restaurant / Café",
+  transport: "Transport",
+  carburant: "Carburant",
+  energie: "Énergie (gaz, électricité)",
+  telecom: "Télécom (internet, mobile)",
+  loisirs: "Loisirs / Culture",
+  sante: "Santé",
+  logement: "Logement",
+  autre: "Autre",
+};
+
+/**
+ * Default TVA rates by category (simplified)
+ */
+export const DEFAULT_TVA_RATES: Record<SpendingCategory, number> = {
+  alimentation: 5.5, // Most food items at reduced rate
+  restaurant: 10, // Restaurant service
+  transport: 10,
+  carburant: 20,
+  energie: 5.5,
+  telecom: 20,
+  loisirs: 20,
+  sante: 5.5, // Most health products at reduced rate
+  logement: 20,
+  autre: 20,
+};
 
 /**
  * Status of data source for journal entry

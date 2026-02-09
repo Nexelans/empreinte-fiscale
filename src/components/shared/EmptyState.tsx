@@ -174,9 +174,7 @@ export function EmptyJournal({ onAddEntry }: { onAddEntry?: () => void }) {
       title="Votre journal est vide"
       description="Commencez à suivre vos dépenses quotidiennes pour visualiser les taxes que vous payez."
       actionLabel="Ajouter une dépense"
-      secondaryLabel="Scanner un ticket"
       onAction={onAddEntry}
-      onSecondary={onAddEntry}
     />
   );
 }

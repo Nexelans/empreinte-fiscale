@@ -414,7 +414,7 @@ export function Step4Consommation({ data, onChange }: Step4ConsommationProps) {
       <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
         <p className="text-sm text-purple-900">
           💡 <strong>Astuce :</strong> Plus votre estimation est précise, plus votre score de TVA
-          sera juste. Vous pourrez scanner vos tickets plus tard pour affiner.
+          sera juste. Vous pourrez utiliser le journal fiscal pour affiner vos dépenses réelles.
         </p>
       </div>
     </div>

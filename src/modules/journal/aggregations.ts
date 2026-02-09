@@ -1,5 +1,4 @@
-import { JournalEntryData, MonthlyAggregation, AnnualAggregation } from "./types";
-import { SpendingCategory } from "../tickets/types";
+import { JournalEntryData, MonthlyAggregation, AnnualAggregation, SpendingCategory } from "./types";
 import { getEntryTotalTax } from "./service";
 
 /**

@@ -20,7 +20,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { JournalEntryData } from "@/modules/journal/types";
-import { SpendingCategory, SPENDING_CATEGORY_LABELS } from "@/modules/tickets/types";
+import { SpendingCategory, SPENDING_CATEGORY_LABELS } from "@/modules/journal/types";
 
 interface EditEntryModalProps {
   entry: JournalEntryData;

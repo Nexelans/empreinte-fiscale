@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { createJournalEntry, getJournalEntries } from "@/modules/journal/service";
-import { TicketData } from "@/modules/tickets/types";
+import { createJournalEntry, getJournalEntries, JournalEntryInput } from "@/modules/journal/service";
 import { JournalFilters } from "@/modules/journal/types";
 
 export const dynamic = "force-dynamic";
@@ -63,7 +62,7 @@ export async function GET(request: NextRequest) {
 
 /**
  * POST /api/journal
- * Create a new journal entry from ticket data or manual entry
+ * Create a new journal entry from manual entry data
  */
 export async function POST(request: NextRequest) {
   try {
@@ -82,17 +81,17 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { ticketData } = body as { ticketData: TicketData };
+    const { entryData } = body as { entryData: JournalEntryInput };
 
-    if (!ticketData || !ticketData.montantTTC) {
+    if (!entryData || !entryData.montantTTC) {
       return NextResponse.json(
-        { error: "Données du ticket manquantes ou invalides" },
+        { error: "Données de l'entrée manquantes ou invalides" },
         { status: 400 }
       );
     }
 
     // Validate montantTTC is positive
-    if (ticketData.montantTTC <= 0) {
+    if (entryData.montantTTC <= 0) {
       return NextResponse.json(
         { error: "Le montant doit être supérieur à 0" },
         { status: 400 }
@@ -100,7 +99,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create journal entry
-    const entry = await createJournalEntry(user.id, ticketData);
+    const entry = await createJournalEntry(user.id, entryData);
 
     console.log(
       `[POST /api/journal] Created entry: ${entry.enseigne || "Unknown"} - ${entry.montantTTC}€`

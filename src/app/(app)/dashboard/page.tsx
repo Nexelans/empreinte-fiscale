@@ -242,8 +242,8 @@ export default function DashboardPage() {
           <div className="flex gap-2">
             <Link href="/journal">
               <Button variant="outline" className="flex items-center gap-2">
-                <span>📸</span>
-                <span>Scanner un ticket</span>
+                <span>📅</span>
+                <span>Ajouter une dépense</span>
               </Button>
             </Link>
             <Link href="/documents">

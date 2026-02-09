@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { JournalEntryData } from "@/modules/journal/types";
-import { SPENDING_CATEGORY_LABELS } from "@/modules/tickets/types";
+import { SPENDING_CATEGORY_LABELS } from "@/modules/journal/types";
 import { getEntryTotalTax } from "@/modules/journal/service";
 
 interface EntryCardProps {

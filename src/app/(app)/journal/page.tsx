@@ -11,29 +11,23 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useJournal } from "@/modules/journal/hooks/useJournal";
-import { useTicketScan } from "@/modules/tickets/hooks/useTicketScan";
 import { TimelineView } from "@/components/journal/TimelineView";
 import { AddEntryForm } from "@/components/journal/AddEntryForm";
 import { EditEntryModal } from "@/components/journal/EditEntryModal";
 import { MonthlyChart } from "@/components/journal/MonthlyChart";
 import { DailyScoreImpact } from "@/components/journal/DailyScoreImpact";
-import { CameraCapture } from "@/components/scan/CameraCapture";
-import { OCRProgress } from "@/components/scan/OCRProgress";
-import { TicketValidation } from "@/components/scan/TicketValidation";
-import { JournalEntryData } from "@/modules/journal/types";
+import { JournalEntryData, SpendingCategory, SPENDING_CATEGORY_LABELS } from "@/modules/journal/types";
 import { getCurrentYearAggregation } from "@/modules/journal/aggregations";
-import { SpendingCategory, SPENDING_CATEGORY_LABELS } from "@/modules/tickets/types";
 import { StreakBanner } from "@/components/gamification/StreakBanner";
 import { FreezeModal } from "@/components/gamification/FreezeModal";
 import { ChallengesCarousel } from "@/components/gamification/ChallengesCarousel";
 import { ChallengeCompletionToast, useChallengeCompletionToast } from "@/components/gamification/ChallengeCompletionToast";
 import type { StreakData, UserChallenge } from "@/modules/gamification/types";
 
-type ViewMode = "timeline" | "add" | "scan";
+type ViewMode = "timeline" | "add";
 
 export default function JournalPage() {
   const journal = useJournal();
-  const ticketScan = useTicketScan();
   const { toast, showToast, hideToast } = useChallengeCompletionToast();
   const [viewMode, setViewMode] = useState<ViewMode>("timeline");
   const [editingEntry, setEditingEntry] = useState<JournalEntryData | null>(null);
@@ -187,42 +181,22 @@ export default function JournalPage() {
     }
   };
 
-  const handleAddEntry = async (ticketData: any) => {
+  const handleAddEntry = async (entryData: any) => {
     try {
-      await journal.addEntry(ticketData);
+      await journal.addEntry(entryData);
       setViewMode("timeline");
     } catch (err) {
       // Error handled in hook
     }
   };
 
-  const handleScanConfirm = async (ticketData: any) => {
-    try {
-      await ticketScan.confirmValidation(ticketData);
-      await journal.addEntry(ticketData);
-      ticketScan.reset();
-      setViewMode("timeline");
-    } catch (err) {
-      // Error handled in hooks
-    }
-  };
-
   return (
     <div className="container mx-auto py-8 px-4 max-w-7xl">
-      <div className="mb-8 flex items-start justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Journal fiscal</h1>
-          <p className="text-gray-600 mt-2">
-            Suivez vos dépenses quotidiennes et visualisez les taxes que vous payez
-          </p>
-        </div>
-        <Button
-          onClick={() => setViewMode("scan")}
-          className="flex items-center gap-2"
-        >
-          <span>📸</span>
-          <span>Scanner un ticket</span>
-        </Button>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900">Journal fiscal</h1>
+        <p className="text-gray-600 mt-2">
+          Suivez vos dépenses quotidiennes et visualisez les taxes que vous payez
+        </p>
       </div>
 
       {/* Streak Banner */}
@@ -251,12 +225,6 @@ export default function JournalPage() {
           variant={viewMode === "add" ? "default" : "outline"}
         >
           ➕ Ajouter une dépense
-        </Button>
-        <Button
-          onClick={() => setViewMode("scan")}
-          variant={viewMode === "scan" ? "default" : "outline"}
-        >
-          📸 Scanner un ticket
         </Button>
       </div>
 
@@ -352,54 +320,6 @@ export default function JournalPage() {
             onCancel={() => setViewMode("timeline")}
             isSubmitting={journal.isLoading}
           />
-        </div>
-      )}
-
-      {viewMode === "scan" && (
-        <div className="max-w-2xl mx-auto bg-white border border-gray-200 rounded-lg p-6">
-          {ticketScan.step === "idle" && (
-            <CameraCapture
-              onCapture={ticketScan.startScan}
-              disabled={ticketScan.isLoading}
-            />
-          )}
-
-          {ticketScan.step === "scanning" && (
-            <OCRProgress estimatedTimeMs={ticketScan.estimatedTimeMs} />
-          )}
-
-          {ticketScan.step === "validating" && ticketScan.scanResult && (
-            <TicketValidation
-              scanResult={ticketScan.scanResult}
-              onConfirm={handleScanConfirm}
-              onCancel={() => {
-                ticketScan.reset();
-                setViewMode("timeline");
-              }}
-              isSubmitting={ticketScan.isLoading}
-            />
-          )}
-
-          {ticketScan.step === "success" && (
-            <div className="text-center py-12">
-              <div className="text-6xl mb-4">✓</div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Ticket ajouté !</h3>
-              <Button onClick={() => setViewMode("timeline")} className="mt-4">
-                Retour au journal
-              </Button>
-            </div>
-          )}
-
-          {ticketScan.step === "error" && ticketScan.error && (
-            <div className="text-center py-12">
-              <div className="text-6xl mb-4">✕</div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Erreur</h3>
-              <p className="text-red-600 mb-4">{ticketScan.error}</p>
-              <Button onClick={ticketScan.reset} variant="outline">
-                Réessayer
-              </Button>
-            </div>
-          )}
         </div>
       )}
 

@@ -189,7 +189,7 @@ export function getTVADetail(montant: number, depensesAnnuelles: number): Detail
     hypotheses: [
       "Dépenses annuelles estimées selon votre profil de consommation",
       "Répartition moyenne des achats par taux de TVA",
-      "Scanez vos tickets pour un calcul plus précis !",
+      "Utilisez le journal fiscal pour un calcul plus précis !",
     ],
     statut: "estime",
     icon: "🛒",

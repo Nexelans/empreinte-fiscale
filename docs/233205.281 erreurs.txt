@@ -1,0 +1,32 @@
+23:32:05.281 
+├ ○ /wrapped                                        4.44 kB         100 kB
+23:32:05.281 
+└ ƒ /wrapped/[year]                                 6.82 kB         155 kB
+23:32:05.281 
++ First Load JS shared by all                       87.6 kB
+23:32:05.281 
+  ├ chunks/2117-5ea916f722cf3951.js                 31.9 kB
+23:32:05.281 
+  ├ chunks/fd9d1056-2cfa95adc0565b0e.js             53.6 kB
+23:32:05.281 
+  └ other shared chunks (total)                     2.06 kB
+23:32:05.281 
+23:32:05.282 
+23:32:05.282 
+ƒ Middleware                                        47.7 kB
+23:32:05.285 
+23:32:05.285 
+○  (Static)   prerendered as static content
+23:32:05.285 
+ƒ  (Dynamic)  server-rendered on demand
+23:32:05.285 
+23:32:05.518 
+Traced Next.js server files in: 30.816ms
+23:32:06.350 
+Created all serverless functions in: 830.863ms
+23:32:06.425 
+Collected static files (public/, static/, .next/static): 10.793ms
+23:32:06.634 
+Build Completed in /vercel/output [2m]
+23:32:06.896 
+Deploying outputs...

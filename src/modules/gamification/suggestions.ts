@@ -107,16 +107,6 @@ function calculateSuggestionScore(
       }
       break;
 
-    case "ticket_scan":
-      // Encourage si l'utilisateur a déjà scanné au moins un ticket
-      if (pattern.scannedEntries > 0) {
-        score += 40;
-      } else if (pattern.totalEntries > 5) {
-        // Ou s'il log manuellement beaucoup
-        score += 20;
-      }
-      break;
-
     case "document_upload":
       // Encourage si le profil a besoin d'amélioration
       if (pattern.confidenceScore < 70) {

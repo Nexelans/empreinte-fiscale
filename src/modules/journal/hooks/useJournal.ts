@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { JournalEntryData, JournalFilters } from "../types";
-import { TicketData } from "@/modules/tickets/types";
+import { JournalEntryInput } from "../service";
 
 interface UseJournalReturn {
   // State
@@ -13,7 +13,7 @@ interface UseJournalReturn {
 
   // Actions
   loadEntries: () => Promise<void>;
-  addEntry: (ticketData: TicketData) => Promise<void>;
+  addEntry: (entryData: JournalEntryInput) => Promise<void>;
   updateEntry: (entryId: string, updates: Partial<JournalEntryData>) => Promise<void>;
   deleteEntry: (entryId: string) => Promise<void>;
   setFilters: (filters: JournalFilters) => void;
@@ -56,7 +56,7 @@ export function useJournal(): UseJournalReturn {
   }, [filters]);
 
   // Add new entry
-  const addEntry = useCallback(async (ticketData: TicketData) => {
+  const addEntry = useCallback(async (entryData: JournalEntryInput) => {
     setIsLoading(true);
     setError(null);
 
@@ -64,7 +64,7 @@ export function useJournal(): UseJournalReturn {
       const response = await fetch("/api/journal", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ticketData }),
+        body: JSON.stringify({ entryData }),
       });
 
       const data = await response.json();
