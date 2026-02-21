@@ -276,45 +276,37 @@ Réponds toujours en français.`;
  * Génère un contexte spécifique pour l'analyse de documents
  */
 export function generateDocumentAnalysisContext(documentType: string): string {
-  const contexts: Record<string, string> = {
-    paie: `Tu analyses un bulletin de paie français. Extrais:
-- Salaire brut
-- Salaire net imposable
-- Cotisations salariales détaillées
-- Cotisations patronales détaillées
-- CSG/CRDS
+  // Importer les prompts détaillés depuis les fichiers séparés
+  const {
+    PAIE_EXTRACTION_PROMPT,
+  } = require('./prompts/paie');
+  const {
+    IMPOT_EXTRACTION_PROMPT,
+  } = require('./prompts/impot');
+  const {
+    TICKET_EXTRACTION_PROMPT,
+  } = require('./prompts/ticket');
+  const {
+    FONCIERE_EXTRACTION_PROMPT,
+  } = require('./prompts/fonciere');
+  const {
+    CAF_EXTRACTION_PROMPT,
+  } = require('./prompts/caf');
 
-Formate les montants en euros avec 2 décimales. Identifie le mois et l'année.`,
-
-    impot: `Tu analyses un avis d'imposition français. Extrais:
-- Revenu fiscal de référence
-- Montant de l'impôt sur le revenu
-- Nombre de parts
-- Revenu imposable
-- Année fiscale
-
-Formate les montants en euros. Identifie l'année d'imposition.`,
-
-    fonciere: `Tu analyses un avis de taxe foncière français. Extrais:
-- Montant de la taxe
-- Valeur locative cadastrale
-- Commune
-- Année
-
-Formate les montants en euros.`,
-
-    ticket: `Tu analyses un ticket de caisse ou une facture française. Extrais:
-- Enseigne/commerçant
-- Date
-- Montant TTC total
-- Détail TVA si visible (TVA 20%, 10%, 5.5%)
-- Catégorie de dépense probable (alimentaire, restaurant, carburant, etc.)
-
-Formate les montants en euros avec 2 décimales.`,
+  const prompts: Record<string, string> = {
+    paie: PAIE_EXTRACTION_PROMPT,
+    impot: IMPOT_EXTRACTION_PROMPT,
+    ticket: TICKET_EXTRACTION_PROMPT,
+    facture: TICKET_EXTRACTION_PROMPT, // Même prompt que ticket
+    fonciere: FONCIERE_EXTRACTION_PROMPT,
+    caf: CAF_EXTRACTION_PROMPT,
   };
 
-  return (
-    contexts[documentType] ||
-    "Analyse ce document et extrais les informations fiscales pertinentes."
-  );
+  const prompt = prompts[documentType];
+
+  if (!prompt) {
+    return "Analyse ce document et extrais les informations fiscales pertinentes au format JSON.";
+  }
+
+  return prompt;
 }

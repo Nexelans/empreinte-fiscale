@@ -15,6 +15,7 @@ import {
 } from '@/modules/ai/service';
 import { AIProvider } from '@/modules/ai/types';
 import { checkConfigRateLimit, formatRateLimitError } from '@/modules/ai/rateLimit';
+import { checkAIConsent, grantAIConsent, withdrawAIConsent } from '@/modules/ai/consent';
 
 /**
  * GET /api/ai/config
@@ -81,6 +82,23 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
 
+    // ✅ RGPD: Enregistrer le consentement si fourni (premier setup)
+    if (body.grantConsent === true) {
+      await grantAIConsent(session.user.id, 'AI_DATA_TRANSMISSION');
+    }
+
+    // Vérifier le consentement (doit avoir été accordé)
+    const hasConsent = await checkAIConsent(session.user.id);
+    if (!hasConsent) {
+      return NextResponse.json(
+        {
+          error: 'Consentement requis',
+          message: 'Vous devez accepter la transmission de données avant de configurer votre IA.',
+        },
+        { status: 403 }
+      );
+    }
+
     // Validation
     if (!body.provider || !Object.values(AIProvider).includes(body.provider)) {
       return NextResponse.json({ error: 'Invalid provider' }, { status: 400 });
@@ -141,7 +159,7 @@ export async function POST(request: NextRequest) {
 
 /**
  * DELETE /api/ai/config
- * Supprime la configuration IA
+ * Supprime la configuration IA et révoque le consentement
  */
 export async function DELETE(request: NextRequest) {
   try {
@@ -151,9 +169,20 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    // Supprimer la config
     await deleteAIConfig(session.user.id);
 
-    return NextResponse.json({ message: 'Configuration deleted successfully' });
+    // ✅ RGPD: Révoquer le consentement automatiquement
+    try {
+      await withdrawAIConsent(session.user.id, 'AI_DATA_TRANSMISSION');
+    } catch (error) {
+      // Si le consentement n'existe pas, ignorer l'erreur
+      console.log('No consent to withdraw (already absent)');
+    }
+
+    return NextResponse.json({
+      message: 'Configuration et consentement supprimés avec succès',
+    });
   } catch (error: any) {
     console.error('Error deleting AI config:', error);
 

@@ -138,7 +138,7 @@ async function processWithAI(
 
   // Enregistrer l'utilisation
   if (result.success && result.estimatedCost !== undefined) {
-    recordUsage({
+    await recordUsage({
       userId,
       provider: aiConfig.provider,
       model: aiConfig.model,
@@ -146,7 +146,7 @@ async function processWithAI(
       completionTokens: 0,
       totalTokens: 0,
       estimatedCost: result.estimatedCost,
-      context: 'document-ocr',
+      context: 'ocr',
     });
   }
 

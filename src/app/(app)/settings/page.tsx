@@ -2,12 +2,14 @@
 
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Bell, Download, Trash2, Sparkles } from "lucide-react";
 
 export default function SettingsPage() {
   const { data: session } = useSession();
+  const router = useRouter();
   const [wrappedOptIn, setWrappedOptIn] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -87,6 +89,23 @@ export default function SettingsPage() {
                 onCheckedChange={handleWrappedToggle}
                 disabled={loading}
               />
+            </div>
+            <div className="flex justify-between items-center pt-4 border-t">
+              <div>
+                <p className="font-medium flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-purple-600" />
+                  Connexion IA
+                </p>
+                <p className="text-sm text-gray-600">
+                  Connectez votre IA pour des analyses personnalisées et un OCR amélioré
+                </p>
+              </div>
+              <Button
+                variant="outline"
+                onClick={() => router.push('/settings/ai')}
+              >
+                Configurer
+              </Button>
             </div>
             <div className="flex justify-between items-center pt-4 border-t">
               <div>

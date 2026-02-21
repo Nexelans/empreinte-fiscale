@@ -9,6 +9,7 @@ import { ExportMenu } from "@/components/simulations/ExportMenu";
 import { Loader2, ArrowLeft, Share2, Download, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { SimulationResult } from "@/modules/simulations/types";
+import { AIAnalysisButton } from "@/components/ai/AIAnalysisButton";
 
 export default function SimulationDetailPage({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -79,6 +80,12 @@ export default function SimulationDetailPage({ params }: { params: { id: string 
           Retour
         </Button>
         <div className="flex gap-2">
+          <AIAnalysisButton
+            context="simulation"
+            initialMessage={`Expliquez-moi les différences entre ma situation actuelle et cette simulation : ${simulation.label}`}
+            variant="outline"
+            size="default"
+          />
           <Button variant="outline" onClick={handleShare} className="flex items-center gap-2">
             <Share2 className="w-4 h-4" />
             Partager

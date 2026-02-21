@@ -28,6 +28,8 @@ model User {
 
   profilFiscal           ProfilFiscal?
   aiConfig               AIConfig?
+  aiUsages               AIUsage[]
+  consents               UserConsent[]
   documents              DocumentUpload[]
   journalEntries         JournalEntry[]
   friends                Friend[]           @relation(name: "UserFriends")
@@ -264,6 +266,41 @@ model AIConfig {
 
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
+}
+
+// Phase 4: AI Usage tracking
+model AIUsage {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  provider        String   // openai, anthropic, mistral, google, custom
+  model           String
+  promptTokens    Int
+  completionTokens Int
+  totalTokens     Int
+  estimatedCost   Float
+  context         String   // 'chat', 'ocr', 'analysis'
+
+  createdAt       DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([context])
+}
+
+// Phase 4: User consent for RGPD compliance
+model UserConsent {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  consentType String    // AI_DATA_TRANSMISSION, DOCUMENT_EXTRACTION, SOCIAL_SHARING
+  granted     Boolean
+  grantedAt   DateTime  @default(now())
+  withdrawnAt DateTime?
+
+  @@index([userId, consentType])
+  @@unique([userId, consentType])
 }
 
 model UserBadge {

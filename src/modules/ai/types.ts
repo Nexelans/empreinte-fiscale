@@ -71,11 +71,12 @@ export interface AITestResult {
 
 export interface AIUsageStats {
   userId: string;
-  period: 'day' | 'month';
+  period: 'day' | 'month' | 'today';
   requestCount: number;
   totalTokens: number;
   estimatedCost: number;
   lastRequestAt?: Date;
+  chatRequestsToday?: number;
 }
 
 export const AVAILABLE_MODELS: Record<AIProvider, AIModel[]> = {

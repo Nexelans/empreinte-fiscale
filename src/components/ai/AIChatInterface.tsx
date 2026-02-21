@@ -15,6 +15,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar } from '@/components/ui/avatar';
 import { Loader2, Send, User, Bot } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { ErrorAlert } from './ErrorAlert';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -36,6 +37,7 @@ export function AIChatInterface({
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<any>(null);
   const [conversationId, setConversationId] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -68,6 +70,7 @@ export function AIChatInterface({
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
     setLoading(true);
+    setError(null); // Clear previous errors
 
     try {
       const response = await fetch('/api/ai/chat', {
@@ -100,17 +103,21 @@ export function AIChatInterface({
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
-    } catch (error: any) {
-      // Afficher l'erreur comme message de l'assistant
-      const errorMessage: Message = {
-        role: 'assistant',
-        content: `Erreur : ${error.message || 'Impossible de communiquer avec l\'IA'}`,
-        timestamp: new Date(),
-      };
-
-      setMessages((prev) => [...prev, errorMessage]);
+    } catch (err: any) {
+      console.error('[AIChatInterface] Error:', err);
+      setError(err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleRetry = () => {
+    setError(null);
+    if (messages.length > 0) {
+      const lastUserMessage = messages.filter(m => m.role === 'user').pop();
+      if (lastUserMessage) {
+        handleSendMessage(lastUserMessage.content);
+      }
     }
   };
 
@@ -187,6 +194,11 @@ export function AIChatInterface({
 
       {/* Input */}
       <div className="border-t p-4">
+        {error && (
+          <div className="mb-4">
+            <ErrorAlert error={error} onRetry={handleRetry} />
+          </div>
+        )}
         <div className="flex gap-2">
           <Textarea
             value={input}

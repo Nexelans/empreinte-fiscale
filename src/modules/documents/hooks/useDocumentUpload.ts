@@ -15,7 +15,7 @@ interface UseDocumentUploadReturn {
   isLoading: boolean;
 
   // Actions
-  selectFile: (file: File, documentType: DocumentType) => void;
+  selectFile: (file: File, documentType: DocumentType, useAIOcr?: boolean) => void;
   acceptConsent: () => Promise<void>;
   declineConsent: () => void;
   confirmValidation: (correctedData: Partial<ExtractedData>) => Promise<void>;
@@ -27,15 +27,17 @@ export function useDocumentUpload(): UseDocumentUploadReturn {
   const [step, setStep] = useState<UploadStep>("idle");
   const [file, setFile] = useState<File | null>(null);
   const [documentType, setDocumentType] = useState<DocumentType | null>(null);
+  const [useAIOcr, setUseAIOcr] = useState<boolean>(false);
   const [parseResult, setParseResult] = useState<ParseResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const isLoading = ["uploading", "submitting"].includes(step);
 
   // Step 1: Sélection du fichier → afficher consentement
-  const selectFile = useCallback((selectedFile: File, selectedType: DocumentType) => {
+  const selectFile = useCallback((selectedFile: File, selectedType: DocumentType, useAI?: boolean) => {
     setFile(selectedFile);
     setDocumentType(selectedType);
+    setUseAIOcr(useAI || false);
     setStep("consent");
     setError(null);
   }, []);
@@ -54,6 +56,7 @@ export function useDocumentUpload(): UseDocumentUploadReturn {
       const formData = new FormData();
       formData.append("file", file);
       formData.append("documentType", documentType);
+      formData.append("useAIOcr", useAIOcr.toString());
 
       const response = await fetch("/api/documents/upload", {
         method: "POST",
@@ -82,7 +85,7 @@ export function useDocumentUpload(): UseDocumentUploadReturn {
       setError(err instanceof Error ? err.message : "Erreur lors de l'upload");
       setStep("error");
     }
-  }, [file, documentType]);
+  }, [file, documentType, useAIOcr]);
 
   // Step 2 alt: Refuser le consentement → reset
   const declineConsent = useCallback(() => {

@@ -6,6 +6,7 @@
  */
 
 import { AIProvider, AIChatRequest, AIChatResponse, AITestResult } from '../types';
+import { handleProviderError } from '../errors';
 
 const OPENAI_BASE_URL = 'https://api.openai.com/v1';
 
@@ -49,57 +50,66 @@ export async function sendChatRequest(
   request: AIChatRequest,
   model: string
 ): Promise<AIChatResponse> {
-  const openAIRequest: OpenAIRequest = {
-    model,
-    messages: request.messages.map((msg) => ({
-      role: msg.role,
-      content: msg.content,
-    })),
-    temperature: request.temperature ?? 0.3,
-    max_tokens: request.maxTokens ?? 2048,
-  };
+  try {
+    const openAIRequest: OpenAIRequest = {
+      model,
+      messages: request.messages.map((msg) => ({
+        role: msg.role,
+        content: msg.content,
+      })),
+      temperature: request.temperature ?? 0.3,
+      max_tokens: request.maxTokens ?? 2048,
+    };
 
-  const response = await fetch(`${OPENAI_BASE_URL}/chat/completions`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify(openAIRequest),
-  });
+    const response = await fetch(`${OPENAI_BASE_URL}/chat/completions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify(openAIRequest),
+    });
 
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ error: 'Unknown error' }));
-    throw new Error(
-      `OpenAI API error: ${response.status} - ${error.error?.message || JSON.stringify(error)}`
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ error: { message: 'Unknown error' } }));
+      const error = new Error(errorData.error?.message || 'OpenAI API error');
+      (error as any).response = { status: response.status, data: errorData };
+      throw handleProviderError(error, 'OpenAI');
+    }
+
+      const data: OpenAIResponse = await response.json();
+
+    if (!data.choices || data.choices.length === 0) {
+      throw new Error('OpenAI API returned no choices');
+    }
+
+    const choice = data.choices[0]!;
+
+    // Calculer le coût estimé (basé sur le modèle)
+    const estimatedCost = calculateCost(
+      model,
+      data.usage.prompt_tokens,
+      data.usage.completion_tokens
     );
+
+    return {
+      content: choice.message.content,
+      usage: {
+        promptTokens: data.usage.prompt_tokens,
+        completionTokens: data.usage.completion_tokens,
+        totalTokens: data.usage.total_tokens,
+      },
+      model: data.model,
+      estimatedCost,
+    };
+  } catch (error) {
+    // Si c'est déjà une AIError, la relancer
+    if (error && typeof error === 'object' && 'code' in error && 'userMessage' in error) {
+      throw error;
+    }
+    // Sinon, mapper vers AIError
+    throw handleProviderError(error, 'OpenAI');
   }
-
-  const data: OpenAIResponse = await response.json();
-
-  if (!data.choices || data.choices.length === 0) {
-    throw new Error('OpenAI API returned no choices');
-  }
-
-  const choice = data.choices[0]!;
-
-  // Calculer le coût estimé (basé sur le modèle)
-  const estimatedCost = calculateCost(
-    model,
-    data.usage.prompt_tokens,
-    data.usage.completion_tokens
-  );
-
-  return {
-    content: choice.message.content,
-    usage: {
-      promptTokens: data.usage.prompt_tokens,
-      completionTokens: data.usage.completion_tokens,
-      totalTokens: data.usage.total_tokens,
-    },
-    model: data.model,
-    estimatedCost,
-  };
 }
 
 /**
@@ -133,10 +143,13 @@ export async function testConnection(apiKey: string, model: string): Promise<AIT
       model: response.model,
     };
   } catch (error: any) {
+    // Si c'est une AIError, utiliser son userMessage
+    const errorMessage = error.userMessage || error.message || 'Unknown error';
+
     return {
       success: false,
       message: 'Connection failed',
-      error: error.message || 'Unknown error',
+      error: errorMessage,
       latency: Date.now() - startTime,
     };
   }

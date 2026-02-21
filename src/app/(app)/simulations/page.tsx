@@ -8,6 +8,7 @@ import { SimulationHistoryList } from "@/components/simulations/SimulationHistor
 import type { ScenarioTemplate } from "@/modules/simulations/types";
 import type { SimulationResult } from "@/modules/simulations/types";
 import { Loader2, History, Sparkles } from "lucide-react";
+import { AIAnalysisButton } from "@/components/ai/AIAnalysisButton";
 
 type ViewMode = "selector" | "history";
 
@@ -135,6 +136,12 @@ export default function SimulationsPage() {
           <History className="w-4 h-4" />
           Historique ({simulations.length})
         </Button>
+        <AIAnalysisButton
+          context="simulation"
+          initialMessage="Aidez-moi à comprendre l'impact de mes simulations fiscales"
+          variant="outline"
+          size="default"
+        />
       </div>
       {isCreating && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">

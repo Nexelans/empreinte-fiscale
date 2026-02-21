@@ -13,8 +13,10 @@ import {
   checkAIOperation,
   recordSuccess,
   recordError,
+  checkDailyRateLimit,
 } from '@/modules/ai/rateLimit';
 import { recordUsage } from '@/modules/ai/usage';
+import { checkAIConsent } from '@/modules/ai/consent';
 
 /**
  * POST /api/ai/chat
@@ -26,6 +28,18 @@ export async function POST(request: NextRequest) {
 
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // ✅ RGPD: Vérifier le consentement AVANT toute opération
+    const hasConsent = await checkAIConsent(session.user.id);
+    if (!hasConsent) {
+      return NextResponse.json(
+        {
+          error: 'Consentement requis',
+          message: 'Vous devez accepter la transmission de données à votre IA avant utilisation.',
+        },
+        { status: 403 }
+      );
     }
 
     const body = await request.json();
@@ -42,6 +56,20 @@ export async function POST(request: NextRequest) {
         {
           error: operationCheck.reason,
           retryAfter: operationCheck.retryAfter,
+        },
+        { status: 429 }
+      );
+    }
+
+    // Vérifier le rate limit quotidien (DB)
+    const dailyLimit = await checkDailyRateLimit(session.user.id, 'chat');
+    if (!dailyLimit.allowed) {
+      return NextResponse.json(
+        {
+          error: dailyLimit.reason,
+          retryAfter: dailyLimit.retryAfter,
+          current: dailyLimit.current,
+          limit: dailyLimit.limit,
         },
         { status: 429 }
       );
@@ -85,7 +113,7 @@ export async function POST(request: NextRequest) {
       recordSuccess(session.user.id);
 
       // Enregistrer l'utilisation
-      recordUsage({
+      await recordUsage({
         userId: session.user.id,
         provider: response.model.split('-')[0] || 'unknown', // Approximation
         model: response.model,
@@ -102,10 +130,17 @@ export async function POST(request: NextRequest) {
         content: response.content,
       });
 
+      // Get updated daily usage stats
+      const updatedLimit = await checkDailyRateLimit(session.user.id, 'chat');
+
       return NextResponse.json({
         conversationId: conversation.id,
-        message: response.content,
-        usage: response.usage,
+        response: response.content,
+        message: response.content, // Backward compatibility
+        usage: {
+          ...response.usage,
+          chatRequestsToday: updatedLimit.current || 0,
+        },
         estimatedCost: response.estimatedCost,
       });
     } catch (error: any) {

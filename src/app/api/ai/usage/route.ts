@@ -46,17 +46,20 @@ export async function GET(request: NextRequest) {
     }
 
     // Récupérer les statistiques de base
-    const stats = getUsageStats(session.user.id, period);
+    const stats = await getUsageStats(session.user.id, period === 'day' ? 'today' : period);
 
     // Si pas de détails demandés, retourner seulement les stats de base
     if (!details) {
-      return NextResponse.json({ stats });
+      return NextResponse.json({
+        stats,
+        chatRequestsToday: stats.chatRequestsToday,
+      });
     }
 
     // Récupérer les détails
     const days = period === 'day' ? 1 : 30;
-    const byProvider = getUsageByProvider(session.user.id, days);
-    const byContext = getUsageByContext(session.user.id, days);
+    const byProvider = await getUsageByProvider(session.user.id, days);
+    const byContext = await getUsageByContext(session.user.id, days);
     const history = getUsageHistory(session.user.id, 20); // 20 derniers
     const projections = getCostProjections(session.user.id);
 
@@ -66,6 +69,7 @@ export async function GET(request: NextRequest) {
       byContext,
       history,
       projections,
+      chatRequestsToday: stats.chatRequestsToday,
     });
   } catch (error: any) {
     console.error('Error fetching AI usage:', error);

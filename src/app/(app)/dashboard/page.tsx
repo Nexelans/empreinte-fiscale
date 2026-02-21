@@ -26,6 +26,7 @@ import {
   getSecuriteDetail,
   getInfrastructureDetail,
 } from "@/modules/pedagogie/detailPanelData";
+import { AIAnalysisButton } from "@/components/ai/AIAnalysisButton";
 
 export default function DashboardPage() {
   const { data: session } = useSession();
@@ -240,6 +241,12 @@ export default function DashboardPage() {
             <p className="text-gray-600">Année {score.annee}</p>
           </div>
           <div className="flex gap-2">
+            <AIAnalysisButton
+              context="dashboard"
+              initialMessage="Analysez mon score fiscal et expliquez-moi ma situation"
+              variant="outline"
+              size="default"
+            />
             <Link href="/journal">
               <Button variant="outline" className="flex items-center gap-2">
                 <span>📅</span>

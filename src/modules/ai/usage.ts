@@ -25,136 +25,260 @@ export interface AIUsageRecord {
 }
 
 /**
- * Stockage en mémoire temporaire
- * TODO: Migrer vers une table Prisma dédiée pour persistance
+ * Stockage en mémoire temporaire (fallback)
+ * Utilisé seulement si Prisma échoue
  */
 const usageStore = new Map<string, AIUsageRecord[]>();
 
 /**
- * Enregistre l'utilisation d'une requête IA
+ * Enregistre l'utilisation d'une requête IA dans la base de données
  */
-export function recordUsage(record: Omit<AIUsageRecord, 'id' | 'createdAt'>): void {
-  const id = generateRecordId();
+export async function recordUsage(record: Omit<AIUsageRecord, 'id' | 'createdAt'>): Promise<void> {
+  try {
+    // Enregistrer dans Prisma
+    await prisma.aIUsage.create({
+      data: {
+        userId: record.userId,
+        provider: record.provider,
+        model: record.model,
+        promptTokens: record.promptTokens,
+        completionTokens: record.completionTokens,
+        totalTokens: record.totalTokens,
+        estimatedCost: record.estimatedCost,
+        context: record.context || 'unknown',
+      },
+    });
+  } catch (error) {
+    console.error('[AI Usage] Failed to record usage in database, using in-memory fallback:', error);
 
-  const fullRecord: AIUsageRecord = {
-    id,
-    ...record,
-    createdAt: new Date(),
-  };
+    // Fallback vers stockage en mémoire
+    const id = generateRecordId();
+    const fullRecord: AIUsageRecord = {
+      id,
+      ...record,
+      createdAt: new Date(),
+    };
 
-  // Récupérer ou créer le tableau pour cet utilisateur
-  const userRecords = usageStore.get(record.userId) || [];
-  userRecords.push(fullRecord);
-  usageStore.set(record.userId, userRecords);
+    const userRecords = usageStore.get(record.userId) || [];
+    userRecords.push(fullRecord);
+    usageStore.set(record.userId, userRecords);
 
-  // Nettoyer les anciens enregistrements (garder seulement les 90 derniers jours)
-  cleanupOldRecords(record.userId, 90);
+    cleanupOldRecords(record.userId, 90);
+  }
 }
 
 /**
  * Récupère les statistiques d'utilisation pour un utilisateur
  */
-export function getUsageStats(
+export async function getUsageStats(
   userId: string,
-  period: 'day' | 'month' = 'month'
-): AIUsageStats {
-  const records = usageStore.get(userId) || [];
+  period: 'day' | 'month' | 'today' = 'month'
+): Promise<AIUsageStats> {
+  try {
+    // Calculer la date limite
+    const now = new Date();
+    const cutoffDate = new Date();
 
-  // Calculer la date limite
-  const now = new Date();
-  const cutoffDate = new Date();
+    if (period === 'day' || period === 'today') {
+      cutoffDate.setHours(0, 0, 0, 0); // Début de la journée
+    } else {
+      cutoffDate.setDate(cutoffDate.getDate() - 30);
+    }
 
-  if (period === 'day') {
-    cutoffDate.setDate(cutoffDate.getDate() - 1);
-  } else {
-    cutoffDate.setDate(cutoffDate.getDate() - 30);
-  }
+    // Requête Prisma
+    const records = await prisma.aIUsage.findMany({
+      where: {
+        userId,
+        createdAt: {
+          gte: cutoffDate,
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
 
-  // Filtrer les enregistrements dans la période
-  const periodRecords = records.filter((r) => r.createdAt >= cutoffDate);
-
-  // Calculer les statistiques
-  const requestCount = periodRecords.length;
-  const totalTokens = periodRecords.reduce((sum, r) => sum + r.totalTokens, 0);
-  const estimatedCost = periodRecords.reduce((sum, r) => sum + r.estimatedCost, 0);
-
-  const lastRequestAt =
-    periodRecords.length > 0
-      ? periodRecords[periodRecords.length - 1]!.createdAt
+    // Calculer les statistiques
+    const requestCount = records.length;
+    const totalTokens = records.reduce((sum, r) => sum + r.totalTokens, 0);
+    const estimatedCost = records.reduce((sum, r) => sum + r.estimatedCost, 0);
+    const chatRequestsToday = period === 'today'
+      ? records.filter(r => r.context === 'chat').length
       : undefined;
 
-  return {
-    userId,
-    period,
-    requestCount,
-    totalTokens,
-    estimatedCost,
-    lastRequestAt,
-  };
+    const lastRequestAt = records.length > 0 ? records[0]!.createdAt : undefined;
+
+    return {
+      userId,
+      period,
+      requestCount,
+      totalTokens,
+      estimatedCost,
+      lastRequestAt,
+      chatRequestsToday,
+    };
+  } catch (error) {
+    console.error('[AI Usage] Failed to get stats from database, using in-memory fallback:', error);
+
+    // Fallback vers stockage en mémoire
+    const records = usageStore.get(userId) || [];
+    const now = new Date();
+    const cutoffDate = new Date();
+
+    if (period === 'day' || period === 'today') {
+      cutoffDate.setDate(cutoffDate.getDate() - 1);
+    } else {
+      cutoffDate.setDate(cutoffDate.getDate() - 30);
+    }
+
+    const periodRecords = records.filter((r) => r.createdAt >= cutoffDate);
+    const requestCount = periodRecords.length;
+    const totalTokens = periodRecords.reduce((sum, r) => sum + r.totalTokens, 0);
+    const estimatedCost = periodRecords.reduce((sum, r) => sum + r.estimatedCost, 0);
+    const lastRequestAt =
+      periodRecords.length > 0 ? periodRecords[periodRecords.length - 1]!.createdAt : undefined;
+
+    return {
+      userId,
+      period,
+      requestCount,
+      totalTokens,
+      estimatedCost,
+      lastRequestAt,
+    };
+  }
 }
 
 /**
  * Récupère les statistiques détaillées par provider
  */
-export function getUsageByProvider(
+export async function getUsageByProvider(
   userId: string,
   days: number = 30
-): Record<string, { requests: number; tokens: number; cost: number }> {
-  const records = usageStore.get(userId) || [];
+): Promise<Array<{ provider: string; requests: number; tokens: number; cost: number }>> {
+  try {
+    // Calculer la date limite
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - days);
 
-  // Calculer la date limite
-  const cutoffDate = new Date();
-  cutoffDate.setDate(cutoffDate.getDate() - days);
+    // Requête Prisma avec groupBy
+    const records = await prisma.aIUsage.findMany({
+      where: {
+        userId,
+        createdAt: {
+          gte: cutoffDate,
+        },
+      },
+    });
 
-  // Filtrer et grouper par provider
-  const periodRecords = records.filter((r) => r.createdAt >= cutoffDate);
+    // Grouper manuellement par provider
+    const byProvider = new Map<string, { requests: number; tokens: number; cost: number }>();
 
-  const byProvider: Record<string, { requests: number; tokens: number; cost: number }> = {};
-
-  for (const record of periodRecords) {
-    if (!byProvider[record.provider]) {
-      byProvider[record.provider] = { requests: 0, tokens: 0, cost: 0 };
+    for (const record of records) {
+      const existing = byProvider.get(record.provider) || { requests: 0, tokens: 0, cost: 0 };
+      byProvider.set(record.provider, {
+        requests: existing.requests + 1,
+        tokens: existing.tokens + record.totalTokens,
+        cost: existing.cost + record.estimatedCost,
+      });
     }
 
-    byProvider[record.provider]!.requests++;
-    byProvider[record.provider]!.tokens += record.totalTokens;
-    byProvider[record.provider]!.cost += record.estimatedCost;
-  }
+    // Convertir en array
+    return Array.from(byProvider.entries()).map(([provider, data]) => ({
+      provider,
+      ...data,
+    }));
+  } catch (error) {
+    console.error('[AI Usage] Failed to get usage by provider from database:', error);
 
-  return byProvider;
+    // Fallback vers stockage en mémoire
+    const records = usageStore.get(userId) || [];
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - days);
+    const periodRecords = records.filter((r) => r.createdAt >= cutoffDate);
+
+    const byProvider = new Map<string, { requests: number; tokens: number; cost: number }>();
+    for (const record of periodRecords) {
+      const existing = byProvider.get(record.provider) || { requests: 0, tokens: 0, cost: 0 };
+      byProvider.set(record.provider, {
+        requests: existing.requests + 1,
+        tokens: existing.tokens + record.totalTokens,
+        cost: existing.cost + record.estimatedCost,
+      });
+    }
+
+    return Array.from(byProvider.entries()).map(([provider, data]) => ({
+      provider,
+      ...data,
+    }));
+  }
 }
 
 /**
  * Récupère les statistiques par contexte d'utilisation
  */
-export function getUsageByContext(
+export async function getUsageByContext(
   userId: string,
   days: number = 30
-): Record<string, { requests: number; tokens: number; cost: number }> {
-  const records = usageStore.get(userId) || [];
+): Promise<Array<{ context: string; requests: number; tokens: number; cost: number }>> {
+  try {
+    // Calculer la date limite
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - days);
 
-  // Calculer la date limite
-  const cutoffDate = new Date();
-  cutoffDate.setDate(cutoffDate.getDate() - days);
+    // Requête Prisma
+    const records = await prisma.aIUsage.findMany({
+      where: {
+        userId,
+        createdAt: {
+          gte: cutoffDate,
+        },
+      },
+    });
 
-  // Filtrer et grouper par contexte
-  const periodRecords = records.filter((r) => r.createdAt >= cutoffDate);
+    // Grouper manuellement par contexte
+    const byContext = new Map<string, { requests: number; tokens: number; cost: number }>();
 
-  const byContext: Record<string, { requests: number; tokens: number; cost: number }> = {};
-
-  for (const record of periodRecords) {
-    const context = record.context || 'other';
-
-    if (!byContext[context]) {
-      byContext[context] = { requests: 0, tokens: 0, cost: 0 };
+    for (const record of records) {
+      const context = record.context || 'other';
+      const existing = byContext.get(context) || { requests: 0, tokens: 0, cost: 0 };
+      byContext.set(context, {
+        requests: existing.requests + 1,
+        tokens: existing.tokens + record.totalTokens,
+        cost: existing.cost + record.estimatedCost,
+      });
     }
 
-    byContext[context].requests++;
-    byContext[context].tokens += record.totalTokens;
-    byContext[context].cost += record.estimatedCost;
-  }
+    // Convertir en array
+    return Array.from(byContext.entries()).map(([context, data]) => ({
+      context,
+      ...data,
+    }));
+  } catch (error) {
+    console.error('[AI Usage] Failed to get usage by context from database:', error);
 
-  return byContext;
+    // Fallback vers stockage en mémoire
+    const records = usageStore.get(userId) || [];
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - days);
+    const periodRecords = records.filter((r) => r.createdAt >= cutoffDate);
+
+    const byContext = new Map<string, { requests: number; tokens: number; cost: number }>();
+    for (const record of periodRecords) {
+      const context = record.context || 'other';
+      const existing = byContext.get(context) || { requests: 0, tokens: 0, cost: 0 };
+      byContext.set(context, {
+        requests: existing.requests + 1,
+        tokens: existing.tokens + record.totalTokens,
+        cost: existing.cost + record.estimatedCost,
+      });
+    }
+
+    return Array.from(byContext.entries()).map(([context, data]) => ({
+      context,
+      ...data,
+    }));
+  }
 }
 
 /**
