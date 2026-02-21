@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
 
     const metrics = await getUserGrowthMetrics(period, startDate, endDate);
 
-    return NextResponse.json({ metrics });
+    return NextResponse.json(metrics);
   } catch (error: any) {
     console.error('Error getting growth metrics:', error);
     return NextResponse.json(
