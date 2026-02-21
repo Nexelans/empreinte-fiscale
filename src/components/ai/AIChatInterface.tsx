@@ -16,6 +16,7 @@ import { Avatar } from '@/components/ui/avatar';
 import { Loader2, Send, User, Bot } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ErrorAlert } from './ErrorAlert';
+import { AISuggestedQuestions, getSuggestedQuestions } from './AISuggestedQuestions';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -140,6 +141,7 @@ export function AIChatInterface({
             </div>
           )}
 
+
           {messages.map((message, index) => (
             <div
               key={index}
@@ -191,6 +193,15 @@ export function AIChatInterface({
           )}
         </div>
       </ScrollArea>
+
+      {/* Questions suggérées — visibles uniquement avant le premier message */}
+      {messages.length === 0 && (
+        <AISuggestedQuestions
+          questions={getSuggestedQuestions(context)}
+          onSelect={(q) => handleSendMessage(q)}
+          disabled={loading}
+        />
+      )}
 
       {/* Input */}
       <div className="border-t p-4">
