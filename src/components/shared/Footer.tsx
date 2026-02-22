@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Mail, Github, FileText, Shield, HelpCircle, BookOpen, Home } from "lucide-react";
+import { Mail, Github, FileText, Shield, HelpCircle, BookOpen, Home, ExternalLink } from "lucide-react";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -13,8 +13,21 @@ export function Footer() {
             <h3 className="font-display text-lg font-bold mb-4" style={{ color: "var(--color-navy, #1A2332)" }}>
               Empreinte Fiscale
             </h3>
-            <p className="text-sm text-gray-600 leading-relaxed mb-4">
+            <p className="text-sm text-gray-600 leading-relaxed mb-3">
               Application transparente, non-partisane et sourcée pour visualiser votre relation financière avec l'État.
+            </p>
+            <p className="text-sm text-gray-500 mb-4">
+              Créé par{" "}
+              <a
+                href="https://nxlforge.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-gray-700 hover:text-gray-900 transition-colors inline-flex items-center gap-1"
+              >
+                NxlForge
+                <ExternalLink size={12} />
+              </a>
+              {" "}— studio d'applications web innovantes.
             </p>
             <div className="flex gap-3">
               <a
@@ -147,7 +160,16 @@ export function Footer() {
         <div className="pt-8 border-t border-gray-200">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-gray-500">
-              © {currentYear} Empreinte Fiscale. Tous droits réservés.
+              © {currentYear} Empreinte Fiscale. Tous droits réservés. Une réalisation{" "}
+              <a
+                href="https://nxlforge.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-gray-600 hover:text-gray-800 transition-colors"
+              >
+                NxlForge
+              </a>
+              .
             </p>
             <p className="text-xs text-gray-400">
               Données sources : INSEE, PLF 2026, DEPP, DREES • Mise à jour : Janvier 2026
