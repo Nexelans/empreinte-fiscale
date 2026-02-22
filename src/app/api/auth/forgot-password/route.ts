@@ -47,7 +47,7 @@ export async function POST(request: Request) {
     const msg = error instanceof Error ? error.message : String(error);
     console.error("Forgot password error:", msg);
     return NextResponse.json(
-      { error: "Une erreur est survenue", debug: msg },
+      { error: "Une erreur est survenue" },
       { status: 500 }
     );
   }
