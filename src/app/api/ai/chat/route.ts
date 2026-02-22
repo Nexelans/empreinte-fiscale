@@ -14,6 +14,8 @@ import {
   recordSuccess,
   recordError,
   checkChatRateLimit,
+  formatRateLimitError,
+  AI_RATE_LIMITS,
 } from '@/modules/ai/rateLimit';
 import { recordUsage } from '@/modules/ai/usage';
 import { checkAIConsent } from '@/modules/ai/consent';
@@ -66,10 +68,10 @@ export async function POST(request: NextRequest) {
     if (!dailyLimit.allowed) {
       return NextResponse.json(
         {
-          error: dailyLimit.reason,
-          retryAfter: dailyLimit.retryAfter,
-          current: dailyLimit.current,
-          limit: dailyLimit.limit,
+          error: formatRateLimitError(dailyLimit),
+          retryAfter: dailyLimit.resetAt,
+          current: AI_RATE_LIMITS.CHAT.limit - dailyLimit.remaining,
+          limit: AI_RATE_LIMITS.CHAT.limit,
         },
         { status: 429 }
       );
@@ -139,7 +141,7 @@ export async function POST(request: NextRequest) {
         message: response.content, // Backward compatibility
         usage: {
           ...response.usage,
-          chatRequestsToday: updatedLimit.current || 0,
+          chatRequestsToday: AI_RATE_LIMITS.CHAT.limit - updatedLimit.remaining,
         },
         estimatedCost: response.estimatedCost,
       });
