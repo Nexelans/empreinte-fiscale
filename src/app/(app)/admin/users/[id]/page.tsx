@@ -82,7 +82,7 @@ export default function AdminUserDetailPage() {
       const response = await fetch(`/api/admin/users/${userId}`);
       if (!response.ok) {
         if (response.status === 404) {
-          toast({ title: 'Utilisateur introuvable', variant: 'destructive' });
+          toast({ title: 'Utilisateur introuvable', type: 'error' });
           router.push('/admin/users');
           return;
         }
@@ -92,7 +92,7 @@ export default function AdminUserDetailPage() {
       setUser(data.user);
     } catch (error) {
       console.error('Error loading user:', error);
-      toast({ title: 'Erreur de chargement', variant: 'destructive' });
+      toast({ title: 'Erreur de chargement', type: 'error' });
     } finally {
       setLoading(false);
     }
@@ -116,7 +116,7 @@ export default function AdminUserDetailPage() {
       toast({
         title: 'Erreur',
         description: error.message,
-        variant: 'destructive',
+        type: 'error',
       });
       setDeleting(false);
     }
