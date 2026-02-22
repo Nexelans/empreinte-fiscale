@@ -126,5 +126,5 @@ export function getSuggestedQuestions(context?: string): SuggestedQuestion[] {
     ],
   };
 
-  return questionsByContext[context || 'dashboard'] || questionsByContext.dashboard;
+  return (questionsByContext[context || 'dashboard'] ?? questionsByContext['dashboard']) as SuggestedQuestion[];
 }

@@ -98,7 +98,7 @@ export function AIModelConfig({
             max={1}
             step={0.1}
             value={[temperature]}
-            onValueChange={([value]) => onTemperatureChange(value)}
+            onValueChange={([value]) => onTemperatureChange(value ?? 0.3)}
           />
           <p className="text-xs text-gray-500 mt-1">
             {temperature < 0.3
@@ -121,7 +121,7 @@ export function AIModelConfig({
             max={4096}
             step={256}
             value={[maxTokens]}
-            onValueChange={([value]) => onMaxTokensChange(value)}
+            onValueChange={([value]) => onMaxTokensChange(value ?? 1024)}
           />
           <p className="text-xs text-gray-500 mt-1">
             Limite de longueur des réponses générées (≈ {Math.round(maxTokens * 0.75)} mots)

@@ -359,14 +359,13 @@ export function deleteUserUsage(userId: string): void {
 /**
  * Calcule les projections de coût
  */
-export function getCostProjections(userId: string): {
+export async function getCostProjections(userId: string): Promise<{
   currentMonth: number;
   projectedMonth: number;
   averagePerRequest: number;
   averagePerDay: number;
-} {
-  const monthlyStats = getUsageStats(userId, 'month');
-  const dailyStats = getUsageStats(userId, 'day');
+}> {
+  const monthlyStats = await getUsageStats(userId, 'month');
 
   // Coût actuel du mois
   const currentMonth = monthlyStats.estimatedCost;
@@ -392,15 +391,15 @@ export function getCostProjections(userId: string): {
  * Vérifie si l'utilisateur approche d'une limite de budget
  * (À implémenter avec une fonctionnalité de budget utilisateur)
  */
-export function checkBudgetLimit(
+export async function checkBudgetLimit(
   userId: string,
   monthlyBudget: number
-): {
+): Promise<{
   isNearLimit: boolean;
   percentageUsed: number;
   remainingBudget: number;
-} {
-  const stats = getUsageStats(userId, 'month');
+}> {
+  const stats = await getUsageStats(userId, 'month');
 
   const percentageUsed = (stats.estimatedCost / monthlyBudget) * 100;
   const remainingBudget = monthlyBudget - stats.estimatedCost;
