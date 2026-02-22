@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Vérifier le rate limit quotidien (DB)
-    const dailyLimit = await checkChatRateLimit(session.user.id, 'chat');
+    const dailyLimit = await checkChatRateLimit(session.user.id);
     if (!dailyLimit.allowed) {
       return NextResponse.json(
         {
@@ -131,7 +131,7 @@ export async function POST(request: NextRequest) {
       });
 
       // Get updated daily usage stats
-      const updatedLimit = await checkChatRateLimit(session.user.id, 'chat');
+      const updatedLimit = await checkChatRateLimit(session.user.id);
 
       return NextResponse.json({
         conversationId: conversation.id,
