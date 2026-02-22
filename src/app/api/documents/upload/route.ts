@@ -131,7 +131,7 @@ export async function POST(request: NextRequest) {
       parseResult: {
         ...parseResult,
         metadata: {
-          ...parseResult.metadata,
+          ...('metadata' in parseResult ? parseResult.metadata : {}),
           extractionMethod,
         },
       },
