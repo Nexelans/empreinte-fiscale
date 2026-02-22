@@ -44,9 +44,10 @@ export async function POST(request: Request) {
         "Si un compte existe avec cet email, vous recevrez un lien de réinitialisation",
     });
   } catch (error) {
-    console.error("Forgot password error:", error);
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error("Forgot password error:", msg);
     return NextResponse.json(
-      { error: "Une erreur est survenue" },
+      { error: "Une erreur est survenue", debug: msg },
       { status: 500 }
     );
   }
