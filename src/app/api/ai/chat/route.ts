@@ -13,7 +13,7 @@ import {
   checkAIOperation,
   recordSuccess,
   recordError,
-  checkDailyRateLimit,
+  checkChatRateLimit,
 } from '@/modules/ai/rateLimit';
 import { recordUsage } from '@/modules/ai/usage';
 import { checkAIConsent } from '@/modules/ai/consent';
@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Vérifier le rate limit quotidien (DB)
-    const dailyLimit = await checkDailyRateLimit(session.user.id, 'chat');
+    const dailyLimit = await checkChatRateLimit(session.user.id, 'chat');
     if (!dailyLimit.allowed) {
       return NextResponse.json(
         {
@@ -131,7 +131,7 @@ export async function POST(request: NextRequest) {
       });
 
       // Get updated daily usage stats
-      const updatedLimit = await checkDailyRateLimit(session.user.id, 'chat');
+      const updatedLimit = await checkChatRateLimit(session.user.id, 'chat');
 
       return NextResponse.json({
         conversationId: conversation.id,
