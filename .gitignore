@@ -36,5 +36,11 @@ next-env.d.ts
 # prisma
 prisma/migrations/*.sql
 
-.vercel
+# claude code local config (peut contenir des secrets)
+.claude/settings.local.json
+
+# mcp local config (peut contenir des credentials)
+.mcp.json
+
+# fichiers parasites Windows
 nul
